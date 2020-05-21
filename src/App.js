@@ -1,26 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styled from "styled-components";
+import NavBar from './components/NavBar'
+import SideBar from './components/SideBar'
+import Board from './components/Board'
+import dotgrid from './images/dotgrid.png';
 
-function App() {
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <NavBar />
+      <Main>
+        <SideBar />
+        <Board />
+      </Main>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+  background-image: url(${dotgrid});
+  background-repeat: repeat;
+  background-size: 30px 30px;
+`;
+
+const Main = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 
 export default App;
