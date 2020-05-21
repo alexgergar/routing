@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback, useEffect } from "react";
 
 const POSITION = {x: 0, y: 0};
 
-const Draggable = ({children}) => {
+const Draggable = ({children, onDrag, onDragEnd, id}) => {
   const [state, setState] = useState({
     isDragging: false,
     origin: POSITION, // cusor potiion on mousedown
@@ -17,7 +17,6 @@ const Draggable = ({children}) => {
         origin: {x: clientX, y: clientY}
       }));
     },
-
     [],
   )
 
@@ -30,8 +29,9 @@ const Draggable = ({children}) => {
         translation
       }));
 
+      onDrag({translation, id});
     },
-    [state.origin],
+    [state.origin, onDrag, id],
   );
 
   const handleMouseUp = useCallback(
@@ -40,8 +40,9 @@ const Draggable = ({children}) => {
         ...state,
         isDragging: false,
       }))
+      onDragEnd();
     },
-    [],
+    [onDragEnd],
   );
 
   useEffect(() => {
