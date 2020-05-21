@@ -1,7 +1,7 @@
-import React, {useState, useCallback} from 'react';
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
-import Draggable from './Draggable';
-import {range, inRange} from 'lodash';
+import Draggable from "./Draggable";
+import { range, inRange } from "lodash";
 
 const MAX = 5;
 const HEIGHT = 88;
@@ -10,35 +10,36 @@ const Board = (props) => {
   const items = range(MAX);
   const [state, setState] = useState({
     order: items, // sorting list in idle state
-    dragOrder: items, // sorting list while dragging 
+    dragOrder: items, // sorting list while dragging
     draggedIndex: null, // know the current drag row in the list
   });
 
   const handleDrag = useCallback(
-    ({translation, id}) => {
+    ({ translation, id }) => {
       const delta = Math.round(translation.y / HEIGHT);
       const index = state.order.indexOf(id);
-      const dragOrder = state.order.filter(index => index !== id);
+      const dragOrder = state.order.filter((index) => index !== id);
 
       if (!inRange(index + delta, 0, items.length)) {
-        return
+        return;
       }
       dragOrder.splice(index + delta, 0, id);
 
-      setState(state => ({
+      setState((state) => ({
         ...state,
         draggedIndex: id,
         dragOrder,
-      }))
-    }, [state.order, items.length],
-  )
+      }));
+    },
+    [state.order, items.length]
+  );
 
   const handleDragEnd = useCallback(() => {
-    setState(state => ({
+    setState((state) => ({
       ...state,
       order: state.dragOrder,
       draggedIndex: null,
-    }))
+    }));
   }, []);
 
   return (
@@ -49,23 +50,21 @@ const Board = (props) => {
         const draggedTop = state.order.indexOf(index) * (HEIGHT + 10);
 
         return (
-          <Draggable 
+          <Draggable
             key={index}
             id={index}
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
           >
-            <Rect 
-              isDragging={isDragging}
-              top={isDragging ? draggedTop: top}
-              >{index}</Rect>
+            <Rect isDragging={isDragging} top={isDragging ? draggedTop : top}>
+              {index}
+            </Rect>
           </Draggable>
         );
       })}
     </Container>
   );
-
-}
+};
 
 const Container = styled.div`
   width: calc(100vw - 350px);
@@ -75,7 +74,7 @@ const Container = styled.div`
 
 const Rect = styled.div.attrs((props) => ({
   style: {
-    transition: props.isDragging ? 'none' : 'all 500ms',
+    transition: props.isDragging ? "none" : "all 500ms",
     top: `${props.top}px`,
   },
 }))`
@@ -88,8 +87,8 @@ const Rect = styled.div.attrs((props) => ({
   align-items: center;
   justify-content: center;
   position: absolute;
-  
-  left: calc((100vw - 350px)/2 - 150px);
+
+  left: calc((100vw - 350px) / 2 - 150px);
   font-size: 20px;
   color: #777;
 `;
