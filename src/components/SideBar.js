@@ -70,6 +70,7 @@ const SideBarColumn = styled.div`
   box-sizing: border-box;
   background-color: #fff;
   border-right: 1px solid #c7c7c7;
+  z-index: 3;
 `;
 
 const PaddingForSideBar = styled.div`

@@ -22,7 +22,8 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 20px;
   border-radius: 10px;
-  ${'' /* background-color: red; */}
+  user-select: none;
+  ${"" /* background-color: red; */}
 
   &:hover {
     box-shadow: 0px 4px 30px rgba(22, 33, 74, 0.08);

@@ -30,6 +30,8 @@ const Container = styled.div`
 const Main = styled.div`
   display: flex;
   flex-direction: row;
+  position: absolute;
+  top: 50px;
 `;
 
 export default App;

@@ -3,10 +3,11 @@ import styled from "styled-components";
 
 const Draggable = (props) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0, coords: {} });
+  const [position, setPosition] = useState({x: 0, y: 0, coords: {}});
   const [width, setWidth] = useState(null);
 
   const handleMouseDown = (e) => {
+    console.log(props.id)
     setIsDragging(true);
     const pageX = e.pageX;
     const pageY = e.pageY;
@@ -21,8 +22,8 @@ const Draggable = (props) => {
     document.addEventListener("mousemove", handleMouseMove.current);
   };
 
-  const handleMouseMove = useRef((event) => {
-    setPosition((position) => {
+  const handleMouseMove = useRef(event => {
+    setPosition(position => {
       const xDiff = position.coords.x - event.pageX;
       const yDiff = position.coords.y - event.pageY;
       return {
@@ -32,34 +33,35 @@ const Draggable = (props) => {
           x: event.pageX,
           y: event.pageY,
         },
-      };
-    });
-  });
+      }
+    })
+  })
 
   const handleMouseUp = () => {
     setIsDragging(false);
-    document.removeEventListener("mousemove", handleMouseMove.current);
-    setPosition((position) => ({
+    document.removeEventListener('mousemove', handleMouseMove.current);
+    setPosition(position => ({
       ...position,
-      coords: {},
-    }));
-  };
+      coords: {}
+    }))
+  }
+
+  
 
   return (
-    <Wrapper
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      position={position}
+    <Wrapper 
+      onMouseDown={handleMouseDown} 
+      onMouseUp={handleMouseUp} 
+      position={position} 
       isDragging={isDragging}
-      width={width}
-    >
+      width={width}>
       {props.children}
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  /* width: ${(props) => props.width}; */
+  width: ${props => props.width};
   cursor: ${(props) =>
     props.isDragging ? "-webkit-grabbing" : "-webkit-grab"};
   transform: ${(props) =>

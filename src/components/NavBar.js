@@ -16,6 +16,11 @@ const NavBarRow = styled.div`
   height: 50px;
   background-color: #FFF;
   border-bottom: 1px solid #C7C7C7;
+  z-index: 10;
+  box-sizing: border-box;
+  position: fixed; /* this is needed so the b
+  /* top: 0; */
+
 `;
 
  export default NavBar;
