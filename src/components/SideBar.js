@@ -6,6 +6,9 @@ import Tab from "react-bootstrap/Tab";
 import Row from 'react-bootstrap/Row';
 import Nav from 'react-bootstrap/Nav';
 import OptionCard from "./OptionCard";
+import DragData from './DragData';
+
+const dataInfo = { title: "this is the title", body: "this is the body" };
 
 const SideBar = (props) => {
   const [optionKey, setOptionKey] = useState('triggers');
@@ -46,10 +49,18 @@ const SideBar = (props) => {
         <BoxForOptionsSection noGutters>
           <OptionsContentBox>
             <OptionsPaneItem eventKey="triggers">
-              <OptionCard />
-              <OptionCard />
-              <OptionCard />
-              <OptionCard />
+              <DragData dataItem={dataInfo}>
+                <OptionCard />
+              </DragData>
+              <DragData dataItem={dataInfo}>
+                <OptionCard />
+              </DragData>
+              <DragData dataItem={dataInfo}>
+                <OptionCard />
+              </DragData>
+              <DragData dataItem={dataInfo}>
+                <OptionCard />
+              </DragData>
             </OptionsPaneItem>
             <OptionsPaneItem eventKey="actions">
               <OptionCard />

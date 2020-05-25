@@ -1,10 +1,18 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import Draggable from "./Draggable";
+import DropTarget from './DropTarget';
+
 
 const Board = (props) => {
+  const [items, setItems] = React.useState([]);
+
+  const itemDropped = (item) => {
+    setItems([...items, item]);
+  }
+
   return (
-    <Container>
+    <Container onItemDropped={itemDropped}>
       <Draggable>
         <Rect />
       </Draggable>
@@ -19,7 +27,7 @@ const Board = (props) => {
   );
 };
 
-const Container = styled.div`
+const Container = styled(DropTarget)`
   position: absolute;
   width: calc(100% - 350px);
   min-height: calc(100% - 50px);
