@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
-import * as dropEffect from '../utils/dropEffects'
+import * as dropEffects from '../utils/dropEffects'
 
+const insideStyle = {
+  backgroundColor: 'pink',
+}
 const DropTarget = (props) => {
 const [isOver, setIsOver] = useState(false);
 
@@ -32,11 +35,15 @@ const dragLeave = () => setIsOver(false);
       onDrop={drop}
       onDragEnter={dragEnter}
       onDragLeave={dragLeave}
+      style={isOver ? insideStyle : {}}
     >
       {props.children}
     </div>
   );
 }
 
+DropTarget.defaultProps = {
+  dropEffect: dropEffects.All,
+};
 
 export default DropTarget;

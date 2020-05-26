@@ -12,29 +12,30 @@ const Board = (props) => {
   }
 
   return (
-    <Container onItemDropped={itemDropped} dropEffect="copy">
-      <Draggable>
-        <Rect />
-      </Draggable>
-      <Draggable>
-        <BlueRect />
-      </Draggable>
+    <DropTarget onItemDropped={itemDropped} dropEffect="copy">
+      <Container>
+        <Draggable>
+          <Rect />
+        </Draggable>
+        <Draggable>
+          <BlueRect />
+        </Draggable>
 
-      <Draggable>
-        <Random />
-      </Draggable>
-    </Container>
+        <Draggable>
+          <Random />
+        </Draggable>
+      </Container>
+    </DropTarget>
   );
 };
 
-const Container = styled(DropTarget)`
-  position: absolute;
-  width: calc(100% - 350px);
-  min-height: calc(100% - 50px);
-  top: 50px;
-  left: 350px;
+const Container = styled.div`
+  min-width: calc(100vw - 350px);
+  min-height: calc(100vh - 50px);
   z-index: 0;
+  /* background: yellow; */
 `;
+
 
 const Rect = styled.div`
   width: 300px;
