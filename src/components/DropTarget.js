@@ -13,6 +13,7 @@ const dragOver = (e) => {
 };
 
 const drop = (e) => {
+  console.log(`PageX: ${e.pageX} PageY: ${e.pageY}`)
   const droppedItem = e.dataTransfer.getData("drag-item");
   const dataItems = JSON.parse(droppedItem);
   if (droppedItem) {
@@ -35,7 +36,7 @@ const dragLeave = () => setIsOver(false);
       onDrop={drop}
       onDragEnter={dragEnter}
       onDragLeave={dragLeave}
-      style={isOver ? insideStyle : {}}
+      // style={isOver ? insideStyle : {}}
     >
       {props.children}
     </div>

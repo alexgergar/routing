@@ -1,16 +1,49 @@
-import React from "react";
+import React, {useState, useCallback} from "react";
 import styled from "styled-components";
 import { MoreVertical } from "react-feather";
 
 
 
 const OptionCard = (props) => {
+  const [area, setArea] = useState({});
+  const [position, setPosition] = useState({});
+
+  const measuredRef = useCallback((node) => {
+    if (node !== null) {
+      setArea({
+        x: node.getBoundingClientRect().x,
+        y: node.getBoundingClientRect().y,
+        width: node.getBoundingClientRect().width,
+        height: node.getBoundingClientRect().height,
+      });
+      
+    }
+  }, []);
+
+  const onMouseDown = e => {
+    setPosition({x: e.pageX, y: e.pageY})
+    const mousePosition = {
+      x: e.pageX,
+      y: e.pageY,
+    };
+    props.getOptionCardAreaMousePosition(area, mousePosition);
+
+  }
+
   return (
-    <Wrapper>
+    <Wrapper ref={measuredRef} onMouseDown={onMouseDown}>
       <MoreVertical color="#c2c2c2" />
       <BlockDescp>
         <Title>Title of Option</Title>
-        <DetailText>this is where the details of the option go</DetailText>
+        <DetailText>
+          this is block x/left: {area.x} and y/top: {area.y}
+        </DetailText>
+        <DetailText>
+          width: {area.width} and height: {area.height}
+        </DetailText>
+        <DetailText>
+          mousePositionX: {position.x} mouse position Y: {position.y}
+        </DetailText>
       </BlockDescp>
     </Wrapper>
   );

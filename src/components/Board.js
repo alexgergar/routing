@@ -11,10 +11,19 @@ const Board = (props) => {
     setItems([...items, item]);
   }
 
+
   return (
     <DropTarget onItemDropped={itemDropped} dropEffect="copy">
       <Container>
-        <Draggable>
+        {items.length > 0 &&
+          items.map((item) => (
+            <div key={item}>
+              <Draggable>
+                <OptionContainer dropElementCoords={props.dropElementCoords} />
+              </Draggable>
+            </div>
+          ))}
+        {/* <Draggable>
           <Rect />
         </Draggable>
         <Draggable>
@@ -23,7 +32,7 @@ const Board = (props) => {
 
         <Draggable>
           <Random />
-        </Draggable>
+        </Draggable> */}
       </Container>
     </DropTarget>
   );
@@ -35,6 +44,15 @@ const Container = styled.div`
   z-index: 0;
   /* background: yellow; */
 `;
+
+const OptionContainer = styled.div`
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  background: red;
+  left: ${props => props.dropElementCoords.x}px;
+  top: ${props => props.dropElementCoords.y}px;
+`
 
 
 const Rect = styled.div`

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import NavBar from './components/NavBar'
 import SideBar from './components/SideBar'
 import Board from './components/Board'
+import MainContainer from './components/MainContainer'
 import dotgrid from './images/dotgrid.png';
 
 
@@ -10,10 +11,7 @@ const App = () => {
   return (
     <Container>
       <NavBar />
-      <Main>
-        <SideBar />
-        <Board />
-      </Main>
+      <MainContainer />
     </Container>
   );
 }
@@ -27,11 +25,5 @@ const Container = styled.div`
   background-size: 30px 30px;
 `;
 
-const Main = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  top: 50px;
-`;
 
 export default App;

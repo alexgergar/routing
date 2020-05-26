@@ -1,9 +1,8 @@
-import React, {useState} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 
 
 const DragData = props => {
   const [isDragging, setIsDragging] = useState(false);
-
   
   const startDrag = (e) => {
     setIsDragging(true);
@@ -11,10 +10,17 @@ const DragData = props => {
     e.dataTransfer.effectAllowed = props.dropEffect;
   }
 
-  const dragEnd = () => setIsDragging(false);
+  const dragEnd = e => {
+    setIsDragging(false);
+    props.setMouseDropCoords({x: e.pageX, y: e.pageY});
+  };
 
   return (
-    <div draggable onDragStart={startDrag} onDragEnd={dragEnd}>
+    <div 
+      draggable 
+      onDragStart={startDrag} 
+      onDragEnd={dragEnd}
+      >
         {props.children}
     </div>
   )
