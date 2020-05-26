@@ -1,10 +1,12 @@
-import React, {useState} from 'react'
+import React, {useState} from 'react';
+import * as dropEffect from '../utils/dropEffects'
 
 const DropTarget = (props) => {
 const [isOver, setIsOver] = useState(false);
 
 const dragOver = (e) => {
   e.preventDefault();
+  e.dataTransfer.dropEffect = props.dropEffect;
 };
 
 const drop = (e) => {
@@ -18,6 +20,8 @@ const drop = (e) => {
 };
 
 const dragEnter = (e) => {
+  console.log('drag enter');
+  e.dataTransfer.dropEffect = props.dropEffect;
   setIsOver(true);
 };
 
@@ -33,5 +37,6 @@ const dragLeave = () => setIsOver(false);
     </div>
   );
 }
+
 
 export default DropTarget;

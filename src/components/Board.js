@@ -12,7 +12,7 @@ const Board = (props) => {
   }
 
   return (
-    <Container onItemDropped={itemDropped}>
+    <Container onItemDropped={itemDropped} dropEffect="copy">
       <Draggable>
         <Rect />
       </Draggable>

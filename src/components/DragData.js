@@ -1,13 +1,15 @@
 import React, {useState} from 'react'
 
+
 const DragData = props => {
   const [isDragging, setIsDragging] = useState(false);
 
+  
   const startDrag = (e) => {
     setIsDragging(true);
     e.dataTransfer.setData("drag-item", JSON.stringify(props.dataItem));
+    e.dataTransfer.effectAllowed = props.dropEffect;
   }
-
 
   const dragEnd = () => setIsDragging(false);
 
