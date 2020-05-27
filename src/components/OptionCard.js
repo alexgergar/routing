@@ -6,7 +6,6 @@ import { MoreVertical } from "react-feather";
 
 const OptionCard = (props) => {
   const [area, setArea] = useState({});
-  const [position, setPosition] = useState({});
 
   const measuredRef = useCallback((node) => {
     if (node !== null) {
@@ -21,7 +20,6 @@ const OptionCard = (props) => {
   }, []);
 
   const onMouseDown = e => {
-    setPosition({x: e.pageX, y: e.pageY})
     const mousePosition = {
       x: e.pageX,
       y: e.pageY,
@@ -40,9 +38,6 @@ const OptionCard = (props) => {
         </DetailText>
         <DetailText>
           width: {area.width} and height: {area.height}
-        </DetailText>
-        <DetailText>
-          mousePositionX: {position.x} mouse position Y: {position.y}
         </DetailText>
       </BlockDescp>
     </Wrapper>

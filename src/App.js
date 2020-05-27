@@ -1,18 +1,20 @@
 import React from 'react';
 import styled from "styled-components";
 import NavBar from './components/NavBar'
-import SideBar from './components/SideBar'
-import Board from './components/Board'
 import MainContainer from './components/MainContainer'
 import dotgrid from './images/dotgrid.png';
+import Theme from './Theme'
+
 
 
 const App = () => {
   return (
-    <Container>
-      <NavBar />
-      <MainContainer />
-    </Container>
+    <Theme>
+      <Container>
+        <NavBar />
+        <MainContainer />
+      </Container>
+    </Theme>
   );
 }
 
