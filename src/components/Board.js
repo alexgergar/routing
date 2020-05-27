@@ -1,51 +1,49 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import Draggable from "./Draggable";
+import DropTarget from './DropTarget';
+import OnBoardOptionCard from './OnBoardOptionCard'
+
+
 
 const Board = (props) => {
-  return (
-    <Container>
-      <Draggable>
-        <Rect />
-      </Draggable>
-      <Draggable>
-        <BlueRect />
-      </Draggable>
+  const [items, setItems] = React.useState([]);
 
-      <Draggable>
-        <Random />
-      </Draggable>
-    </Container>
+  const itemDropped = (item) => {
+    setItems([...items, item]);
+  }
+
+  return (
+    <DropTarget onItemDropped={itemDropped} dropEffect="copy">
+      <Container>
+        {items.length > 0 &&
+          items.map((item) => (
+            <div key={item}>
+              <Draggable>
+                <OnBoardOptionCard
+                  dropElementCoords={props.dropElementCoords}
+                />
+              </Draggable>
+            </div>
+          ))}
+      </Container>
+    </DropTarget>
   );
 };
 
 const Container = styled.div`
-  position: absolute;
-  width: calc(100% - 350px);
-  min-height: calc(100% - 50px);
-  top: 50px;
-  left: 350px;
+  min-width: calc(100vw - 350px);
+  min-height: calc(100vh - 50px);
   z-index: 0;
 `;
 
-const Rect = styled.div`
-  width: 300px;
+const OptionContainer = styled.div`
+  position: absolute;
+  width: 200px;
   height: 100px;
   background: red;
-  margin: 0;
-`;
-
-const BlueRect = styled.div`
-  width: 300px;
-  height: 100px;
-  background: blue;
-  margin: 0;
-`;
-
-const Random = styled.div`
-  height: 200px;
-  width: 200px;
-  background-color: teal;
-`;
+  left: ${props => props.dropElementCoords.x}px;
+  top: ${props => props.dropElementCoords.y}px;
+`
 
 export default Board;

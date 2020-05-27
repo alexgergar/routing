@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useCallback} from "react";
 import styled from "styled-components";
 import Form from "react-bootstrap/Form";
 import TabContainer from "react-bootstrap/TabContainer";
@@ -6,6 +6,9 @@ import Tab from "react-bootstrap/Tab";
 import Row from 'react-bootstrap/Row';
 import Nav from 'react-bootstrap/Nav';
 import OptionCard from "./OptionCard";
+import DragData from './DragData';
+
+const dataInfo = { title: "this is the title", body: "this is the body" };
 
 const SideBar = (props) => {
   const [optionKey, setOptionKey] = useState('triggers');
@@ -46,16 +49,60 @@ const SideBar = (props) => {
         <BoxForOptionsSection noGutters>
           <OptionsContentBox>
             <OptionsPaneItem eventKey="triggers">
-              <OptionCard />
-              <OptionCard />
-              <OptionCard />
-              <OptionCard />
+              <DragData
+                dataItem={dataInfo}
+                setMouseDropCoords={props.setMouseDropCoords}
+              >
+                <OptionCard
+                  getOptionCardAreaMousePosition={
+                    props.getOptionCardAreaMousePosition
+                  }
+                />
+              </DragData>
+              <DragData
+                dataItem={dataInfo}
+                setMouseDropCoords={props.setMouseDropCoords}
+              >
+                <OptionCard
+                  getOptionCardAreaMousePosition={
+                    props.getOptionCardAreaMousePosition
+                  }
+                />
+              </DragData>
+              <DragData
+                dataItem={dataInfo}
+                setMouseDropCoords={props.setMouseDropCoords}
+              >
+                <OptionCard
+                  getOptionCardAreaMousePosition={
+                    props.getOptionCardAreaMousePosition
+                  }
+                />
+              </DragData>
+              <DragData
+                dataItem={dataInfo}
+                setMouseDropCoords={props.setMouseDropCoords}
+              >
+                <OptionCard
+                  getOptionCardAreaMousePosition={
+                    props.getOptionCardAreaMousePosition
+                  }
+                />
+              </DragData>
             </OptionsPaneItem>
             <OptionsPaneItem eventKey="actions">
-              <OptionCard />
+              <OptionCard
+                getOptionCardAreaMousePosition={
+                  props.getOptionCardAreaMousePosition
+                }
+              />
             </OptionsPaneItem>
             <OptionsPaneItem eventKey="extras">
-              <OptionCard />
+              <OptionCard
+                getOptionCardAreaMousePosition={
+                  props.getOptionCardAreaMousePosition
+                }
+              />
             </OptionsPaneItem>
           </OptionsContentBox>
         </BoxForOptionsSection>

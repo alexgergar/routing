@@ -3,18 +3,15 @@ import styled from "styled-components";
 import Draggable from "./Draggable";
 
 const Board = (props) => {
-  
-
   return (
     <Container>
-      <Draggable
-      >
+      <Draggable>
         <Rect />
       </Draggable>
       <Draggable>
- <BlueRect />
+        <BlueRect />
       </Draggable>
-       
+
       <Draggable>
         <Random />
       </Draggable>
