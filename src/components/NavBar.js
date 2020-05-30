@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 
 const NavBar = props => {
   return (

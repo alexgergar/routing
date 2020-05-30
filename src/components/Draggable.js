@@ -59,7 +59,6 @@ const Draggable = (props) => {
 };
 
 const Wrapper = styled.div`
-  /* width: ${(props) => props.width}; */
   cursor: ${(props) =>
     props.isDragging ? "-webkit-grabbing" : "-webkit-grab"};
   transform: ${(props) =>

@@ -1,8 +1,7 @@
 import React, {useState, useCallback} from "react";
 import styled from "styled-components";
 import { MoreVertical } from "react-feather";
-
-
+import IconSquare from './IconSquare'
 
 const OptionCard = (props) => {
   const [area, setArea] = useState({});
@@ -30,15 +29,15 @@ const OptionCard = (props) => {
 
   return (
     <Wrapper ref={measuredRef} onMouseDown={onMouseDown}>
-      <MoreVertical color="#c2c2c2" />
+      <MoveIcon>
+        <MoreVertical color="#c2c2c2" />
+      </MoveIcon>
+      <OptionIconColumn>
+        <IconSquare icon={props.cardData.icon} size={36} />
+      </OptionIconColumn>
       <BlockDescp>
-        <Title>Title of Option</Title>
-        <DetailText>
-          this is block x/left: {area.x} and y/top: {area.y}
-        </DetailText>
-        <DetailText>
-          width: {area.width} and height: {area.height}
-        </DetailText>
+        <Title>{props.cardData.title}</Title>
+        <DetailText>{props.cardData.shortDesc}</DetailText>
       </BlockDescp>
     </Wrapper>
   );
@@ -47,15 +46,21 @@ const OptionCard = (props) => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   padding: 20px;
   border-radius: 10px;
   user-select: none;
-  ${"" /* background-color: red; */}
 
   &:hover {
     box-shadow: 0px 4px 30px rgba(22, 33, 74, 0.08);
   }
+`;
+
+const MoveIcon = styled.div`
+`;
+
+const OptionIconColumn = styled.div`
+  margin: 0 12px;
 `;
 
 const BlockDescp = styled.div`
@@ -64,11 +69,16 @@ const BlockDescp = styled.div`
 
 const Title = styled.h6`
   margin: 0;
+  font-weight: 900;
+  font-size: 16px;
+  color: #393c44;
 `;
 
-const DetailText = styled.p`
+const DetailText = styled.h6`
   margin: 0;
-  font-size: 14px;
+  font-size: 15px;
+  color: #808292;
+  padding-top: 5px;
 `;
 
 export default OptionCard;

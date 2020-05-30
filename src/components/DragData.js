@@ -1,29 +1,36 @@
-import React, {useState, useRef, useEffect} from 'react'
-
+import React from 'react'
+import styled from "styled-components";
 
 const DragData = props => {
-  const [isDragging, setIsDragging] = useState(false);
+  // const [isDragging, setIsDragging] = useState(false);
   
   const startDrag = (e) => {
-    setIsDragging(true);
+    // setIsDragging(true);
     e.dataTransfer.setData("drag-item", JSON.stringify(props.dataItem));
     e.dataTransfer.effectAllowed = props.dropEffect;
   }
 
   const dragEnd = e => {
-    setIsDragging(false);
+    // setIsDragging(false);
     props.setMouseDropCoords({x: e.pageX, y: e.pageY});
   };
 
   return (
-    <div 
-      draggable 
-      onDragStart={startDrag} 
-      onDragEnd={dragEnd}
-      >
-        {props.children}
-    </div>
-  )
+    <Wrapper draggable onDragStart={startDrag} onDragEnd={dragEnd}>
+      {props.children}
+    </Wrapper>
+  );
 }
+
+const Wrapper = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:active {
+    cursor: -webkit-grabbing;
+    cursor: grabbing;
+  }
+`;
 
 export default DragData

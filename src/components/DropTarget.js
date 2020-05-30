@@ -1,47 +1,48 @@
-import React, {useState} from 'react';
-import * as dropEffects from '../utils/dropEffects'
+import React, { useState } from "react";
+import styled from "styled-components";
+import * as dropEffects from "../utils/dropEffects";
 
-const insideStyle = {
-  backgroundColor: 'pink',
-}
 const DropTarget = (props) => {
-const [isOver, setIsOver] = useState(false);
+  const dragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = props.dropEffect;
+    // props.setIsOver(true);
+    // console.log("drag over");
+  };
 
-const dragOver = (e) => {
-  e.preventDefault();
-  e.dataTransfer.dropEffect = props.dropEffect;
-};
+  const drop = (e) => {
+    const droppedItem = e.dataTransfer.getData("drag-item");
+    if (droppedItem) {
+      props.onItemDropped(droppedItem); // this will send back the object - that you can't read in console.log
+    }
+    props.setIsOver(false);
+    console.log('drop')
+  };
 
-const drop = (e) => {
-  console.log(`PageX: ${e.pageX} PageY: ${e.pageY}`)
-  const droppedItem = e.dataTransfer.getData("drag-item");
-  const dataItems = JSON.parse(droppedItem);
-  if (droppedItem) {
-    console.log(`in dropped item of Drop: ${dataItems.title}`);
-    props.onItemDropped(droppedItem); // this will send back the object - that you can't read in console.log
-  }
-  setIsOver(false);
-};
+  const dragEnter = (e) => {
+    e.dataTransfer.dropEffect = props.dropEffect;
+    props.setIsOver(true);
+    console.log('drag enter')
+  };
 
-const dragEnter = (e) => {
-  console.log('drag enter');
-  e.dataTransfer.dropEffect = props.dropEffect;
-  setIsOver(true);
-};
+  const dragLeave = () => { 
+    props.setIsOver(false);
+  console.log("drag leave");
+}
 
-const dragLeave = () => setIsOver(false);
   return (
-    <div
+    <Wrapper
       onDragOver={dragOver}
       onDrop={drop}
       onDragEnter={dragEnter}
       onDragLeave={dragLeave}
-      // style={isOver ? insideStyle : {}}
     >
       {props.children}
-    </div>
+    </Wrapper>
   );
-}
+};
+
+const Wrapper = styled.div``;
 
 DropTarget.defaultProps = {
   dropEffect: dropEffects.All,
