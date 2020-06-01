@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import * as dropEffects from "../utils/dropEffects";
 
 const DropTarget = (props) => {
+
   const dragOver = (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = props.dropEffect;
-    // props.setIsOver(true);
-    // console.log("drag over");
+    if (props.isOver === false) {
+      props.setIsOver(true);
+      props.setDragOverDropTargetID(props.id);
+      console.log(`drag enter - id ${props.id}`)
+    } 
   };
 
   const drop = (e) => {
@@ -22,13 +26,14 @@ const DropTarget = (props) => {
   const dragEnter = (e) => {
     e.dataTransfer.dropEffect = props.dropEffect;
     props.setIsOver(true);
-    console.log('drag enter')
+    props.setDragOverDropTargetID(props.id);
   };
 
   const dragLeave = () => { 
     props.setIsOver(false);
-  console.log("drag leave");
-}
+    console.log("drag leave");
+    props.setDragOverDropTargetID(null);
+  }
 
   return (
     <Wrapper

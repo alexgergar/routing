@@ -11,15 +11,18 @@ const Board = (props) => {
     <>
       {props.items.length >= 1 ? (
         <ContainerForBoard>
-          <DropTarget
-            onItemDropped={props.onItemDropped}
-            dropEffect="copy"
-            setIsOver={setIsOver}
-          >
             {props.items.map((item) => {
               const extraSpace = item.nextStep.length > 0 ? true : false;
               return (
-                <div key={item.id}>
+              <DropTarget
+                onItemDropped={props.onItemDropped}
+                dropEffect="copy"
+                setIsOver={setIsOver}
+                isOver={isOver}
+                key={item.id}
+                id={item.id}
+                setDragOverDropTargetID={props.setDragOverDropTargetID}
+              >
                   <Draggable>
                     <OnBoardOptionCard
                       cardData={item}
@@ -27,32 +30,19 @@ const Board = (props) => {
                       extraSpace={extraSpace}
                     />
                   </Draggable>
-                </div>
+                </DropTarget>
               );
             })}
-          </DropTarget>
+          
         </ContainerForBoard>
       ) : (
         <DropTarget
           onItemDropped={props.onItemDropped}
           dropEffect="copy"
           setIsOver={setIsOver}
+          setDragOverDropTargetID={props.setDragOverDropTargetID}
         >
-          <ContainerForBoard>
-            {props.items.length > 0 &&
-              props.items.map((item, index) => (
-                <DropTarget
-                  onItemDropped={props.onItemDropped}
-                  dropEffect="copy"
-                  key={index}
-                  setIsOver={setIsOver}
-                >
-                  <Draggable>
-                    <OnBoardOptionCard cardData={item} />
-                  </Draggable>
-                </DropTarget>
-              ))}
-          </ContainerForBoard>
+          <ContainerForBoard />
         </DropTarget>
       )}
     </>

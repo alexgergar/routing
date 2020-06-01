@@ -1,14 +1,10 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import styled from 'styled-components';
 import { MoreHorizontal } from "react-feather";
 import IconSquare from "./IconSquare";
 
 const OnBoardOptionCard = props => {
   
-  useEffect(() => {
-    console.log(props.isOver);
-  }, [props.isOver]);
-
   return (
     <Wrapper
       dropElementCoords={props.dropElementCoords}
@@ -41,8 +37,6 @@ const Wrapper = styled.div`
   width: 350px;
   left: ${(props) => props.cardData.x}px;
   top: ${(props) => props.cardData.y}px;
-  
-  
 `;
 
 const CardContents = styled.div`

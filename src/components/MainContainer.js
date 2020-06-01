@@ -9,25 +9,31 @@ const MainContainer = props => {
   const [dropElementCoords, setDropElementCoords] = useState(null);
   const [items, setItems] = useState([]);
   const [currentItem, setCurrentItem] = useState(null);
+  const [dragOverDropTargetID, setDragOverDropTargetID] = useState(null);
 
   useEffect(() => {
     if (currentItem !== null && dropElementCoords !== null) {
+      console.log(`in useefect in main container - id: ${dragOverDropTargetID}`);
+      items.findIndex(x => x.id === dragOverDropTargetID);
       const date = new Date();
       const newData = {
-        id: date.valueOf(),
-        optionType: currentItem.optionType,
-        title: currentItem.title,
-        shortDesc: currentItem.shortDesc,
-        icon: currentItem.icon,
-        x: dropElementCoords.x,
-        y: dropElementCoords.y,
+        id: date.valueOf(), // to find in the array
+        parentId: dragOverDropTargetID, // tells the parent node
+        optionType: currentItem.optionType, // for the card option type
+        title: currentItem.title, // title for the card
+        shortDesc: currentItem.shortDesc, // description of the the card
+        icon: currentItem.icon, // icon to help with visuals
+        x: dropElementCoords.x, // where the x-posiiton should be om the card. 
+        y: dropElementCoords.y, // where the y-position should be on the car
         nextStep: [],
       };
+
       setItems([...items, newData]);
       setDropElementCoords(null);
       setCurrentItem(null);
+      setDragOverDropTargetID(null);
     }
-  }, [currentItem, dropElementCoords, items]);
+  }, [currentItem, dropElementCoords, items, dragOverDropTargetID]);
 
   const onItemDropped = (item) => {
     setCurrentItem(JSON.parse(item));
@@ -55,6 +61,7 @@ const MainContainer = props => {
       <Board
         onItemDropped={onItemDropped}
         items={items}
+        setDragOverDropTargetID={setDragOverDropTargetID}
       />
     </Main>
   );

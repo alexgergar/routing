@@ -4,7 +4,7 @@ import styled from "styled-components";
 const NavBar = props => {
   return (
     <NavBarRow>
-      <p>nav bar</p>
+      <p>nav bars</p>
     </NavBarRow>
   );
 }
