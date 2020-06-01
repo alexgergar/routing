@@ -59,9 +59,7 @@ const SideBar = (props) => {
                   setMouseDropCoords={props.setMouseDropCoords}
                 >
                   <OptionCard
-                    getOptionCardAreaMousePosition={
-                      props.getOptionCardAreaMousePosition
-                    }
+                    handleCardClicked={props.handleCardClicked}
                     cardData={listItem}
                   />
                 </DragData>
@@ -75,8 +73,8 @@ const SideBar = (props) => {
                   setMouseDropCoords={props.setMouseDropCoords}
                 >
                   <OptionCard
-                    getOptionCardAreaMousePosition={
-                      props.getOptionCardAreaMousePosition
+                    handleCardClicked={
+                      props.handleCardClicked
                     }
                     cardData={listItem}
                   />

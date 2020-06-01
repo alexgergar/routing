@@ -7,7 +7,6 @@ const OnBoardOptionCard = props => {
   
   return (
     <Wrapper
-      dropElementCoords={props.dropElementCoords}
       cardData={props.cardData}
     >
       <CardContents isOver={props.isOver}>

@@ -8,9 +8,10 @@ const DropTarget = (props) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = props.dropEffect;
     if (props.isOver === false) {
-      props.setIsOver(true);
-      props.setDragOverDropTargetID(props.id);
-      console.log(`drag enter - id ${props.id}`)
+      props.dispatchDraggedElement({
+        type: "DRAG_OVER",
+        setDragOverDropTargetID: props.id,
+      })
     } 
   };
 
@@ -19,20 +20,18 @@ const DropTarget = (props) => {
     if (droppedItem) {
       props.onItemDropped(droppedItem); // this will send back the object - that you can't read in console.log
     }
-    props.setIsOver(false);
-    console.log('drop')
   };
 
   const dragEnter = (e) => {
     e.dataTransfer.dropEffect = props.dropEffect;
-    props.setIsOver(true);
-    props.setDragOverDropTargetID(props.id);
+    props.dispatchDraggedElement({
+      type: "DRAG_ENTER",
+      setDragOverDropTargetID: props.id,
+    })
   };
 
   const dragLeave = () => { 
-    props.setIsOver(false);
-    console.log("drag leave");
-    props.setDragOverDropTargetID(null);
+    props.dispatchDraggedElement({type: "DRAG_LEAVE"})
   }
 
   return (

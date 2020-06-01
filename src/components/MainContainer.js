@@ -1,67 +1,140 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useReducer} from 'react'
 import styled from "styled-components";
 import SideBar from './SideBar';
 import Board from './Board';
 
+const initialDragElement = {
+  areaOfClickedElement: null,
+  positionOfMouseDown: null,
+  coordsOfDroppedElement: null,
+  currentItem: null,
+  dragOverDropTargetID: null,
+}
+
+const draggedElementReducer = (state, action) => {
+  switch (action.type) {
+    case "CLICKED":
+      return {
+        ...state, 
+        areaOfClickedElement: action.areaOfClickedElement,
+        positionOfMouseDown: action.positionOfMouseDown, 
+    }
+    case "DRAG_ENTER":
+      return {
+        ...state,
+        isOver: true,
+        dragOverDropTargetID: action.dragOverDropTargetID,
+      }
+    case "DRAG_OVER":
+      return {
+        ...state,
+        isOver: true,
+        dragOverDropTargetID: action.dragOverDropTargetID,
+      }
+    case "DRAG_LEAVE": 
+      return {
+        ...state,
+        isOver: false,
+        dragOverDropTargetID: null,
+      }
+    case "DROP":
+      return {
+        ...state,
+        currentItem: action.currentItem,
+        isOver: false,
+      }
+    case "MOUSE_UP":
+      return {
+        ...state,
+        coordsOfDroppedElement: action.coordsOfDroppedElement,
+      }
+    case "RESET":
+      return {
+        areaOfClickedElement: null,
+        positionOfMouseDown: null, 
+        coordsOfDroppedElement: null,
+        currentItem: null,
+        dragOverDropTargetID: null,
+      }
+    default: 
+      console.log('error in dragged element reducer')
+  }
+}
+
+
+const itemReducer = (state, action) => {
+  switch (action.type) {
+    case "ADD":
+      return state.concat(action.data)
+    default:
+      console.log('error in item reducer')
+  }
+}
+
+
+
 const MainContainer = props => {
-  const [clickedElementArea, setClickedElementArea] = useState();
-  const [mouseDownPagePosition, setMouseDownPagePosition] = useState();
-  const [dropElementCoords, setDropElementCoords] = useState(null);
-  const [items, setItems] = useState([]);
-  const [currentItem, setCurrentItem] = useState(null);
-  const [dragOverDropTargetID, setDragOverDropTargetID] = useState(null);
+  const [draggedElement, dispatchDraggedElement] = useReducer(draggedElementReducer, initialDragElement);
+  const [itemList, dispatchItems] = useReducer(itemReducer, [])
+
 
   useEffect(() => {
-    if (currentItem !== null && dropElementCoords !== null) {
-      console.log(`in useefect in main container - id: ${dragOverDropTargetID}`);
-      items.findIndex(x => x.id === dragOverDropTargetID);
+    if (draggedElement.currentItem !== null && draggedElement.coordsOfDroppedElement !== null && draggedElement.dragOverDropTargetID !== null) {
       const date = new Date();
       const newData = {
         id: date.valueOf(), // to find in the array
-        parentId: dragOverDropTargetID, // tells the parent node
-        optionType: currentItem.optionType, // for the card option type
-        title: currentItem.title, // title for the card
-        shortDesc: currentItem.shortDesc, // description of the the card
-        icon: currentItem.icon, // icon to help with visuals
-        x: dropElementCoords.x, // where the x-posiiton should be om the card. 
-        y: dropElementCoords.y, // where the y-position should be on the car
+        parentId: draggedElement.dragOverDropTargetID, // tells the parent node
+        optionType: draggedElement.currentItem.optionType, // for the card option type
+        title: draggedElement.currentItem.title, // title for the card
+        shortDesc: draggedElement.currentItem.shortDesc, // description of the the card
+        icon: draggedElement.currentItem.icon, // icon to help with visuals
+        x: draggedElement.coordsOfDroppedElement.x, // where the x-posiiton should be om the card. 
+        y: draggedElement.coordsOfDroppedElement.y, // where the y-position should be on the car
         nextStep: [],
       };
-
-      setItems([...items, newData]);
-      setDropElementCoords(null);
-      setCurrentItem(null);
-      setDragOverDropTargetID(null);
+      dispatchItems({type: "ADD", data: newData})
+      dispatchDraggedElement({type: "RESET"})
     }
-  }, [currentItem, dropElementCoords, items, dragOverDropTargetID]);
+  }, [draggedElement.currentItem, draggedElement.coordsOfDroppedElement, draggedElement.dragOverDropTargetID]);
+
 
   const onItemDropped = (item) => {
-    setCurrentItem(JSON.parse(item));
+    dispatchDraggedElement({
+      type: 'DROP', 
+      currentItem: JSON.parse(item),
+    })
   };
 
-  const getOptionCardAreaMousePosition = (area, mouseDownPagePosition) => {
-    setClickedElementArea(area);
-    setMouseDownPagePosition(mouseDownPagePosition);
+  const handleCardClicked = (area, mouseDownPagePosition) => {
+    dispatchDraggedElement({
+      type: "CLICKED",
+      areaOfClickedElement: area,
+      positionOfMouseDown: mouseDownPagePosition,
+    })
   }
 
   const setMouseDropCoords = (mouseUpPosition) => {
     const xDropCoord =
-      mouseUpPosition.x - 350 - (mouseDownPagePosition.x - clickedElementArea.x); 
+      mouseUpPosition.x - 350 - (draggedElement.positionOfMouseDown.x - draggedElement.areaOfClickedElement.x); 
     const yDropCoord =
-      mouseUpPosition.y - 50 - (mouseDownPagePosition.y - clickedElementArea.y);
-    setDropElementCoords({x: xDropCoord, y: yDropCoord});
-  };
+      mouseUpPosition.y - 50 - (draggedElement.positionOfMouseDown.y - draggedElement.areaOfClickedElement.y);
+    dispatchDraggedElement({
+      type: "MOUSE_UP",
+      coordsOfDroppedElement: {x: xDropCoord, y: yDropCoord},
+    });
+  }
 
   return (
     <Main>
       <SideBar
-        getOptionCardAreaMousePosition={getOptionCardAreaMousePosition}
         setMouseDropCoords={setMouseDropCoords}
+        handleCardClicked={handleCardClicked}
       />
       <Board
+        items={itemList}
         onItemDropped={onItemDropped}
-        items={items}
-        setDragOverDropTargetID={setDragOverDropTargetID}
+        isOver={draggedElement.isOver}
+        dispatchDraggedElement={dispatchDraggedElement}
       />
     </Main>
   );

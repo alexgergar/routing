@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Draggable from "./Draggable";
 import DropTarget from "./DropTarget";
 import OnBoardOptionCard from "./OnBoardOptionCard";
 
 const Board = (props) => {
-  const [isOver, setIsOver] = useState(false);
 
   return (
     <>
@@ -17,16 +16,15 @@ const Board = (props) => {
               <DropTarget
                 onItemDropped={props.onItemDropped}
                 dropEffect="copy"
-                setIsOver={setIsOver}
-                isOver={isOver}
+                dispatchDraggedElement={props.dispatchDraggedElement}
+                isOver={props.isOver}
                 key={item.id}
                 id={item.id}
-                setDragOverDropTargetID={props.setDragOverDropTargetID}
               >
                   <Draggable>
                     <OnBoardOptionCard
                       cardData={item}
-                      isOver={isOver}
+                      isOver={props.isOver}
                       extraSpace={extraSpace}
                     />
                   </Draggable>
@@ -39,8 +37,8 @@ const Board = (props) => {
         <DropTarget
           onItemDropped={props.onItemDropped}
           dropEffect="copy"
-          setIsOver={setIsOver}
-          setDragOverDropTargetID={props.setDragOverDropTargetID}
+          dispatchDraggedElement={props.dispatchDraggedElement}
+          isOver={props.isOver}
         >
           <ContainerForBoard />
         </DropTarget>
