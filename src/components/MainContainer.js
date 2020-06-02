@@ -9,6 +9,7 @@ const initialDragElement = {
   coordsOfDroppedElement: null,
   currentItem: null,
   dragOverDropTargetID: null,
+  dragOverArea: null,
 }
 
 const draggedElementReducer = (state, action) => {
@@ -24,23 +25,44 @@ const draggedElementReducer = (state, action) => {
         ...state,
         isOver: true,
         dragOverDropTargetID: action.dragOverDropTargetID,
+        dragOverArea: action.dragOverArea,
       }
     case "DRAG_OVER":
-      return {
-        ...state,
-        isOver: true,
-        dragOverDropTargetID: action.dragOverDropTargetID,
-      }
+      if (state.isOver == false) {
+        return {
+          ...state,
+          isOver: true,
+          dragOverDropTargetID: action.dragOverDropTargetID,
+          dragOverArea: action.dragOverArea,
+        }
+      } 
+      // else {
+      //   return {
+      //     ...state,
+      //     dragOverDropTargetID: action.dragOverDropTargetID,
+      //     dragOverArea: action.dragOverArea,
+      //   }
+      // }
+    // case "DRAG_OVER":
+    //   return {
+    //     ...state,
+    //     isOver: true,
+    //     dragOverDropTargetID: action.dragOverDropTargetID,
+    //     dragOverArea: action.dragOverArea,
+    //   }
     case "DRAG_LEAVE": 
       return {
         ...state,
         isOver: false,
         dragOverDropTargetID: null,
+        dragOverArea: null,
       }
     case "DROP":
       return {
         ...state,
         currentItem: action.currentItem,
+        dragOverDropTargetID: action.dragOverDropTargetID,
+        dragOverArea: action.dragOverArea,
         isOver: false,
       }
     case "MOUSE_UP":
@@ -55,17 +77,26 @@ const draggedElementReducer = (state, action) => {
         coordsOfDroppedElement: null,
         currentItem: null,
         dragOverDropTargetID: null,
+        dragOverArea: null,
       }
     default: 
       console.log('error in dragged element reducer')
   }
 }
 
+const initialList = {
+  list: [],
+  levels: [0],
+}
+
 
 const itemReducer = (state, action) => {
   switch (action.type) {
-    case "ADD":
-      return state.concat(action.data)
+    case "ADD_NODE":
+      return {
+        list: state.list.concat(action.data),
+        levels: action.levels,
+      };
     default:
       console.log('error in item reducer')
   }
@@ -73,35 +104,52 @@ const itemReducer = (state, action) => {
 
 
 
+
 const MainContainer = props => {
   const [draggedElement, dispatchDraggedElement] = useReducer(draggedElementReducer, initialDragElement);
-  const [itemList, dispatchItems] = useReducer(itemReducer, [])
-
+  const [itemList, dispatchItems] = useReducer(itemReducer, initialList);
+  const [hoverOverArea, setHoverOverArea] = useState(null);
 
   useEffect(() => {
     if (draggedElement.currentItem !== null && draggedElement.coordsOfDroppedElement !== null && draggedElement.dragOverDropTargetID !== null) {
       const date = new Date();
+      const nodeID = date.valueOf();
+      let xCoord = draggedElement.coordsOfDroppedElement.x;
+      let yCoord = draggedElement.coordsOfDroppedElement.y;
+      let level = 0;
+      if (itemList.length > 0 ) {
+        const indexOfParentNode = itemList.list.findIndex(card => card.id === draggedElement.dragOverDropTargetID);
+        const parentLevel = itemList.list[indexOfParentNode].treeLevel;
+        level = parentLevel + 1;
+        // if (itemList.list[indexOfParentNode].children.length > 0) {
+        //   if (itemList.levels[parentLevel] < gra)
+        // }
+        itemList.list[indexOfParentNode].children.push(draggedElement.dragOverDropTargetID);
+      }
       const newData = {
-        id: date.valueOf(), // to find in the array
+        id: nodeID, // to find in the array
         parentId: draggedElement.dragOverDropTargetID, // tells the parent node
+        treeLevel: level,
         optionType: draggedElement.currentItem.optionType, // for the card option type
         title: draggedElement.currentItem.title, // title for the card
         shortDesc: draggedElement.currentItem.shortDesc, // description of the the card
         icon: draggedElement.currentItem.icon, // icon to help with visuals
-        x: draggedElement.coordsOfDroppedElement.x, // where the x-posiiton should be om the card. 
-        y: draggedElement.coordsOfDroppedElement.y, // where the y-position should be on the car
-        nextStep: [],
+        x: xCoord, // where the x-posiiton should be om the card. 
+        y: yCoord, // where the y-position should be on the car
+        children: [],
       };
-      dispatchItems({type: "ADD", data: newData})
+      dispatchItems({type: "ADD_NODE", data: newData})
       dispatchDraggedElement({type: "RESET"})
     }
-  }, [draggedElement.currentItem, draggedElement.coordsOfDroppedElement, draggedElement.dragOverDropTargetID]);
+  }, [itemList, draggedElement.currentItem, draggedElement.coordsOfDroppedElement, draggedElement.areaOfClickedElement, draggedElement.dragOverDropTargetID]);
 
 
-  const onItemDropped = (item) => {
+  const onItemDropped = (item, id, hoverElementArea) => {
     dispatchDraggedElement({
       type: 'DROP', 
       currentItem: JSON.parse(item),
+      dragOverDropTargetID: id,
+      dragOverArea: hoverElementArea,
     })
   };
 
@@ -131,7 +179,7 @@ const MainContainer = props => {
         handleCardClicked={handleCardClicked}
       />
       <Board
-        items={itemList}
+        items={itemList.list}
         onItemDropped={onItemDropped}
         isOver={draggedElement.isOver}
         dispatchDraggedElement={dispatchDraggedElement}

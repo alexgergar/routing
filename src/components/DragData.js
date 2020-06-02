@@ -2,17 +2,16 @@ import React from 'react'
 import styled from "styled-components";
 
 const DragData = props => {
-  // const [isDragging, setIsDragging] = useState(false);
   
   const startDrag = (e) => {
-    // setIsDragging(true);
     e.dataTransfer.setData("drag-item", JSON.stringify(props.dataItem));
     e.dataTransfer.effectAllowed = props.dropEffect;
   }
 
   const dragEnd = e => {
-    // setIsDragging(false);
-    props.setMouseDropCoords({x: e.pageX, y: e.pageY});
+    if (e !== null) {
+      props.setMouseDropCoords({x: e.pageX, y: e.pageY});
+    }
   };
 
   return (

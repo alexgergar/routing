@@ -1,17 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import Draggable from "./Draggable";
 import DropTarget from "./DropTarget";
 import OnBoardOptionCard from "./OnBoardOptionCard";
 
 const Board = (props) => {
-
+  const [hoverArea, setHoverArea] = useState(null);
   return (
     <>
       {props.items.length >= 1 ? (
         <ContainerForBoard>
             {props.items.map((item) => {
-              const extraSpace = item.nextStep.length > 0 ? true : false;
+              const extraSpace = item.children.length > 0 ? true : false;
               return (
               <DropTarget
                 onItemDropped={props.onItemDropped}
@@ -20,9 +20,11 @@ const Board = (props) => {
                 isOver={props.isOver}
                 key={item.id}
                 id={item.id}
+                hoverArea={hoverArea}
               >
                   <Draggable>
                     <OnBoardOptionCard
+                      setHoverArea={setHoverArea}
                       cardData={item}
                       isOver={props.isOver}
                       extraSpace={extraSpace}

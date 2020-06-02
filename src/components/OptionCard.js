@@ -23,7 +23,6 @@ const OptionCard = (props) => {
       x: e.pageX,
       y: e.pageY,
     };
-    // props.getOptionCardAreaMousePosition(area, mousePosition);
     props.handleCardClicked(area, mousePosition);
   }
 

@@ -1,12 +1,31 @@
-import React from 'react'
+import React, {useState, useCallback, useRef, useEffect, useLayoutEffect} from 'react'
 import styled from 'styled-components';
 import { MoreHorizontal } from "react-feather";
 import IconSquare from "./IconSquare";
 
 const OnBoardOptionCard = props => {
-  
+  const [area, setArea] = useState({});
+
+  const measuredRef = useCallback((node) => {
+    if (node !== null) {
+      setArea({
+        x: node.getBoundingClientRect().x,
+        y: node.getBoundingClientRect().y,
+        width: node.getBoundingClientRect().width,
+        height: node.getBoundingClientRect().height,
+        bottom: node.getBoundingClientRect().bottom,
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    props.isOver ? props.setHoverArea(area) : props.setHoverArea(null);
+  }, [props.isOver, area])
+
+
   return (
     <Wrapper
+      ref={measuredRef}
       cardData={props.cardData}
     >
       <CardContents isOver={props.isOver}>
@@ -23,10 +42,16 @@ const OnBoardOptionCard = props => {
         </TitleRow>
         <HorizontalLine />
         <BodyRow>
-          <ContentText>I am the body text {props.cardData.id}</ContentText>
+          <ContentText>I am the body text </ContentText>
         </BodyRow>
+        {props.area && (
+          <BodyRow>
+          <ContentText>{props.area.height} - {props.area.bottom}</ContentText>
+        </BodyRow>
+        )}
+        
       </CardContents>
-      {props.extraSpace && <ExtraSpace />}
+      {/* <ExtraSpace /> */}
     </Wrapper>
   );
 }
@@ -44,6 +69,7 @@ const CardContents = styled.div`
   border-radius: 5px;
   box-shadow: 0px 4px 30px rgba(22, 33, 74, 0.08);
   background-color: ${(props) => (props.isOver ? "red" : "white")};
+  zIndex: 10;
 `;
 
 const Row = styled.div`
@@ -83,5 +109,6 @@ const ContentText = styled.p`
 const ExtraSpace = styled.div`
   height: 100px;
   content: '';
+  zIndex: 0;
 `;
 export default OnBoardOptionCard
