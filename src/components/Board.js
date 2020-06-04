@@ -11,7 +11,7 @@ const Board = (props) => {
       {props.items.length >= 1 ? (
         <ContainerForBoard>
             {props.items.map((item) => {
-              const extraSpace = item.children.length > 0 ? true : false;
+              {/* const extraSpace = item.children.length > 0 ? true : false; */}
               return (
               <DropTarget
                 onItemDropped={props.onItemDropped}
@@ -27,7 +27,7 @@ const Board = (props) => {
                       setHoverArea={setHoverArea}
                       cardData={item}
                       isOver={props.isOver}
-                      extraSpace={extraSpace}
+                      // extraSpace={extraSpace}
                     />
                   </Draggable>
                 </DropTarget>

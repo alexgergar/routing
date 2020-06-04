@@ -1,7 +1,8 @@
-import React, {useState, useEffect, useReducer} from 'react'
+import React, { useEffect, useReducer} from 'react'
 import styled from "styled-components";
 import SideBar from './SideBar';
 import Board from './Board';
+import OnBoardOptionCard from './OnBoardOptionCard';
 
 const initialDragElement = {
   areaOfClickedElement: null,
@@ -28,6 +29,7 @@ const draggedElementReducer = (state, action) => {
         dragOverArea: action.dragOverArea,
       }
     case "DRAG_OVER":
+      // eslint-disable-next-line eqeqeq
       if (state.isOver == false) {
         return {
           ...state,
@@ -36,20 +38,7 @@ const draggedElementReducer = (state, action) => {
           dragOverArea: action.dragOverArea,
         }
       } 
-      // else {
-      //   return {
-      //     ...state,
-      //     dragOverDropTargetID: action.dragOverDropTargetID,
-      //     dragOverArea: action.dragOverArea,
-      //   }
-      // }
-    // case "DRAG_OVER":
-    //   return {
-    //     ...state,
-    //     isOver: true,
-    //     dragOverDropTargetID: action.dragOverDropTargetID,
-    //     dragOverArea: action.dragOverArea,
-    //   }
+      break;
     case "DRAG_LEAVE": 
       return {
         ...state,
@@ -90,43 +79,84 @@ const initialList = {
 }
 
 
+
 const itemReducer = (state, action) => {
   switch (action.type) {
     case "ADD_NODE":
       return {
-        list: state.list.concat(action.data),
-        levels: action.levels,
-      };
+        ...state,
+        list: [...state.list, action.payload],
+      }
+    case "UPDATE_LEVELS":
+      return {
+        ...state,
+        levels: state.levels.splice(action.payload.parentIndex, 1, action.payload.parentHeight)
+      }
+    case "ADD_LEVEL":
+      return {
+        ...state,
+        levels: [...state.levels, action.payload.newLevel]
+      }
+    case "ADD_CHILDREN_TO_PARENT":
+      return {
+        ...state,
+        list: state.list.map((item) => item.id === action.payload.parentID ? {...item, children: action.payload.children} : item)
+      }
     default:
       console.log('error in item reducer')
   }
 }
 
 
-
-
 const MainContainer = props => {
   const [draggedElement, dispatchDraggedElement] = useReducer(draggedElementReducer, initialDragElement);
   const [itemList, dispatchItems] = useReducer(itemReducer, initialList);
-  const [hoverOverArea, setHoverOverArea] = useState(null);
 
   useEffect(() => {
-    if (draggedElement.currentItem !== null && draggedElement.coordsOfDroppedElement !== null && draggedElement.dragOverDropTargetID !== null) {
+    if (draggedElement.currentItem !== null && draggedElement.coordsOfDroppedElement !== null) {
       const date = new Date();
       const nodeID = date.valueOf();
       let xCoord = draggedElement.coordsOfDroppedElement.x;
       let yCoord = draggedElement.coordsOfDroppedElement.y;
       let level = 0;
-      if (itemList.length > 0 ) {
-        const indexOfParentNode = itemList.list.findIndex(card => card.id === draggedElement.dragOverDropTargetID);
-        const parentLevel = itemList.list[indexOfParentNode].treeLevel;
+      let children = []
+      if (itemList.list.length > 0) {
+        const indexOfParent = itemList.list.findIndex(card => card.id === draggedElement.dragOverDropTargetID);
+        const parentData = itemList.list[indexOfParent];
+        const parentLevel = parentData.treeLevel;
+        const parentX = parentData.x;
+        const parentY = parentData.y;
+        const parentHeight = draggedElement.dragOverArea.height;
+        const parentLevelHeightInState = itemList.levels[parentLevel];
         level = parentLevel + 1;
-        // if (itemList.list[indexOfParentNode].children.length > 0) {
-        //   if (itemList.levels[parentLevel] < gra)
-        // }
-        itemList.list[indexOfParentNode].children.push(draggedElement.dragOverDropTargetID);
+        if (parentHeight > parentLevelHeightInState) {
+          // this updates the parent level height
+          dispatchItems({
+            type: "UPDATE_LEVELS",
+            payload: {
+              parentIndex: parentLevel,
+              parentHeight: parentHeight,
+            }
+          })
+        }
+        if (itemList.levels[level] === undefined) {
+          // adds new item to the levels array 
+          dispatchItems({
+            type: "ADD_LEVEL",
+            payload: {
+              newLevel: 0,
+            }
+          })
+        }
+        parentData.children.push(nodeID);
+        dispatchItems({
+          type: "ADD_CHILDREN_TO_PARENT",
+          payload: {
+            children: parentData.children,
+          }
+        })
       }
-      const newData = {
+      const newNode = {
         id: nodeID, // to find in the array
         parentId: draggedElement.dragOverDropTargetID, // tells the parent node
         treeLevel: level,
@@ -136,13 +166,77 @@ const MainContainer = props => {
         icon: draggedElement.currentItem.icon, // icon to help with visuals
         x: xCoord, // where the x-posiiton should be om the card. 
         y: yCoord, // where the y-position should be on the car
-        children: [],
+        children: children,
       };
-      dispatchItems({type: "ADD_NODE", data: newData})
+      dispatchItems({
+        type: "ADD_NODE", 
+        payload: newNode,
+      })
       dispatchDraggedElement({type: "RESET"})
     }
-  }, [itemList, draggedElement.currentItem, draggedElement.coordsOfDroppedElement, draggedElement.areaOfClickedElement, draggedElement.dragOverDropTargetID]);
+  }, [draggedElement.currentItem, draggedElement.coordsOfDroppedElement, draggedElement.dragOverDropTargetID, draggedElement.dragOverArea, itemList])
 
+
+  useEffect(() => {
+    console.log(itemList)
+    // this will add the children
+  }, [itemList])
+
+  // useEffect(() => {
+  //   if (draggedElement.currentItem !== null && draggedElement.coordsOfDroppedElement !== null) {
+  //     const date = new Date();
+  //     const nodeID = date.valueOf();
+  //     let xCoord = draggedElement.coordsOfDroppedElement.x;
+  //     let yCoord = draggedElement.coordsOfDroppedElement.y;
+  //     let level = 0;
+  //     if (itemList.length > 0 ) {
+  //       const indexOfParentNode = itemList.findIndex(card => card.id === draggedElement.dragOverDropTargetID);
+  //       const parentLevel = itemList[indexOfParentNode].treeLevel;
+  //       const parentHeight = draggedElement.dragOverArea.height;
+  //       const parentX = itemList[indexOfParentNode].x;
+  //       const parentY = itemList[indexOfParentNode].y;
+  //       level = parentLevel + 1;
+  //       // if (itemList.levels[parentLevel].height < parentHeight) {
+  //       //   let newLevel = {
+  //       //     height: parentHeight,
+  //       //   }
+  //       //   dispatchItems({type: "UPDATE_LEVELS", parentLevel: parentLevel, levelValue: newLevel})
+  //       // }
+  //       // if (level > itemList.levels.length - 1) {
+  //       //   dispatchItems({type: "ADD_LEVEL", newLevel: {height: 0}});
+  //       // }
+  //       // dispatchItems({
+  //       //   type: "ADD_CHILDREN", 
+  //       //   parentIndex: indexOfParentNode, 
+  //       //   // parentLevel: parentLevel, 
+  //       //   childID: nodeID,
+  //       // })
+  //       itemList.list[indexOfParentNode].children.push(nodeID);
+  //       xCoord = parentX;
+  //       yCoord = parentY + parentHeight;
+  //     }
+  //     const newNode = {
+  //       id: nodeID, // to find in the array
+  //       parentId: draggedElement.dragOverDropTargetID, // tells the parent node
+  //       treeLevel: level,
+  //       optionType: draggedElement.currentItem.optionType, // for the card option type
+  //       title: draggedElement.currentItem.title, // title for the card
+  //       shortDesc: draggedElement.currentItem.shortDesc, // description of the the card
+  //       icon: draggedElement.currentItem.icon, // icon to help with visuals
+  //       x: xCoord, // where the x-posiiton should be om the card. 
+  //       y: yCoord, // where the y-position should be on the car
+  //       children: [],
+  //     };
+  //     dispatchItems({
+  //       type: "ADD_NODE", 
+  //       payload: newNode,
+  //     })
+  //     console.log(`after add node:`)
+  //     console.log(itemList)
+  //     dispatchDraggedElement({type: "RESET"})
+      
+  //   }
+  // }, [itemList, draggedElement.currentItem, draggedElement.coordsOfDroppedElement, draggedElement.areaOfClickedElement, draggedElement.dragOverDropTargetID]);
 
   const onItemDropped = (item, id, hoverElementArea) => {
     dispatchDraggedElement({
@@ -161,7 +255,7 @@ const MainContainer = props => {
     })
   }
 
-  const setMouseDropCoords = (mouseUpPosition) => {
+  const setMouseDropCoords = mouseUpPosition => {
     const xDropCoord =
       mouseUpPosition.x - 350 - (draggedElement.positionOfMouseDown.x - draggedElement.areaOfClickedElement.x); 
     const yDropCoord =
@@ -171,6 +265,9 @@ const MainContainer = props => {
       coordsOfDroppedElement: {x: xDropCoord, y: yDropCoord},
     });
   }
+
+
+
 
   return (
     <Main>

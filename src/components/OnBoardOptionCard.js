@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useRef, useEffect, useLayoutEffect} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import styled from 'styled-components';
 import { MoreHorizontal } from "react-feather";
 import IconSquare from "./IconSquare";
@@ -20,6 +20,7 @@ const OnBoardOptionCard = props => {
 
   useEffect(() => {
     props.isOver ? props.setHoverArea(area) : props.setHoverArea(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isOver, area])
 
 
@@ -51,7 +52,7 @@ const OnBoardOptionCard = props => {
         )}
         
       </CardContents>
-      {/* <ExtraSpace /> */}
+      <ExtraSpace />
     </Wrapper>
   );
 }
