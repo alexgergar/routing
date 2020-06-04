@@ -5,7 +5,6 @@ import IconSquare from "./IconSquare";
 
 const OnBoardOptionCard = props => {
   const [area, setArea] = useState({});
-  const [coords, setCoords] = useState({});
 
   const measuredRef = useCallback((node) => {
     if (node !== null) {
@@ -24,21 +23,12 @@ const OnBoardOptionCard = props => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isOver, area])
 
-  useEffect(() => {
-    if (props.cardData.id !== props.rootID) {
-      const endPtForSlice = props.cardData.level + 1;
-      const splicedHeightsList = props.itemList.levels.splice(0, endPtForSlice);
-      const sumOfYHeights = splicedHeightsList.reduce((a,b) => a + b)
-      const yCoord = props.rootCoords.y + sumOfYHeights
-      // const xCoord = 
-    }
-  })
 
 
   return (
     <Wrapper
       ref={measuredRef}
-      cardData={props.cardData}
+      rootCoords={props.rootCoords}
     >
       <CardContents isOver={props.isOver}>
         <TitleRow>
@@ -56,12 +46,6 @@ const OnBoardOptionCard = props => {
         <BodyRow>
           <ContentText>I am the body text </ContentText>
         </BodyRow>
-        {props.area && (
-          <BodyRow>
-          <ContentText>{props.area.height} - {props.area.bottom}</ContentText>
-        </BodyRow>
-        )}
-        
       </CardContents>
       <ExtraSpace />
     </Wrapper>
@@ -71,8 +55,8 @@ const OnBoardOptionCard = props => {
 const Wrapper = styled.div`
   position: absolute;
   width: 350px;
-  left: ${(props) => props.cardData.x}px;
-  top: ${(props) => props.cardData.y}px;
+  left: ${(props) => props.rootCoords.x}px;
+  top: ${(props) => props.rootCoords.y}px;
 `;
 
 const CardContents = styled.div`

@@ -43,12 +43,6 @@ const Draggable = (props) => {
       ...position,
       coords: {},
     }));
-    if (props.rootID !== null && props.rootID === props.cardData.id) {
-      props.dispatchItems({
-        type: "DRAG_ENTER",
-        setDragOverDropTargetID: props.id,
-      })
-    }
   };
 
   return (

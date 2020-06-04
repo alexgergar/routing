@@ -4,37 +4,55 @@ import Draggable from "./Draggable";
 import DropTarget from "./DropTarget";
 import OnBoardOptionCard from "./OnBoardOptionCard";
 
+
+const Node = (props) => {
+  return (
+    <div>
+      {props.items.map(item => {
+        return (
+          <>
+          <DropTarget
+            onItemDropped={props.onItemDropped}
+            dropEffect="copy"
+            dispatchDraggedElement={props.dispatchDraggedElement}
+            isOver={props.isOver}
+            key={item.id}
+            id={item.id}
+            hoverArea={props.hoverArea}>
+            <Draggable cardData={props.items}>
+              <OnBoardOptionCard
+                setHoverArea={props.setHoverArea}
+                cardData={item} 
+                rootCoords={props.rootCoords}
+                isOver={props.isOver}
+                />
+            </Draggable>
+          </DropTarget>
+          {item.children && <Node items={item.children} />}
+        </>  
+        )
+      })}
+    </div>
+  )
+}
+
 const Board = (props) => {
   const [hoverArea, setHoverArea] = useState(null);
+
   return (
     <>
-      {props.items.length >= 1 ? (
+      {props.items.length === 1 ? (
         <ContainerForBoard>
-            {props.items.map((item) => {
-              {/* const extraSpace = item.children.length > 0 ? true : false; */}
-              return (
-              <DropTarget
-                onItemDropped={props.onItemDropped}
-                dropEffect="copy"
-                dispatchDraggedElement={props.dispatchDraggedElement}
-                isOver={props.isOver}
-                key={item.id}
-                id={item.id}
-                hoverArea={hoverArea}
-              >
-                <Draggable
-                  cardData={item}>
-                  <OnBoardOptionCard
-                    setHoverArea={setHoverArea}
-                    cardData={item}
-                    isOver={props.isOver}
-                    // extraSpace={extraSpace}
-                  />
-                </Draggable>
-              </DropTarget>
-              );
-            })}
-          
+          <Node 
+            items={props.items}
+            onItemDropped={props.onItemDropped}
+            dropEffect="copy"
+            dispatchDraggedElement={props.dispatchDraggedElement}
+            isOver={props.isOver}
+            hoverArea={hoverArea}
+            rootCoords={props.rootCoords}
+            setHoverArea={setHoverArea}
+             />
         </ContainerForBoard>
       ) : (
         <DropTarget
