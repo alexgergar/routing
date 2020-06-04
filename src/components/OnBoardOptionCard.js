@@ -5,6 +5,7 @@ import IconSquare from "./IconSquare";
 
 const OnBoardOptionCard = props => {
   const [area, setArea] = useState({});
+  const [coords, setCoords] = useState({});
 
   const measuredRef = useCallback((node) => {
     if (node !== null) {
@@ -22,6 +23,16 @@ const OnBoardOptionCard = props => {
     props.isOver ? props.setHoverArea(area) : props.setHoverArea(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isOver, area])
+
+  useEffect(() => {
+    if (props.cardData.id !== props.rootID) {
+      const endPtForSlice = props.cardData.level + 1;
+      const splicedHeightsList = props.itemList.levels.splice(0, endPtForSlice);
+      const sumOfYHeights = splicedHeightsList.reduce((a,b) => a + b)
+      const yCoord = props.rootCoords.y + sumOfYHeights
+      // const xCoord = 
+    }
+  })
 
 
   return (

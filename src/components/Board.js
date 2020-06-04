@@ -22,15 +22,16 @@ const Board = (props) => {
                 id={item.id}
                 hoverArea={hoverArea}
               >
-                  <Draggable>
-                    <OnBoardOptionCard
-                      setHoverArea={setHoverArea}
-                      cardData={item}
-                      isOver={props.isOver}
-                      // extraSpace={extraSpace}
-                    />
-                  </Draggable>
-                </DropTarget>
+                <Draggable
+                  cardData={item}>
+                  <OnBoardOptionCard
+                    setHoverArea={setHoverArea}
+                    cardData={item}
+                    isOver={props.isOver}
+                    // extraSpace={extraSpace}
+                  />
+                </Draggable>
+              </DropTarget>
               );
             })}
           
