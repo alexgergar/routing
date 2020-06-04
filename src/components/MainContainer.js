@@ -120,6 +120,7 @@ const MainContainer = props => {
       let yCoord = draggedElement.coordsOfDroppedElement.y;
       let level = 0;
       let children = []
+      const cardWidth = 350; // this can be changed - depending on modifcations in the future - this helps with figuing out layout
       if (itemList.list.length > 0) {
         const indexOfParent = itemList.list.findIndex(card => card.id === draggedElement.dragOverDropTargetID);
         const parentData = itemList.list[indexOfParent];
@@ -127,6 +128,8 @@ const MainContainer = props => {
         const parentX = parentData.x;
         const parentY = parentData.y;
         const parentHeight = draggedElement.dragOverArea.height;
+        xCoord = parentX;
+        yCoord = parentY + parentHeight;
         const parentLevelHeightInState = itemList.levels[parentLevel];
         level = parentLevel + 1;
         if (parentHeight > parentLevelHeightInState) {
@@ -139,6 +142,7 @@ const MainContainer = props => {
             }
           })
         }
+        console.log(`chldren length ${parentData.children.length + 1}`)
         if (itemList.levels[level] === undefined) {
           // adds new item to the levels array 
           dispatchItems({
@@ -165,7 +169,8 @@ const MainContainer = props => {
         shortDesc: draggedElement.currentItem.shortDesc, // description of the the card
         icon: draggedElement.currentItem.icon, // icon to help with visuals
         x: xCoord, // where the x-posiiton should be om the card. 
-        y: yCoord, // where the y-position should be on the car
+        y: yCoord, // where the y-position should be on the card
+        centerXPoint: xCoord + (cardWidth/2), 
         children: children,
       };
       dispatchItems({
