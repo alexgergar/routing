@@ -6,7 +6,6 @@ import Tab from "react-bootstrap/Tab";
 import Row from 'react-bootstrap/Row';
 import Nav from 'react-bootstrap/Nav';
 import OptionCard from "./OptionCard";
-import DragData from './DragData';
 import {database} from '../utils/database'
 
 const triggerList = database.filter((task) => task.optionType === "trigger");
@@ -53,48 +52,26 @@ const SideBar = (props) => {
           <OptionsContentBox>
             <OptionsPaneItem eventKey="triggers">
               {triggerList.map((listItem) => (
-                <DragData
-                  dataItem={listItem}
-                  key={listItem.id}
-                  setMouseDropCoords={props.setMouseDropCoords}
-                >
                   <OptionCard
-                    handleCardClicked={props.handleCardClicked}
+                    key={listItem.id}
                     cardData={listItem}
                   />
-                </DragData>
               ))}
             </OptionsPaneItem>
             <OptionsPaneItem eventKey="actions">
               {actionList.map((listItem) => (
-                <DragData
-                  dataItem={listItem}
-                  key={listItem.id}
-                  setMouseDropCoords={props.setMouseDropCoords}
-                >
-                  <OptionCard
-                    handleCardClicked={
-                      props.handleCardClicked
-                    }
+                <OptionCard
+                    key={listItem.id}
                     cardData={listItem}
                   />
-                </DragData>
               ))}
             </OptionsPaneItem>
             <OptionsPaneItem eventKey="extras">
               {loggerList.map((listItem) => (
-                <DragData
-                  dataItem={listItem}
-                  key={listItem.id}
-                  setMouseDropCoords={props.setMouseDropCoords}
-                >
-                  <OptionCard
-                    getOptionCardAreaMousePosition={
-                      props.getOptionCardAreaMousePosition
-                    }
+                <OptionCard
+                    key={listItem.id}
                     cardData={listItem}
                   />
-                </DragData>
               ))}
             </OptionsPaneItem>
           </OptionsContentBox>

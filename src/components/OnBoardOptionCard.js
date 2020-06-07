@@ -1,36 +1,13 @@
-import React, {useState, useCallback, useEffect} from 'react'
+import React from 'react'
 import styled from 'styled-components';
 import { MoreHorizontal } from "react-feather";
 import IconSquare from "./IconSquare";
 
 const OnBoardOptionCard = props => {
-  const [area, setArea] = useState({});
-
-  const measuredRef = useCallback((node) => {
-    if (node !== null) {
-      setArea({
-        x: node.getBoundingClientRect().x,
-        y: node.getBoundingClientRect().y,
-        width: node.getBoundingClientRect().width,
-        height: node.getBoundingClientRect().height,
-        bottom: node.getBoundingClientRect().bottom,
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    props.isOver ? props.setHoverArea(area) : props.setHoverArea(null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.isOver, area])
-
-
 
   return (
-    <Wrapper
-      ref={measuredRef}
-      rootCoords={props.rootCoords}
-    >
-      <CardContents isOver={props.isOver}>
+    <Wrapper >
+      <CardContents>
         <TitleRow>
           <Row>
             <IconSquare
@@ -53,10 +30,7 @@ const OnBoardOptionCard = props => {
 }
 
 const Wrapper = styled.div`
-  position: absolute;
   width: 350px;
-  left: ${(props) => props.rootCoords.x}px;
-  top: ${(props) => props.rootCoords.y}px;
 `;
 
 const CardContents = styled.div`
@@ -64,7 +38,6 @@ const CardContents = styled.div`
   flex-direction: column;
   border-radius: 5px;
   box-shadow: 0px 4px 30px rgba(22, 33, 74, 0.08);
-  background-color: ${(props) => (props.isOver ? "red" : "white")};
   zIndex: 10;
 `;
 

@@ -1,33 +1,12 @@
-import React, {useState, useCallback} from "react";
+import React from "react";
 import styled from "styled-components";
 import { MoreVertical } from "react-feather";
 import IconSquare from './IconSquare'
 
 const OptionCard = (props) => {
-  const [area, setArea] = useState({});
-
-  const measuredRef = useCallback((node) => {
-    if (node !== null) {
-      setArea({
-        x: node.getBoundingClientRect().x,
-        y: node.getBoundingClientRect().y,
-        width: node.getBoundingClientRect().width,
-        height: node.getBoundingClientRect().height,
-      });
-      
-    }
-  }, []);
-
-  const onMouseDown = e => {
-    const mousePosition = {
-      x: e.pageX,
-      y: e.pageY,
-    };
-    props.handleCardClicked(area, mousePosition);
-  }
 
   return (
-    <Wrapper ref={measuredRef} onMouseDown={onMouseDown}>
+    <Wrapper>
       <MoveIcon>
         <MoreVertical color="#c2c2c2" />
       </MoveIcon>

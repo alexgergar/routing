@@ -4,16 +4,19 @@ import NavBar from './components/NavBar'
 import MainContainer from './components/MainContainer'
 import dotgrid from './images/dotgrid.png';
 import Theme from './Theme'
+import { DndProvider } from 'react-dnd'
+	import { HTML5Backend } from 'react-dnd-html5-backend'
 
 
-
-const App = () => {
+const App = props => {
   return (
     <Theme>
-      <Container>
-        <NavBar />
-        <MainContainer />
-      </Container>
+      <DndProvider backend={HTML5Backend}>
+        <Container>
+          <NavBar />
+          <MainContainer/>
+        </Container>
+      </DndProvider>
     </Theme>
   );
 }
@@ -28,4 +31,4 @@ const Container = styled.div`
 `;
 
 
-export default App;
+export default App; 
