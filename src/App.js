@@ -1,25 +1,20 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
-import NavBar from './components/NavBar'
-import MainContainer from './components/MainContainer'
-import dotgrid from './images/dotgrid.png';
-import Theme from './Theme'
-import { DndProvider } from 'react-dnd'
-	import { HTML5Backend } from 'react-dnd-html5-backend'
+import NavBar from "./components/NavBar";
+import MainContainer from "./components/MainContainer";
+import dotgrid from "./images/dotgrid.png";
+import Theme from "./Theme";
 
-
-const App = props => {
+const App = (props) => {
   return (
     <Theme>
-      <DndProvider backend={HTML5Backend}>
-        <Container>
-          <NavBar />
-          <MainContainer/>
-        </Container>
-      </DndProvider>
+      <Container>
+        <NavBar />
+        <MainContainer />
+      </Container>
     </Theme>
   );
-}
+};
 
 const Container = styled.div`
   width: 100vw;
@@ -30,5 +25,4 @@ const Container = styled.div`
   background-size: 30px 30px;
 `;
 
-
-export default App; 
+export default App;

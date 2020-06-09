@@ -1,21 +1,20 @@
-import React from 'react'
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 import { MoreHorizontal } from "react-feather";
 import IconSquare from "./IconSquare";
 
-const OnBoardOptionCard = props => {
-
+const OnBoardOptionCard = (props) => {
   return (
-    <Wrapper >
+    <Wrapper x={props.x} y={props.y}>
       <CardContents>
         <TitleRow>
           <Row>
-            <IconSquare
+            {/* <IconSquare
               showBackground={false}
-              icon={props.cardData.icon}
+              icon={props.data.icon}
               size={36}
-            />
-            <Title>{props.cardData.title}</Title>
+            /> */}
+            <Title>{props.data.name}</Title>
           </Row>
           <MoreHorizontal color="#c2c2c2" />
         </TitleRow>
@@ -24,13 +23,16 @@ const OnBoardOptionCard = props => {
           <ContentText>I am the body text </ContentText>
         </BodyRow>
       </CardContents>
-      <ExtraSpace />
+      {/* <ExtraSpace /> */}
     </Wrapper>
   );
-}
+};
 
 const Wrapper = styled.div`
   width: 350px;
+  position: absolute;
+  left: ${(props) => props.x}px;
+  top: ${(props) => props.y}px;
 `;
 
 const CardContents = styled.div`
@@ -38,7 +40,6 @@ const CardContents = styled.div`
   flex-direction: column;
   border-radius: 5px;
   box-shadow: 0px 4px 30px rgba(22, 33, 74, 0.08);
-  zIndex: 10;
 `;
 
 const Row = styled.div`
@@ -67,8 +68,8 @@ const HorizontalLine = styled.div`
 `;
 
 const BodyRow = styled.div`
- display: flex;
- margin: 15px 20px;
+  display: flex;
+  margin: 15px 20px;
 `;
 
 const ContentText = styled.p`
@@ -77,7 +78,7 @@ const ContentText = styled.p`
 
 const ExtraSpace = styled.div`
   height: 100px;
-  content: '';
-  zIndex: 0;
+  content: "";
+  zindex: 0;
 `;
-export default OnBoardOptionCard
+export default OnBoardOptionCard;
