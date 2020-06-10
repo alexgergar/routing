@@ -3,18 +3,14 @@ import styled from "styled-components";
 import { MoreHorizontal } from "react-feather";
 import IconSquare from "./IconSquare";
 
-const OnBoardOptionCard = (props) => {
+const OnBoardOptionCard = ({ data }) => {
   return (
-    <Wrapper x={props.x} y={props.y}>
+    <Wrapper>
       <CardContents>
         <TitleRow>
           <Row>
-            {/* <IconSquare
-              showBackground={false}
-              icon={props.data.icon}
-              size={36}
-            /> */}
-            <Title>{props.data.name}</Title>
+            <IconSquare showBackground={false} icon={data.icon} size={36} />
+            <Title>{data.title}</Title>
           </Row>
           <MoreHorizontal color="#c2c2c2" />
         </TitleRow>
@@ -30,9 +26,6 @@ const OnBoardOptionCard = (props) => {
 
 const Wrapper = styled.div`
   width: 350px;
-  position: absolute;
-  left: ${(props) => props.x}px;
-  top: ${(props) => props.y}px;
 `;
 
 const CardContents = styled.div`

@@ -22,13 +22,14 @@ const initialDraggedElementState = {
   currentItem: null,
   dragOverDropTargetID: null,
   dragOverArea: null,
+  isOver: false,
 };
 
 const store = createStore(
   allReducers,
   {
     draggedElement: initialDraggedElementState,
-    items: testData,
+    items: null,
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() // checks if dev tools exists and if it does calls it
 );

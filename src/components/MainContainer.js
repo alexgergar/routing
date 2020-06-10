@@ -2,18 +2,13 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import SideBar from "./SideBar";
 import Board from "./Board";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { handleAddRoot } from "../actions/item-actions";
 import { handleReset } from "../actions/draggedElement-actions";
 
 const MainContainer = (props) => {
-  const { draggedElement, items } = useSelector(
-    (state) => ({
-      draggedElement: state.draggedElement,
-      items: state.items,
-    }),
-    shallowEqual
-  );
+  const draggedElement = useSelector((state) => state.draggedElement);
+  const items = useSelector((state) => state.items);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -59,7 +54,6 @@ const MainContainer = (props) => {
     draggedElement.dragOverDropTargetID,
     draggedElement.dragOverArea,
     items,
-    dispatch,
   ]);
 
   return (

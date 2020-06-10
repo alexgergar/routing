@@ -1,10 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useSelector, shallowEqual } from "react-redux";
+import Draggable from "./Draggable";
+import DropTarget from "./DropTarget";
 
 import TreeChart from "./TreeChart";
+import TreeChart2 from "./TreeChart2";
 
 const Board = (props) => {
+  const [hoverArea, setHoverArea] = useState(null);
   // const user = useSelector(state => state.user) // state => and then what selector to return the objec you need - use one selector for each state you need or will rerender for any change of state o
   const { draggedElement, items } = useSelector(
     (state) => ({
@@ -15,11 +19,23 @@ const Board = (props) => {
     shallowEqual
   );
 
-  // useEffect(() => {
-  //   console.log(items);
-  // }, [items]);
-
-  return <ContainerForBoard>{<TreeChart data={items} />}</ContainerForBoard>;
+  return (
+    <>
+      {items !== null ? (
+        <ContainerForBoard>
+          <TreeChart2
+            data={items}
+            hoverArea={hoverArea}
+            setHoverArea={setHoverArea}
+          />
+        </ContainerForBoard>
+      ) : (
+        <DropTarget dropEffect="copy">
+          <ContainerForBoard />
+        </DropTarget>
+      )}
+    </>
+  );
 };
 
 const ContainerForBoard = styled.div`

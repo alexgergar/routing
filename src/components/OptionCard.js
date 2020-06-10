@@ -1,12 +1,36 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { MoreVertical } from "react-feather";
-import IconSquare from './IconSquare'
+import IconSquare from "./IconSquare";
+import { useDispatch, useSelector } from "react-redux";
+import { handleClicked } from "../actions/draggedElement-actions";
 
 const OptionCard = (props) => {
+  const [area, setArea] = useState({});
+  const dispatch = useDispatch();
+
+  const measuredRef = useCallback((node) => {
+    if (node !== null) {
+      setArea({
+        x: node.getBoundingClientRect().x,
+        y: node.getBoundingClientRect().y,
+        width: node.getBoundingClientRect().width,
+        height: node.getBoundingClientRect().height,
+      });
+    }
+  }, []);
+
+  const onMouseDown = (e) => {
+    const mousePosition = {
+      x: e.pageX,
+      y: e.pageY,
+    };
+    const handle = handleClicked(area, mousePosition);
+    console.log(handle);
+  };
 
   return (
-    <Wrapper>
+    <Wrapper ref={measuredRef} onMouseDown={onMouseDown}>
       <MoveIcon>
         <MoreVertical color="#c2c2c2" />
       </MoveIcon>
@@ -19,7 +43,7 @@ const OptionCard = (props) => {
       </BlockDescp>
     </Wrapper>
   );
-}
+};
 
 const Wrapper = styled.div`
   display: flex;
@@ -34,8 +58,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const MoveIcon = styled.div`
-`;
+const MoveIcon = styled.div``;
 
 const OptionIconColumn = styled.div`
   margin: 0 12px;
