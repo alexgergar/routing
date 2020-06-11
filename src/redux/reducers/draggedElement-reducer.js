@@ -15,6 +15,7 @@ export const initialDraggedElementState = {
   currentItem: null,
   dragOverDropTargetID: null,
   dragOverArea: null,
+  isOver: false,
 };
 
 const draggedElementReducer = (
@@ -72,6 +73,7 @@ const draggedElementReducer = (
         currentItem: null,
         dragOverDropTargetID: null,
         dragOverArea: null,
+        isOver: false,
       };
     default:
       return state;

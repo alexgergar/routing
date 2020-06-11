@@ -1,10 +1,10 @@
-export const CLICKED = "draggedElement:handleClicked"; // the colon scopes the type so it avoids collisions with other reduccers
-export const DRAG_ENTER = "draggedElement:handleDragEnter";
-export const DRAG_OVER = "draggedElement:handleDragOver";
-export const DRAG_LEAVE = "draggedElement:handleDragLeave";
-export const DROP = "draggedElement:handleDrop";
-export const MOUSE_UP = "draggedElement:handleMouseUp";
-export const RESET = "draggedelement:handleReset";
+export const CLICKED = "CLICKED";
+export const DRAG_ENTER = "DRAG_ENTER";
+export const DRAG_OVER = "DRAG_OVER";
+export const DRAG_LEAVE = "DRAG_LEAVE";
+export const DROP = "DROP";
+export const MOUSE_UP = "MOUSE_UP";
+export const RESET = "RESET";
 
 const handleClicked = (area, mouseDownPagePosition) => ({
   type: CLICKED,

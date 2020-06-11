@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { handleMouseUp } from "../actions/draggedElement-actions";
+import { handleMouseUp } from "../redux/actions/draggedElement-actions";
 
 const DragData = (props) => {
   const dispatch = useDispatch();

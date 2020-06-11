@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { MoreVertical } from "react-feather";
 import IconSquare from "./IconSquare";
 import { useDispatch, useSelector } from "react-redux";
-import { handleClicked } from "../actions/draggedElement-actions";
+import { handleClicked } from "../redux/actions/draggedElement-actions";
 
 const OptionCard = (props) => {
   const [area, setArea] = useState({});
@@ -25,8 +25,7 @@ const OptionCard = (props) => {
       x: e.pageX,
       y: e.pageY,
     };
-    const handle = handleClicked(area, mousePosition);
-    console.log(handle);
+    dispatch(handleClicked(area, mousePosition));
   };
 
   return (

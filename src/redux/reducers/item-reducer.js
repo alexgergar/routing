@@ -5,9 +5,10 @@ const itemsReducer = (state = {}, { type, payload }) => {
     case ADD_ROOT:
       return payload.newNode;
     case UPDATE_NODE:
-      return state.map((item) =>
-        item.id === payload.node.parentID ? payload.newNode : item
-      );
+      return {
+        ...state,
+        ...payload,
+      };
     default:
       return state;
   }

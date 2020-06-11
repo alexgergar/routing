@@ -6,8 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import * as serviceWorker from "./serviceWorker";
 import { combineReducers, createStore } from "redux";
 import { Provider } from "react-redux";
-import draggedElementReducer from "./reducers/draggedElement-reducer";
-import itemsReducer from "./reducers/item-reducer";
+import draggedElementReducer from "./redux/reducers/draggedElement-reducer";
+import itemsReducer from "./redux/reducers/item-reducer";
 import { testData } from "./utils/testData";
 
 const allReducers = combineReducers({

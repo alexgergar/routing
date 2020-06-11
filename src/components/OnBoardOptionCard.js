@@ -1,16 +1,46 @@
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { MoreHorizontal } from "react-feather";
+import { useSelector } from "react-redux";
 import IconSquare from "./IconSquare";
 
-const OnBoardOptionCard = ({ data }) => {
+const OnBoardOptionCard = (props) => {
+  const isOver = useSelector((state) => state.draggedElement.isOver);
+  const [area, setArea] = useState({});
+
+  const measuredRef = useCallback((node) => {
+    if (node !== null) {
+      setArea({
+        x: node.getBoundingClientRect().x,
+        y: node.getBoundingClientRect().y,
+        width: node.getBoundingClientRect().width,
+        height: node.getBoundingClientRect().height,
+        bottom: node.getBoundingClientRect().bottom,
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    isOver ? props.setHoverArea(area) : props.setHoverArea(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOver, area]);
+
   return (
-    <Wrapper>
+    <Wrapper
+      ref={measuredRef}
+      isOver={isOver}
+      left={props.data.x}
+      top={props.data.y}
+    >
       <CardContents>
         <TitleRow>
           <Row>
-            <IconSquare showBackground={false} icon={data.icon} size={36} />
-            <Title>{data.title}</Title>
+            <IconSquare
+              showBackground={false}
+              icon={props.data.icon}
+              size={36}
+            />
+            <Title>{props.data.title}</Title>
           </Row>
           <MoreHorizontal color="#c2c2c2" />
         </TitleRow>
@@ -26,6 +56,10 @@ const OnBoardOptionCard = ({ data }) => {
 
 const Wrapper = styled.div`
   width: 350px;
+  background-color: ${(props) => (props.isOver ? "red" : "white")};
+  position: absolute;
+  left: ${(props) => props.left}px;
+  top: ${(props) => props.top}px;
 `;
 
 const CardContents = styled.div`

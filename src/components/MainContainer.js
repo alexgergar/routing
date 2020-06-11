@@ -3,8 +3,8 @@ import styled from "styled-components";
 import SideBar from "./SideBar";
 import Board from "./Board";
 import { useSelector, useDispatch } from "react-redux";
-import { handleAddRoot } from "../actions/item-actions";
-import { handleReset } from "../actions/draggedElement-actions";
+import { handleAddRoot, handleUpdateNode } from "../redux/actions/item-actions";
+import { handleReset } from "../redux/actions/draggedElement-actions";
 
 const MainContainer = (props) => {
   const draggedElement = useSelector((state) => state.draggedElement);
@@ -23,30 +23,40 @@ const MainContainer = (props) => {
       const cardWidth = 350; // this can be changed - depending on modifcations in the future - this helps with figuing out layout
       const newNodeData = {
         id: nodeID, // to find in the array
+        parentId: draggedElement.dragOverDropTargetID,
         optionType: draggedElement.currentItem.optionType, // for the card option type
         title: draggedElement.currentItem.title, // title for the card
         shortDesc: draggedElement.currentItem.shortDesc, // description of the the card
         icon: draggedElement.currentItem.icon, // icon to help with visuals
-        // x: xCoord, // where the x-posiiton should be om the card.
-        // y: yCoord, // where the y-position should be on the card
+        x: xCoord, // where the x-posiiton should be om the card.
+        y: yCoord, // where the y-position should be on the card
+        depth: 0,
         children: [],
       };
-      if (items.length === 0) {
-        console.log("length is zero");
+      if (items === null) {
+        dispatch(handleAddRoot(newNodeData));
+      } else {
+        const findID = (
+          object = items,
+          id = draggedElement.dragOverDropTargetID
+        ) => {
+          if (object.id === id) {
+            console.log(" in the if loop of object id");
+            newNodeData.depth = object.depth + 1;
+            object.children.push(newNodeData);
+            dispatch(handleUpdateNode(object));
+          } else if (object.children > 0) {
+            let count = 0;
+            for (const child in object) {
+              console.log(`in the for child object loop count: ${count + 1}`);
+              findID(child, id);
+            }
+          }
+        };
+        findID(items, draggedElement.dragOverDropTargetID);
         // need to figure out how to push data to this element
       }
-      if (items === null) {
-        console.log("items is null");
-        dispatch(
-          handleAddRoot({
-            type: "ADD_ROOT",
-            payload: {
-              newNode: newNodeData,
-            },
-          })
-        );
-      }
-      dispatch(handleReset({ type: "RESET" }));
+      dispatch(handleReset());
     }
   }, [
     draggedElement.currentItem,
@@ -56,6 +66,9 @@ const MainContainer = (props) => {
     items,
   ]);
 
+  useEffect(() => {
+    console.log(items);
+  }, [items]);
   return (
     <Main>
       <SideBar />
