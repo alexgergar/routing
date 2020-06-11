@@ -36,25 +36,27 @@ const MainContainer = (props) => {
       if (items === null) {
         dispatch(handleAddRoot(newNodeData));
       } else {
-        const findID = (
-          object = items,
-          id = draggedElement.dragOverDropTargetID
-        ) => {
+        let foundValue;
+        const findID = (object, id) => {
+          if (
+            typeof object !== "object" ||
+            object === undefined ||
+            object === null
+          )
+            return;
           if (object.id === id) {
-            console.log(" in the if loop of object id");
+            foundValue = object;
             newNodeData.depth = object.depth + 1;
-            object.children.push(newNodeData);
-            dispatch(handleUpdateNode(object));
-          } else if (object.children > 0) {
-            let count = 0;
-            for (const child in object) {
-              console.log(`in the for child object loop count: ${count + 1}`);
-              findID(child, id);
+            return;
+          } else {
+            for (const i in object) {
+              findID(object[i], id);
             }
           }
         };
         findID(items, draggedElement.dragOverDropTargetID);
-        // need to figure out how to push data to this element
+        foundValue.children.push(newNodeData);
+        dispatch(handleUpdateNode(items));
       }
       dispatch(handleReset());
     }
@@ -66,9 +68,6 @@ const MainContainer = (props) => {
     items,
   ]);
 
-  useEffect(() => {
-    console.log(items);
-  }, [items]);
   return (
     <Main>
       <SideBar />

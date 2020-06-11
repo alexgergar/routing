@@ -6,6 +6,39 @@ import Draggable from "../components/Draggable";
 import OnBoardOptionCard from "../components/OnBoardOptionCard";
 import DropTarget from "./DropTarget";
 
+const Node = (props) => {
+  return (
+    <>
+      {props.data.map((node) => {
+        return (
+          <>
+            <DropTarget
+              dropEffect="copy"
+              key={node.id}
+              hoverArea={props.hoverArea}
+              id={node.id}
+            >
+              <Draggable>
+                <OnBoardOptionCard
+                  data={node}
+                  setHoverArea={props.setHoverArea}
+                />
+              </Draggable>
+            </DropTarget>
+            {node.children && (
+              <Node
+                data={node.children}
+                hoverArea={props.hoverArea}
+                setHoverArea={props.setHoverArea}
+              />
+            )}
+          </>
+        );
+      })}
+    </>
+  );
+};
+
 const TreeChart2 = (props) => {
   const items = useSelector((state) => state.items);
   const [tree, setTree] = useState();
@@ -31,31 +64,29 @@ const TreeChart2 = (props) => {
 
     updatedRoot.x = items.x;
     updatedRoot.y = items.y;
-
     setTree(updatedRoot);
   }, [items]);
 
   // useEffect(() => {
   //   console.log("in use effect for tree");
-  //   console.log(tree);
-  // }, [tree]);
+  //   console.log(items);
+  // }, [items]);
   return (
     <Wrapper>
-      {tree !== undefined && (
-        <DropTarget dropEffect="copy" hoverArea={hoverArea} id={tree.data.id}>
+      {items !== undefined && (
+        <DropTarget dropEffect="copy" hoverArea={hoverArea} id={items.id}>
           <Draggable>
-            <OnBoardOptionCard data={tree.data} setHoverArea={setHoverArea} />
+            <OnBoardOptionCard data={items} setHoverArea={setHoverArea} />
           </Draggable>
         </DropTarget>
       )}
-      {/* {tree !== undefined &&
-        tree.map((node) => (
-          <DropTarget dropEffect="copy" hoverArea={hoverArea} id={node.data.id}>
-            <Draggable>
-              <OnBoardOptionCard data={node.data} setHoverArea={setHoverArea} />
-            </Draggable>
-          </DropTarget>
-        ))} */}
+      {items !== undefined && items.children !== undefined && (
+        <Node
+          data={items.children}
+          hoverArea={hoverArea}
+          setHoverArea={setHoverArea}
+        />
+      )}
     </Wrapper>
   );
 };

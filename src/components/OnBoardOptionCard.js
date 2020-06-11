@@ -6,6 +6,9 @@ import IconSquare from "./IconSquare";
 
 const OnBoardOptionCard = (props) => {
   const isOver = useSelector((state) => state.draggedElement.isOver);
+  const hoveredOverId = useSelector(
+    (state) => state.draggedElement.dragOverDropTargetID
+  );
   const [area, setArea] = useState({});
 
   const measuredRef = useCallback((node) => {
@@ -29,6 +32,8 @@ const OnBoardOptionCard = (props) => {
     <Wrapper
       ref={measuredRef}
       isOver={isOver}
+      id={props.data.id}
+      hoveredOverId={hoveredOverId}
       left={props.data.x}
       top={props.data.y}
     >
@@ -56,7 +61,8 @@ const OnBoardOptionCard = (props) => {
 
 const Wrapper = styled.div`
   width: 350px;
-  background-color: ${(props) => (props.isOver ? "red" : "white")};
+  background-color: ${(props) =>
+    props.isOver && props.id === props.hoveredOverId ? "red" : "white"};
   position: absolute;
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
