@@ -16,6 +16,8 @@ const MainContainer = (props) => {
       draggedElement.currentItem !== null &&
       draggedElement.coordsOfDroppedElement !== null
     ) {
+      console.log("coords of dropped element in main container");
+      console.log(draggedElement.coordsOfDroppedElement);
       const date = new Date();
       const nodeID = date.valueOf();
       let xCoord = draggedElement.coordsOfDroppedElement.x;

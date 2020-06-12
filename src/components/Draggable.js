@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 
 const Draggable = (props) => {
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0, coords: {} });
-  const [width, setWidth] = useState(null);
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
@@ -17,7 +17,6 @@ const Draggable = (props) => {
         y: pageY,
       },
     }));
-    setWidth(handleMouseMove.current.offsetWidth);
     document.addEventListener("mousemove", handleMouseMove.current);
   };
 
@@ -51,7 +50,6 @@ const Draggable = (props) => {
       onMouseUp={handleMouseUp}
       position={position}
       isDragging={isDragging}
-      width={width}
     >
       {props.children}
     </Wrapper>

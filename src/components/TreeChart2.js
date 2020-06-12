@@ -13,8 +13,10 @@ const Node = (props) => {
   return (
     <>
       {props.data.map((node) => {
-        console.log(`props.rootY: ${props.rootY}`);
-        const nodeY = props.rootY + 2 * cardHeight; // may want to remove if extra space is in the onboard option card
+        {
+          /* console.log(`props.rootY: ${props.rootY}`); */
+        }
+        const nodeY = props.rootY + 1.5 * cardHeight;
         const nodeX = props.rootX;
         return (
           <>
@@ -51,6 +53,7 @@ const Node = (props) => {
 
 const TreeChart2 = (props) => {
   const items = useSelector((state) => state.items);
+  const draggedElement = useSelector((state) => state.draggedElement);
   const [tree, setTree] = useState();
   const [hoverArea, setHoverArea] = useState(null);
   const [rootX, setRootX] = useState(items.x);
@@ -79,8 +82,12 @@ const TreeChart2 = (props) => {
   }, [items]);
 
   useEffect(() => {
-    console.log(tree);
-  }, [tree]);
+    console.log(draggedElement.coordsOfDroppedElement);
+  }, [draggedElement.coordsOfDroppedElement]);
+
+  // useEffect(() => {
+  //   console.log(tree);
+  // }, [tree]);
 
   return (
     <Wrapper>

@@ -59,6 +59,7 @@ const draggedElementReducer = (
         dragOverDropTargetID: payload.dragOverDropTargetID,
         dragOverArea: payload.dragOverArea,
         isOver: false,
+        coordsOfDroppedElement: null,
       };
     case MOUSE_UP:
       return {
