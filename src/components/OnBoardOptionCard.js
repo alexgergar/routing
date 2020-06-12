@@ -32,20 +32,20 @@ const OnBoardOptionCard = (props) => {
     <Wrapper
       ref={measuredRef}
       isOver={isOver}
-      id={props.data.id}
+      id={props.data.data.id}
       hoveredOverId={hoveredOverId}
-      left={props.data.x}
-      top={props.data.y}
+      left={props.left}
+      top={props.top}
     >
       <CardContents>
         <TitleRow>
           <Row>
             <IconSquare
               showBackground={false}
-              icon={props.data.icon}
+              icon={props.data.data.icon}
               size={36}
             />
-            <Title>{props.data.title}</Title>
+            <Title>{props.data.data.title}</Title>
           </Row>
           <MoreHorizontal color="#c2c2c2" />
         </TitleRow>

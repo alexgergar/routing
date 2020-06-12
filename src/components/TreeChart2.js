@@ -6,22 +6,30 @@ import Draggable from "../components/Draggable";
 import OnBoardOptionCard from "../components/OnBoardOptionCard";
 import DropTarget from "./DropTarget";
 
+const cardWidth = 350;
+const cardHeight = 126;
+
 const Node = (props) => {
   return (
     <>
       {props.data.map((node) => {
+        console.log(`props.rootY: ${props.rootY}`);
+        const nodeY = props.rootY + 2 * cardHeight; // may want to remove if extra space is in the onboard option card
+        const nodeX = props.rootX;
         return (
           <>
             <DropTarget
               dropEffect="copy"
-              key={node.id}
+              key={node.data.id}
               hoverArea={props.hoverArea}
-              id={node.id}
+              id={node.data.id}
             >
               <Draggable>
                 <OnBoardOptionCard
                   data={node}
                   setHoverArea={props.setHoverArea}
+                  left={nodeX}
+                  top={nodeY}
                 />
               </Draggable>
             </DropTarget>
@@ -30,6 +38,8 @@ const Node = (props) => {
                 data={node.children}
                 hoverArea={props.hoverArea}
                 setHoverArea={props.setHoverArea}
+                rootX={props.rootX}
+                rootY={props.rootY}
               />
             )}
           </>
@@ -43,10 +53,11 @@ const TreeChart2 = (props) => {
   const items = useSelector((state) => state.items);
   const [tree, setTree] = useState();
   const [hoverArea, setHoverArea] = useState(null);
+  const [rootX, setRootX] = useState(items.x);
+  const [rootY, setRootY] = useState(items.y);
 
   useEffect(() => {
     const root = hierarchy(items);
-    // console.log(typeof root);
     const updatedRoot = root.eachAfter((node) => {
       if (node.value === undefined) {
         node.value = 1;
@@ -67,24 +78,31 @@ const TreeChart2 = (props) => {
     setTree(updatedRoot);
   }, [items]);
 
-  // useEffect(() => {
-  //   console.log("in use effect for tree");
-  //   console.log(items);
-  // }, [items]);
+  useEffect(() => {
+    console.log(tree);
+  }, [tree]);
+
   return (
     <Wrapper>
-      {items !== undefined && (
-        <DropTarget dropEffect="copy" hoverArea={hoverArea} id={items.id}>
+      {tree !== undefined && (
+        <DropTarget dropEffect="copy" hoverArea={hoverArea} id={tree.data.id}>
           <Draggable>
-            <OnBoardOptionCard data={items} setHoverArea={setHoverArea} />
+            <OnBoardOptionCard
+              data={tree}
+              setHoverArea={setHoverArea}
+              left={rootX}
+              top={rootY}
+            />
           </Draggable>
         </DropTarget>
       )}
-      {items !== undefined && items.children !== undefined && (
+      {tree !== undefined && tree.children !== undefined && (
         <Node
-          data={items.children}
+          data={tree.children}
           hoverArea={hoverArea}
           setHoverArea={setHoverArea}
+          rootX={rootX}
+          rootY={rootY}
         />
       )}
     </Wrapper>
@@ -92,26 +110,15 @@ const TreeChart2 = (props) => {
 };
 
 const Wrapper = styled.div`
+  ${"" /* position: absolute; */}
+  ${"" /* top: ${(props) => props.top}px; */}
+  ${"" /* left: ${(props) => props.left}px; */}
+`;
+
+const NodeWrapper = styled.div`
   position: absolute;
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
-`;
-
-const LevelWrapper = styled.div`
-  position: absolute;
-  left: ${(props) => props.x}px;
-  top: ${(props) => props.y}px;
-`;
-
-const FlexContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const BranchContainer = styled.div`
-  margin-right: 10px;
-  width: ${(props) => props.width}px;
-  border: 1px solid black;
 `;
 
 export default TreeChart2;

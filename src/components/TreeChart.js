@@ -1,139 +1,126 @@
 import React, { useRef, useEffect, useState } from "react";
-import { select, hierarchy, tree, linkVertical } from "d3";
+import { hierarchy, tree, linkVertical } from "d3";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 import Draggable from "../components/Draggable";
 import OnBoardOptionCard from "../components/OnBoardOptionCard";
-import Branch from "../components/Branch";
+import DropTarget from "./DropTarget";
 
-const TreeChart = ({ data }) => {
-  const [nodes, setNodes] = useState(null);
-  const [rootNode, setRootNode] = useState(null);
-  const [links, setLinks] = useState(null);
-  const [rootWidth, setRootWidth] = useState(null);
-  const wrapperRef = useRef();
+const cardWidth = 350;
+const cardHeight = 126;
 
-  const cardWidth = 350;
-  const cardHeight = 125;
+const Node = (props) => {
+  return (
+    <>
+      {props.data.map((node) => {
+        console.log(`props.rootY: ${props.rootY}`);
+        const nodeY = props.rootY * 2; // may want to remove if extra space is in the onboard option card
+        const nodeX = props.rootX;
+        return (
+          <>
+            <DropTarget
+              dropEffect="copy"
+              key={node.data.id}
+              hoverArea={props.hoverArea}
+              id={node.data.id}
+            >
+              <Draggable>
+                <NodeWrapper left={nodeY}>
+                  <OnBoardOptionCard
+                    data={node}
+                    setHoverArea={props.setHoverArea}
+                    left={nodeX}
+                    top={nodeY}
+                  />
+                </NodeWrapper>
+              </Draggable>
+            </DropTarget>
+            {node.children && (
+              <Node
+                data={node.children}
+                hoverArea={props.hoverArea}
+                setHoverArea={props.setHoverArea}
+                rootX={props.rootX}
+                rootY={props.rootY}
+              />
+            )}
+          </>
+        );
+      })}
+    </>
+  );
+};
+
+const TreeChart2 = (props) => {
+  const items = useSelector((state) => state.items);
+  const [tree, setTree] = useState();
+  const [hoverArea, setHoverArea] = useState(null);
+  const [rootX, setRootX] = useState(items.x);
+  const [rootY, setRootY] = useState(items.y);
 
   useEffect(() => {
-    const root = hierarchy(data);
-    const treeLayout = tree().nodeSize([350, 125]); // node size will need to be how big the boxes are from the onBoardOptionCard
-    treeLayout(root);
+    const root = hierarchy(items);
     const updatedRoot = root.eachAfter((node) => {
       if (node.value === undefined) {
         node.value = 1;
       }
       if (node.children) {
-        let totalChildren = node.children.length;
+        let maxSiblingsInBranch = node.children.length; // helps telling the top how many sibilings are below
         node.children.map((node) =>
           node.value > 1
-            ? (totalChildren = totalChildren + node.value - 1)
-            : totalChildren
+            ? (maxSiblingsInBranch = maxSiblingsInBranch + node.value - 1)
+            : maxSiblingsInBranch
         );
-        node.value = totalChildren;
+        node.value = maxSiblingsInBranch;
       }
     });
 
-    // const newRoot = updatedRoot.map((node) => {
-    //   if (node.parent === null) {
-    //     node.x = 400; //////// CHNAGE BASED OFF OF DRAG COORD
-    //     node.y = 0; ///// CHNAGE BASED OFF OF DRAG COORD
-    //   }
-    // });
-    // updatedRoot.each((node) => {
-    //   // console.log(node.parent.x);
-    //   if (node.parent === null) {
-    //     node.x = 400; //////// CHNAGE BASED OFF OF DRAG COORD
-    //     node.y = 0; ///// CHNAGE BASED OFF OF DRAG COORD
-    //   }
-    // });
-    updatedRoot.x = 400;
-    updatedRoot.y = 5;
-    setRootWidth(updatedRoot.value * cardWidth + 10 * (updatedRoot.value - 1));
+    updatedRoot.x = items.x;
+    updatedRoot.y = items.y;
+    setTree(updatedRoot);
+  }, [items]);
 
-    console.log(updatedRoot);
-    setRootNode(updatedRoot);
-    setNodes(updatedRoot.descendants());
-    setLinks(updatedRoot.links());
-    console.log(updatedRoot.descendants());
-    // console.log(root.links());
-  }, [data]);
+  useEffect(() => {
+    console.log(tree);
+  }, [tree]);
 
   return (
-    <Wrapper ref={wrapperRef}>
-      <Draggable>
-        {rootNode !== null && (
-          <RootNodeWrapper x={rootNode.x} y={rootNode.y}>
-            <OnBoardOptionCard data={rootNode} />
-          </RootNodeWrapper>
-        )}
-        {rootNode !== null && rootNode.children && (
-          <LevelWrapper x={rootNode.x - rootWidth / 2} y={cardHeight * 1.5}>
-            <FlexContainer>
-              <BranchContainer width={cardWidth * rootNode.children[0].value}>
-                <div>here</div>
-              </BranchContainer>
-              <BranchContainer width={cardWidth * rootNode.children[1].value}>
-                <div>here</div>
-              </BranchContainer>
-            </FlexContainer>
-          </LevelWrapper>
-        )}
-        {/* {nodes !== null &&
-          nodes.map((node, index) => (
+    <Wrapper>
+      {items !== undefined && (
+        <DropTarget dropEffect="copy" hoverArea={hoverArea} id={tree.data.id}>
+          <Draggable>
             <OnBoardOptionCard
-              data={node.data}
-              x={node.x}
-              y={node.y}
-              key={index}
+              data={tree}
+              setHoverArea={setHoverArea}
+              left={rootX}
+              top={rootY}
             />
-          ))} */}
-        {/* {tester !== null &&
-          tester.map((node, index) =>
-            node.source === undefined ? (
-              <OnBoardOptionCard data={node.data} />
-            ) : (
-              <svg>
-                <path
-                  d={`M ${node.source.x}, ${node.source.y} V100, H ${
-                    node.target.x + 175
-                  }`}
-                  stoke="black"
-                />
-              </svg>
-            )
-          )} */}
-      </Draggable>
+          </Draggable>
+        </DropTarget>
+      )}
+      {tree !== undefined && tree.children !== undefined && (
+        <Node
+          data={tree.children}
+          hoverArea={hoverArea}
+          setHoverArea={setHoverArea}
+          rootX={rootX}
+          rootY={rootY}
+        />
+      )}
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  height: 100%;
-  width: 100%;
+  ${"" /* position: absolute; */}
+  ${"" /* top: ${(props) => props.top}px; */}
+  ${"" /* left: ${(props) => props.left}px; */}
 `;
 
-const RootNodeWrapper = styled.div`
+const NodeWrapper = styled.div`
   position: absolute;
-  left: ${(props) => props.x}px;
-  top: ${(props) => props.y}px;
+  top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
 `;
 
-const LevelWrapper = styled.div`
-  position: absolute;
-  left: ${(props) => props.x}px;
-  top: ${(props) => props.y}px;
-`;
-
-const FlexContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const BranchContainer = styled.div`
-  margin-right: 10px;
-  width: ${(props) => props.width}px;
-  border: 1px solid black;
-`;
-
-export default TreeChart;
+export default TreeChart2;

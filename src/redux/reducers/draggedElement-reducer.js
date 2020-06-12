@@ -41,7 +41,7 @@ const draggedElementReducer = (
         return {
           ...state,
           isOver: true,
-          dragOverDropTargetID: payload.dragOverArea,
+          dragOverDropTargetID: payload.dragOverDropTargetID,
           dragOverArea: payload.dragOverArea,
         };
       } else return state;
