@@ -16,14 +16,11 @@ const MainContainer = (props) => {
       draggedElement.currentItem !== null &&
       draggedElement.coordsOfDroppedElement !== null
     ) {
-      console.log("coords of dropped element in main container");
-      console.log(draggedElement.coordsOfDroppedElement);
       const date = new Date();
       const nodeID = date.valueOf();
       let xCoord = draggedElement.coordsOfDroppedElement.x;
       let yCoord = draggedElement.coordsOfDroppedElement.y;
 
-      const cardWidth = 350; // this can be changed - depending on modifcations in the future - this helps with figuing out layout
       const newNodeData = {
         id: nodeID, // to find in the array
         parentId: draggedElement.dragOverDropTargetID,
@@ -57,7 +54,6 @@ const MainContainer = (props) => {
         };
         findID(items, draggedElement.dragOverDropTargetID);
         foundValue.children.push(newNodeData);
-        console.log(newNodeData);
         dispatch(handleUpdateNode(items));
       }
       dispatch(handleReset());

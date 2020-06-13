@@ -13,7 +13,6 @@ const DragData = (props) => {
   };
 
   const dragEnd = (e) => {
-    console.log(draggedElement);
     if (e !== null) {
       const xPosition = e.pageX;
       const yPosition = e.pageY;
