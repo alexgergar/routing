@@ -1,91 +1,25 @@
 import React, { useRef, useEffect, useState } from "react";
-import { hierarchy, tree, linkVertical } from "d3";
+import { hierarchy, tree, linkVertical, dispatch } from "d3";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Draggable from "../components/Draggable";
 import OnBoardOptionCard from "../components/OnBoardOptionCard";
 import DropTarget from "./DropTarget";
+import Node from "./Node";
+import { handleUpdateRootCoords } from "../redux/actions/item-actions";
 
 const cardWidth = 350;
 const cardHeight = 126;
 
-const Node = (props) => {
-  return (
-    <>
-      {props.data.map((node, index) => {
-        const nodeY = props.rootY + cardHeight + 70;
-        const totalWidthOfDepth =
-          cardWidth * props.parentValue + 10 * (props.parentValue - 1);
-
-        const findBranchWidth = (value) => {
-          return cardWidth * value + 10 * (value - 1);
-        };
-
-        const branchWidth = findBranchWidth(node.value);
-
-        const halfPtOfRootCardOnBoard = cardWidth / 2 + props.rootX;
-        const furtherPtLeftForLevel =
-          halfPtOfRootCardOnBoard - totalWidthOfDepth / 2;
-
-        const leftSiblingsWidth = findBranchWidth(
-          props.valueTopSiblings[index]
-        );
-        const furtherestLeftForBranch =
-          furtherPtLeftForLevel + leftSiblingsWidth;
-
-        const thisCardXPt =
-          furtherestLeftForBranch + (branchWidth - cardWidth) / 2;
-
-        let sumOfSiblingsToPt = 0;
-        let arrayForChildrenValues = [];
-        if (node.children !== undefined) {
-          for (const i in node.children) {
-            arrayForChildrenValues.push(sumOfSiblingsToPt);
-            sumOfSiblingsToPt = sumOfSiblingsToPt + node.children[i].value;
-          }
-        }
-
-        return (
-          <>
-            <DropTarget
-              dropEffect="copy"
-              key={node.data.id}
-              hoverArea={props.hoverArea}
-              id={node.data.id}
-            >
-              <Draggable>
-                <OnBoardOptionCard
-                  data={node}
-                  setHoverArea={props.setHoverArea}
-                  left={thisCardXPt}
-                  top={nodeY}
-                />
-              </Draggable>
-            </DropTarget>
-            {node.children && (
-              <Node
-                data={node.children}
-                hoverArea={props.hoverArea}
-                setHoverArea={props.setHoverArea}
-                rootX={thisCardXPt}
-                rootY={nodeY}
-                parentValue={node.value}
-                valueTopSiblings={arrayForChildrenValues}
-              />
-            )}
-          </>
-        );
-      })}
-    </>
-  );
-};
-
 const TreeChart = (props) => {
+  const dispatch = useDispatch();
   const items = useSelector((state) => state.items);
-  const draggedElement = useSelector((state) => state.draggedElement);
   const [tree, setTree] = useState();
   const [hoverArea, setHoverArea] = useState(null);
-  const [valueTopSiblings, setValueTopSiblings] = useState(); // this is an array that will tell you how many siblings to the left there are and how much space they take up for their branch
+  const [draggingCoords, setDraggingCoords] = useState({
+    x: 0,
+    y: 0,
+  });
 
   useEffect(() => {
     const root = hierarchy(items);
@@ -107,32 +41,73 @@ const TreeChart = (props) => {
     updatedRoot.x = items.x;
     updatedRoot.y = items.y;
 
-    let sumOfSiblingsToPt = 0;
-    let arrayForChildrenValues = [];
-    if (updatedRoot.children !== undefined) {
-      for (const i in updatedRoot.children) {
-        arrayForChildrenValues.push(sumOfSiblingsToPt);
-        sumOfSiblingsToPt = sumOfSiblingsToPt + updatedRoot.children[i].value;
+    updatedRoot.each((node) => {
+      if (node.depth === 0) {
+        node.x = items.x;
+        node.y = items.y;
+      } else {
+        let sumOfSiblingsToPt = 0;
+        let arrayForSiblingsValues = [];
+        for (const i in node.parent.children) {
+          arrayForSiblingsValues.push(sumOfSiblingsToPt);
+          sumOfSiblingsToPt = sumOfSiblingsToPt + node.parent.children[i].value;
+        }
+
+        const findBranchWidth = (value) => {
+          return cardWidth * value + 10 * (value - 1);
+        };
+        const totalWidthOfDepth = findBranchWidth(node.parent.value);
+        const branchWidth = findBranchWidth(node.value);
+        const halfPtOfRootCardOnBoard = cardWidth / 2 + node.parent.x;
+        const furtherPtLeftForLevel =
+          halfPtOfRootCardOnBoard - totalWidthOfDepth / 2;
+        const thisNodeIndex = node.parent.children.findIndex(
+          (child) => child.data.id === node.data.id
+        );
+        const leftSiblingsWidth =
+          thisNodeIndex === 0
+            ? 0
+            : findBranchWidth(arrayForSiblingsValues[thisNodeIndex]) + 10;
+        const furtherestLeftForBranch =
+          furtherPtLeftForLevel + leftSiblingsWidth;
+
+        const thisCardXPt =
+          furtherestLeftForBranch + (branchWidth - cardWidth) / 2;
+
+        node.x = thisCardXPt;
+        node.y = node.parent.y + cardHeight + 70;
       }
-    }
-    setValueTopSiblings(arrayForChildrenValues);
+    });
+
     setTree(updatedRoot);
   }, [items]);
 
+  const handleCoordinateUpdateToRootNode = () => {
+    dispatch(
+      handleUpdateRootCoords({ x: draggingCoords.x, y: draggingCoords.y })
+    );
+    setDraggingCoords({ x: 0, y: 0 });
+  };
+
   // useEffect(() => {
-  //   console.log(tree);
-  // }, [tree]);
+  //   console.log(items);
+  //   // console.log(tree);
+  // }, [items]);
 
   return (
     <Wrapper>
       {tree !== undefined && (
         <DropTarget dropEffect="copy" hoverArea={hoverArea} id={tree.data.id}>
-          <Draggable>
+          <Draggable
+            id={tree.data.id}
+            setDraggingCoords={setDraggingCoords}
+            handleCoordinateUpdateToRootNode={handleCoordinateUpdateToRootNode}
+          >
             <OnBoardOptionCard
               data={tree}
               setHoverArea={setHoverArea}
-              left={items.x}
-              top={items.y}
+              left={tree.x}
+              top={tree.y}
             />
           </Draggable>
         </DropTarget>
@@ -142,10 +117,7 @@ const TreeChart = (props) => {
           data={tree.children}
           hoverArea={hoverArea}
           setHoverArea={setHoverArea}
-          rootX={items.x}
-          rootY={items.y}
-          parentValue={tree.value}
-          valueTopSiblings={valueTopSiblings}
+          handleCoordinateUpdateToRootNode={handleCoordinateUpdateToRootNode}
         />
       )}
     </Wrapper>

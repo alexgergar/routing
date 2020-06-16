@@ -1,5 +1,6 @@
 export const ADD_ROOT = "ADD_ROOT";
 export const UPDATE_NODE = "UPDATE_NODE";
+export const UPDATE_ROOT_COORDS = "UPDATE_ROOT_COORDS";
 
 const handleAddRoot = (node) => ({
   type: ADD_ROOT,
@@ -13,4 +14,12 @@ const handleUpdateNode = (node) => ({
   payload: node,
 });
 
-export { handleAddRoot, handleUpdateNode };
+const handleUpdateRootCoords = (coords) => ({
+  type: UPDATE_ROOT_COORDS,
+  payload: {
+    x: coords.x,
+    y: coords.y,
+  },
+});
+
+export { handleAddRoot, handleUpdateNode, handleUpdateRootCoords };

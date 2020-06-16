@@ -1,4 +1,8 @@
-import { ADD_ROOT, UPDATE_NODE } from "../actions/item-actions";
+import {
+  ADD_ROOT,
+  UPDATE_NODE,
+  UPDATE_ROOT_COORDS,
+} from "../actions/item-actions";
 
 const itemsReducer = (state = {}, { type, payload }) => {
   switch (type) {
@@ -8,6 +12,12 @@ const itemsReducer = (state = {}, { type, payload }) => {
       return {
         ...state,
         ...payload,
+      };
+    case UPDATE_ROOT_COORDS:
+      return {
+        ...state,
+        x: state.x + payload.x,
+        y: state.y + payload.y,
       };
     default:
       return state;

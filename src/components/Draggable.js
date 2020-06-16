@@ -1,6 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
+import { handleUpdateRootCoords } from "../redux/actions/item-actions";
+import {
+  handleMouseMoving,
+  handleReset,
+} from "../redux/actions/draggedElement-actions";
 
 const Draggable = (props) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -24,6 +29,10 @@ const Draggable = (props) => {
     setPosition((position) => {
       const xDiff = position.coords.x - event.pageX;
       const yDiff = position.coords.y - event.pageY;
+      props.setDraggingCoords({
+        x: position.x - xDiff,
+        y: position.y - yDiff,
+      });
       return {
         x: position.x - xDiff,
         y: position.y - yDiff,
@@ -38,10 +47,12 @@ const Draggable = (props) => {
   const handleMouseUp = () => {
     setIsDragging(false);
     document.removeEventListener("mousemove", handleMouseMove.current);
-    setPosition((position) => ({
-      ...position,
+    props.handleCoordinateUpdateToRootNode();
+    setPosition({
+      x: 0,
+      y: 0,
       coords: {},
-    }));
+    });
   };
 
   return (

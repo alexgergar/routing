@@ -5,6 +5,7 @@ import {
   DRAG_LEAVE,
   DROP,
   MOUSE_UP,
+  MOUSE_MOVE,
   RESET,
 } from "../actions/draggedElement-actions";
 
@@ -16,6 +17,7 @@ export const initialDraggedElementState = {
   dragOverDropTargetID: null,
   dragOverArea: null,
   isOver: false,
+  transformCoords: { x: 0, y: 0 },
 };
 
 const draggedElementReducer = (
@@ -75,6 +77,7 @@ const draggedElementReducer = (
         dragOverDropTargetID: null,
         dragOverArea: null,
         isOver: false,
+        transformCoords: { x: 0, y: 0 },
       };
     default:
       return state;

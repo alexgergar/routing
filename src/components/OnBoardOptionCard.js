@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { MoreHorizontal } from "react-feather";
 import { useSelector } from "react-redux";
 import IconSquare from "./IconSquare";
+import { handleUpdateRootCoords } from "../redux/actions/item-actions";
 
 const OnBoardOptionCard = (props) => {
   const isOver = useSelector((state) => state.draggedElement.isOver);
@@ -34,8 +35,8 @@ const OnBoardOptionCard = (props) => {
       isOver={isOver}
       id={props.data.data.id}
       hoveredOverId={hoveredOverId}
-      left={props.left}
-      top={props.top}
+      left={props.data.x}
+      top={props.data.y}
     >
       <CardContents>
         <TitleRow>
