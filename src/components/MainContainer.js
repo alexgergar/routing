@@ -1,291 +1,75 @@
-import React, { useEffect, useReducer} from 'react'
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import SideBar from './SideBar';
-import Board from './Board';
-import OnBoardOptionCard from './OnBoardOptionCard';
+import SideBar from "./SideBar";
+import Board from "./Board";
+import { useSelector, useDispatch } from "react-redux";
+import { handleAddRoot, handleUpdateNode } from "../redux/actions/item-actions";
+import { handleReset } from "../redux/actions/draggedElement-actions";
 
-const initialDragElement = {
-  areaOfClickedElement: null,
-  positionOfMouseDown: null,
-  coordsOfDroppedElement: null,
-  currentItem: null,
-  dragOverDropTargetID: null,
-  dragOverArea: null,
-}
-
-const draggedElementReducer = (state, action) => {
-  switch (action.type) {
-    case "CLICKED":
-      return {
-        ...state, 
-        areaOfClickedElement: action.areaOfClickedElement,
-        positionOfMouseDown: action.positionOfMouseDown, 
-    }
-    case "DRAG_ENTER":
-      return {
-        ...state,
-        isOver: true,
-        dragOverDropTargetID: action.dragOverDropTargetID,
-        dragOverArea: action.dragOverArea,
-      }
-    case "DRAG_OVER":
-      // eslint-disable-next-line eqeqeq
-      if (state.isOver == false) {
-        return {
-          ...state,
-          isOver: true,
-          dragOverDropTargetID: action.dragOverDropTargetID,
-          dragOverArea: action.dragOverArea,
-        }
-      } 
-      break;
-    case "DRAG_LEAVE": 
-      return {
-        ...state,
-        isOver: false,
-        dragOverDropTargetID: null,
-        dragOverArea: null,
-      }
-    case "DROP":
-      return {
-        ...state,
-        currentItem: action.currentItem,
-        dragOverDropTargetID: action.dragOverDropTargetID,
-        dragOverArea: action.dragOverArea,
-        isOver: false,
-      }
-    case "MOUSE_UP":
-      return {
-        ...state,
-        coordsOfDroppedElement: action.coordsOfDroppedElement,
-      }
-    case "RESET":
-      return {
-        areaOfClickedElement: null,
-        positionOfMouseDown: null, 
-        coordsOfDroppedElement: null,
-        currentItem: null,
-        dragOverDropTargetID: null,
-        dragOverArea: null,
-      }
-    default: 
-      console.log('error in dragged element reducer')
-  }
-}
-
-const initialList = {
-  list: [],
-  levels: [0],
-}
-
-
-
-const itemReducer = (state, action) => {
-  switch (action.type) {
-    case "ADD_NODE":
-      return {
-        ...state,
-        list: [...state.list, action.payload],
-      }
-    case "UPDATE_LEVELS":
-      return {
-        ...state,
-        levels: state.levels.splice(action.payload.parentIndex, 1, action.payload.parentHeight)
-      }
-    case "ADD_LEVEL":
-      return {
-        ...state,
-        levels: [...state.levels, action.payload.newLevel]
-      }
-    case "ADD_CHILDREN_TO_PARENT":
-      return {
-        ...state,
-        list: state.list.map((item) => item.id === action.payload.parentID ? {...item, children: action.payload.children} : item)
-      }
-    default:
-      console.log('error in item reducer')
-  }
-}
-
-
-const MainContainer = props => {
-  const [draggedElement, dispatchDraggedElement] = useReducer(draggedElementReducer, initialDragElement);
-  const [itemList, dispatchItems] = useReducer(itemReducer, initialList);
+const MainContainer = (props) => {
+  const draggedElement = useSelector((state) => state.draggedElement);
+  const items = useSelector((state) => state.items);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (draggedElement.currentItem !== null && draggedElement.coordsOfDroppedElement !== null) {
+    if (
+      draggedElement.currentItem !== null &&
+      draggedElement.coordsOfDroppedElement !== null
+    ) {
       const date = new Date();
       const nodeID = date.valueOf();
       let xCoord = draggedElement.coordsOfDroppedElement.x;
       let yCoord = draggedElement.coordsOfDroppedElement.y;
-      let level = 0;
-      let children = []
-      const cardWidth = 350; // this can be changed - depending on modifcations in the future - this helps with figuing out layout
-      if (itemList.list.length > 0) {
-        const indexOfParent = itemList.list.findIndex(card => card.id === draggedElement.dragOverDropTargetID);
-        const parentData = itemList.list[indexOfParent];
-        const parentLevel = parentData.treeLevel;
-        const parentX = parentData.x;
-        const parentY = parentData.y;
-        const parentHeight = draggedElement.dragOverArea.height;
-        xCoord = parentX;
-        yCoord = parentY + parentHeight;
-        const parentLevelHeightInState = itemList.levels[parentLevel];
-        level = parentLevel + 1;
-        if (parentHeight > parentLevelHeightInState) {
-          // this updates the parent level height
-          dispatchItems({
-            type: "UPDATE_LEVELS",
-            payload: {
-              parentIndex: parentLevel,
-              parentHeight: parentHeight,
-            }
-          })
-        }
-        console.log(`chldren length ${parentData.children.length + 1}`)
-        if (itemList.levels[level] === undefined) {
-          // adds new item to the levels array 
-          dispatchItems({
-            type: "ADD_LEVEL",
-            payload: {
-              newLevel: 0,
-            }
-          })
-        }
-        parentData.children.push(nodeID);
-        dispatchItems({
-          type: "ADD_CHILDREN_TO_PARENT",
-          payload: {
-            children: parentData.children,
-          }
-        })
-      }
-      const newNode = {
+
+      const newNodeData = {
         id: nodeID, // to find in the array
-        parentId: draggedElement.dragOverDropTargetID, // tells the parent node
-        treeLevel: level,
+        parentId: draggedElement.dragOverDropTargetID,
         optionType: draggedElement.currentItem.optionType, // for the card option type
         title: draggedElement.currentItem.title, // title for the card
         shortDesc: draggedElement.currentItem.shortDesc, // description of the the card
         icon: draggedElement.currentItem.icon, // icon to help with visuals
-        x: xCoord, // where the x-posiiton should be om the card. 
+        x: xCoord, // where the x-posiiton should be om the card.
         y: yCoord, // where the y-position should be on the card
-        centerXPoint: xCoord + (cardWidth/2), 
-        children: children,
+        children: [],
       };
-      dispatchItems({
-        type: "ADD_NODE", 
-        payload: newNode,
-      })
-      dispatchDraggedElement({type: "RESET"})
+      if (items === null) {
+        dispatch(handleAddRoot(newNodeData));
+      } else {
+        let foundValue;
+        const findID = (object, id) => {
+          if (
+            typeof object !== "object" ||
+            object === undefined ||
+            object === null
+          )
+            return;
+          if (object.id === id) {
+            foundValue = object;
+            return;
+          } else {
+            for (const i in object) {
+              findID(object[i], id);
+            }
+          }
+        };
+        findID(items, draggedElement.dragOverDropTargetID);
+        foundValue.children.push(newNodeData);
+        dispatch(handleUpdateNode(items));
+      }
+      dispatch(handleReset());
     }
-  }, [draggedElement.currentItem, draggedElement.coordsOfDroppedElement, draggedElement.dragOverDropTargetID, draggedElement.dragOverArea, itemList])
-
-
-  useEffect(() => {
-    console.log(itemList)
-    // this will add the children
-  }, [itemList])
-
-  // useEffect(() => {
-  //   if (draggedElement.currentItem !== null && draggedElement.coordsOfDroppedElement !== null) {
-  //     const date = new Date();
-  //     const nodeID = date.valueOf();
-  //     let xCoord = draggedElement.coordsOfDroppedElement.x;
-  //     let yCoord = draggedElement.coordsOfDroppedElement.y;
-  //     let level = 0;
-  //     if (itemList.length > 0 ) {
-  //       const indexOfParentNode = itemList.findIndex(card => card.id === draggedElement.dragOverDropTargetID);
-  //       const parentLevel = itemList[indexOfParentNode].treeLevel;
-  //       const parentHeight = draggedElement.dragOverArea.height;
-  //       const parentX = itemList[indexOfParentNode].x;
-  //       const parentY = itemList[indexOfParentNode].y;
-  //       level = parentLevel + 1;
-  //       // if (itemList.levels[parentLevel].height < parentHeight) {
-  //       //   let newLevel = {
-  //       //     height: parentHeight,
-  //       //   }
-  //       //   dispatchItems({type: "UPDATE_LEVELS", parentLevel: parentLevel, levelValue: newLevel})
-  //       // }
-  //       // if (level > itemList.levels.length - 1) {
-  //       //   dispatchItems({type: "ADD_LEVEL", newLevel: {height: 0}});
-  //       // }
-  //       // dispatchItems({
-  //       //   type: "ADD_CHILDREN", 
-  //       //   parentIndex: indexOfParentNode, 
-  //       //   // parentLevel: parentLevel, 
-  //       //   childID: nodeID,
-  //       // })
-  //       itemList.list[indexOfParentNode].children.push(nodeID);
-  //       xCoord = parentX;
-  //       yCoord = parentY + parentHeight;
-  //     }
-  //     const newNode = {
-  //       id: nodeID, // to find in the array
-  //       parentId: draggedElement.dragOverDropTargetID, // tells the parent node
-  //       treeLevel: level,
-  //       optionType: draggedElement.currentItem.optionType, // for the card option type
-  //       title: draggedElement.currentItem.title, // title for the card
-  //       shortDesc: draggedElement.currentItem.shortDesc, // description of the the card
-  //       icon: draggedElement.currentItem.icon, // icon to help with visuals
-  //       x: xCoord, // where the x-posiiton should be om the card. 
-  //       y: yCoord, // where the y-position should be on the car
-  //       children: [],
-  //     };
-  //     dispatchItems({
-  //       type: "ADD_NODE", 
-  //       payload: newNode,
-  //     })
-  //     console.log(`after add node:`)
-  //     console.log(itemList)
-  //     dispatchDraggedElement({type: "RESET"})
-      
-  //   }
-  // }, [itemList, draggedElement.currentItem, draggedElement.coordsOfDroppedElement, draggedElement.areaOfClickedElement, draggedElement.dragOverDropTargetID]);
-
-  const onItemDropped = (item, id, hoverElementArea) => {
-    dispatchDraggedElement({
-      type: 'DROP', 
-      currentItem: JSON.parse(item),
-      dragOverDropTargetID: id,
-      dragOverArea: hoverElementArea,
-    })
-  };
-
-  const handleCardClicked = (area, mouseDownPagePosition) => {
-    dispatchDraggedElement({
-      type: "CLICKED",
-      areaOfClickedElement: area,
-      positionOfMouseDown: mouseDownPagePosition,
-    })
-  }
-
-  const setMouseDropCoords = mouseUpPosition => {
-    const xDropCoord =
-      mouseUpPosition.x - 350 - (draggedElement.positionOfMouseDown.x - draggedElement.areaOfClickedElement.x); 
-    const yDropCoord =
-      mouseUpPosition.y - 50 - (draggedElement.positionOfMouseDown.y - draggedElement.areaOfClickedElement.y);
-    dispatchDraggedElement({
-      type: "MOUSE_UP",
-      coordsOfDroppedElement: {x: xDropCoord, y: yDropCoord},
-    });
-  }
-
-
-
+  }, [
+    draggedElement.currentItem,
+    draggedElement.coordsOfDroppedElement,
+    draggedElement.dragOverDropTargetID,
+    draggedElement.dragOverArea,
+    items,
+  ]);
 
   return (
     <Main>
-      <SideBar
-        setMouseDropCoords={setMouseDropCoords}
-        handleCardClicked={handleCardClicked}
-      />
-      <Board
-        items={itemList.list}
-        onItemDropped={onItemDropped}
-        isOver={draggedElement.isOver}
-        dispatchDraggedElement={dispatchDraggedElement}
-      />
+      <SideBar />
+      <Board />
     </Main>
   );
 };

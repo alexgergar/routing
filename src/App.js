@@ -1,13 +1,11 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
-import NavBar from './components/NavBar'
-import MainContainer from './components/MainContainer'
-import dotgrid from './images/dotgrid.png';
-import Theme from './Theme'
+import NavBar from "./components/NavBar";
+import MainContainer from "./components/MainContainer";
+import dotgrid from "./images/dotgrid.png";
+import Theme from "./Theme";
 
-
-
-const App = () => {
+const App = (props) => {
   return (
     <Theme>
       <Container>
@@ -16,7 +14,7 @@ const App = () => {
       </Container>
     </Theme>
   );
-}
+};
 
 const Container = styled.div`
   width: 100vw;
@@ -26,6 +24,5 @@ const Container = styled.div`
   background-repeat: repeat;
   background-size: 30px 30px;
 `;
-
 
 export default App;

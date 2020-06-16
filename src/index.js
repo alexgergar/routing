@@ -1,18 +1,46 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
-import * as serviceWorker from './serviceWorker';
+import * as serviceWorker from "./serviceWorker";
+import { combineReducers, createStore } from "redux";
+import { Provider } from "react-redux";
+import draggedElementReducer from "./redux/reducers/draggedElement-reducer";
+import itemsReducer from "./redux/reducers/item-reducer";
+import { testData } from "./utils/testData";
+
+const allReducers = combineReducers({
+  draggedElement: draggedElementReducer,
+  items: itemsReducer,
+});
+
+const initialDraggedElementState = {
+  areaOfClickedElement: null,
+  positionOfMouseDown: null,
+  coordsOfDroppedElement: null,
+  currentItem: null,
+  dragOverDropTargetID: null,
+  dragOverArea: null,
+  isOver: false,
+};
+
+const store = createStore(
+  allReducers,
+  {
+    draggedElement: initialDraggedElementState,
+    items: null,
+  },
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() // checks if dev tools exists and if it does calls it
+);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();

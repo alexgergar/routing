@@ -1,13 +1,13 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 
 const Draggable = (props) => {
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0, coords: {} });
-  const [width, setWidth] = useState(null);
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
+    props.setDraggingParentID(props.id);
     const pageX = e.pageX;
     const pageY = e.pageY;
     setPosition((position) => ({
@@ -17,7 +17,6 @@ const Draggable = (props) => {
         y: pageY,
       },
     }));
-    setWidth(handleMouseMove.current.offsetWidth);
     document.addEventListener("mousemove", handleMouseMove.current);
   };
 
@@ -25,6 +24,10 @@ const Draggable = (props) => {
     setPosition((position) => {
       const xDiff = position.coords.x - event.pageX;
       const yDiff = position.coords.y - event.pageY;
+      props.setDraggingCoords({
+        x: position.x - xDiff,
+        y: position.y - yDiff,
+      });
       return {
         x: position.x - xDiff,
         y: position.y - yDiff,
@@ -39,10 +42,12 @@ const Draggable = (props) => {
   const handleMouseUp = () => {
     setIsDragging(false);
     document.removeEventListener("mousemove", handleMouseMove.current);
-    setPosition((position) => ({
-      ...position,
+    props.handleCoordinateUpdateToRootNode();
+    setPosition({
+      x: 0,
+      y: 0,
       coords: {},
-    }));
+    });
   };
 
   return (
@@ -51,7 +56,9 @@ const Draggable = (props) => {
       onMouseUp={handleMouseUp}
       position={position}
       isDragging={isDragging}
-      width={width}
+      draggingParentID={props.draggingParentID}
+      id={props.id}
+      draggingCoords={props.draggingCoords}
     >
       {props.children}
     </Wrapper>
@@ -62,7 +69,9 @@ const Wrapper = styled.div`
   cursor: ${(props) =>
     props.isDragging ? "-webkit-grabbing" : "-webkit-grab"};
   transform: ${(props) =>
-    `translate(${props.position.x}px, ${props.position.y}px)`};
+    props.draggingParentID !== props.id
+      ? `translate(${props.draggingCoords.x}px, ${props.draggingCoords.y}px)`
+      : `translate(${props.position.x}px, ${props.position.y}px)`};
 `;
 
 export default Draggable;

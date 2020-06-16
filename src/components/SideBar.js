@@ -1,20 +1,20 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Form from "react-bootstrap/Form";
 import TabContainer from "react-bootstrap/TabContainer";
 import Tab from "react-bootstrap/Tab";
-import Row from 'react-bootstrap/Row';
-import Nav from 'react-bootstrap/Nav';
+import Row from "react-bootstrap/Row";
+import Nav from "react-bootstrap/Nav";
 import OptionCard from "./OptionCard";
-import DragData from './DragData';
-import {database} from '../utils/database'
+import DragData from "./DragData";
+import { database } from "../utils/database";
 
 const triggerList = database.filter((task) => task.optionType === "trigger");
 const actionList = database.filter((task) => task.optionType === "action");
 const loggerList = database.filter((task) => task.optionType === "logger");
 
 const SideBar = (props) => {
-  const [option, setOption] = useState('triggers');
+  const [option, setOption] = useState("triggers");
 
   return (
     <SideBarColumn>
@@ -53,47 +53,22 @@ const SideBar = (props) => {
           <OptionsContentBox>
             <OptionsPaneItem eventKey="triggers">
               {triggerList.map((listItem) => (
-                <DragData
-                  dataItem={listItem}
-                  key={listItem.id}
-                  setMouseDropCoords={props.setMouseDropCoords}
-                >
-                  <OptionCard
-                    handleCardClicked={props.handleCardClicked}
-                    cardData={listItem}
-                  />
+                <DragData dataItem={listItem} key={listItem.id}>
+                  <OptionCard cardData={listItem} />
                 </DragData>
               ))}
             </OptionsPaneItem>
             <OptionsPaneItem eventKey="actions">
               {actionList.map((listItem) => (
-                <DragData
-                  dataItem={listItem}
-                  key={listItem.id}
-                  setMouseDropCoords={props.setMouseDropCoords}
-                >
-                  <OptionCard
-                    handleCardClicked={
-                      props.handleCardClicked
-                    }
-                    cardData={listItem}
-                  />
+                <DragData dataItem={listItem} key={listItem.id}>
+                  <OptionCard cardData={listItem} />
                 </DragData>
               ))}
             </OptionsPaneItem>
             <OptionsPaneItem eventKey="extras">
               {loggerList.map((listItem) => (
-                <DragData
-                  dataItem={listItem}
-                  key={listItem.id}
-                  setMouseDropCoords={props.setMouseDropCoords}
-                >
-                  <OptionCard
-                    getOptionCardAreaMousePosition={
-                      props.getOptionCardAreaMousePosition
-                    }
-                    cardData={listItem}
-                  />
+                <DragData dataItem={listItem} key={listItem.id}>
+                  <OptionCard cardData={listItem} />
                 </DragData>
               ))}
             </OptionsPaneItem>
@@ -131,8 +106,7 @@ const OptionsTabNavBar = styled(Nav)`
 `;
 
 const OptionTabLink = styled(Nav.Link)`
-  color: ${(props) =>
-    props.eventKey === props.option ? "black" : "#7D7D7D"};
+  color: ${(props) => (props.eventKey === props.option ? "black" : "#7D7D7D")};
   border-bottom: ${(props) =>
     props.eventKey === props.option ? "3px solid blue" : ""};
   text-decoration: none;
@@ -155,8 +129,6 @@ const OptionsContentBox = styled(Tab.Content)`
   overflow-y: auto;
 `;
 
-const OptionsPaneItem = styled(Tab.Pane)`
-
-`;
+const OptionsPaneItem = styled(Tab.Pane)``;
 
 export default SideBar;

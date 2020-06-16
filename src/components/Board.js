@@ -1,47 +1,20 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Draggable from "./Draggable";
+import { useSelector } from "react-redux";
 import DropTarget from "./DropTarget";
-import OnBoardOptionCard from "./OnBoardOptionCard";
+import TreeChart from "./TreeChart";
 
 const Board = (props) => {
-  const [hoverArea, setHoverArea] = useState(null);
+  const items = useSelector((state) => state.items);
+
   return (
     <>
-      {props.items.length >= 1 ? (
+      {items !== null ? (
         <ContainerForBoard>
-            {props.items.map((item) => {
-              {/* const extraSpace = item.children.length > 0 ? true : false; */}
-              return (
-              <DropTarget
-                onItemDropped={props.onItemDropped}
-                dropEffect="copy"
-                dispatchDraggedElement={props.dispatchDraggedElement}
-                isOver={props.isOver}
-                key={item.id}
-                id={item.id}
-                hoverArea={hoverArea}
-              >
-                  <Draggable>
-                    <OnBoardOptionCard
-                      setHoverArea={setHoverArea}
-                      cardData={item}
-                      isOver={props.isOver}
-                      // extraSpace={extraSpace}
-                    />
-                  </Draggable>
-                </DropTarget>
-              );
-            })}
-          
+          <TreeChart />
         </ContainerForBoard>
       ) : (
-        <DropTarget
-          onItemDropped={props.onItemDropped}
-          dropEffect="copy"
-          dispatchDraggedElement={props.dispatchDraggedElement}
-          isOver={props.isOver}
-        >
+        <DropTarget dropEffect="copy">
           <ContainerForBoard />
         </DropTarget>
       )}

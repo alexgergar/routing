@@ -1,9 +1,15 @@
-import React, {useState, useCallback, useEffect} from 'react'
-import styled from 'styled-components';
+import React, { useState, useCallback, useEffect } from "react";
+import styled from "styled-components";
 import { MoreHorizontal } from "react-feather";
+import { useSelector } from "react-redux";
 import IconSquare from "./IconSquare";
+import { handleUpdateRootCoords } from "../redux/actions/item-actions";
 
-const OnBoardOptionCard = props => {
+const OnBoardOptionCard = (props) => {
+  const isOver = useSelector((state) => state.draggedElement.isOver);
+  const hoveredOverId = useSelector(
+    (state) => state.draggedElement.dragOverDropTargetID
+  );
   const [area, setArea] = useState({});
 
   const measuredRef = useCallback((node) => {
@@ -19,25 +25,28 @@ const OnBoardOptionCard = props => {
   }, []);
 
   useEffect(() => {
-    props.isOver ? props.setHoverArea(area) : props.setHoverArea(null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.isOver, area])
-
+    isOver ? props.setHoverArea(area) : props.setHoverArea(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOver, area]);
 
   return (
     <Wrapper
       ref={measuredRef}
-      cardData={props.cardData}
+      isOver={isOver}
+      id={props.data.data.id}
+      hoveredOverId={hoveredOverId}
+      left={props.data.x}
+      top={props.data.y}
     >
-      <CardContents isOver={props.isOver}>
+      <CardContents>
         <TitleRow>
           <Row>
             <IconSquare
               showBackground={false}
-              icon={props.cardData.icon}
+              icon={props.data.data.icon}
               size={36}
             />
-            <Title>{props.cardData.title}</Title>
+            <Title>{props.data.data.title}</Title>
           </Row>
           <MoreHorizontal color="#c2c2c2" />
         </TitleRow>
@@ -45,23 +54,19 @@ const OnBoardOptionCard = props => {
         <BodyRow>
           <ContentText>I am the body text </ContentText>
         </BodyRow>
-        {props.area && (
-          <BodyRow>
-          <ContentText>{props.area.height} - {props.area.bottom}</ContentText>
-        </BodyRow>
-        )}
-        
       </CardContents>
-      <ExtraSpace />
+      {/* <ExtraSpace /> */}
     </Wrapper>
   );
-}
+};
 
 const Wrapper = styled.div`
-  position: absolute;
   width: 350px;
-  left: ${(props) => props.cardData.x}px;
-  top: ${(props) => props.cardData.y}px;
+  background-color: ${(props) =>
+    props.isOver && props.id === props.hoveredOverId ? "red" : "white"};
+  position: absolute;
+  left: ${(props) => props.left}px;
+  top: ${(props) => props.top}px;
 `;
 
 const CardContents = styled.div`
@@ -69,8 +74,6 @@ const CardContents = styled.div`
   flex-direction: column;
   border-radius: 5px;
   box-shadow: 0px 4px 30px rgba(22, 33, 74, 0.08);
-  background-color: ${(props) => (props.isOver ? "red" : "white")};
-  zIndex: 10;
 `;
 
 const Row = styled.div`
@@ -99,8 +102,8 @@ const HorizontalLine = styled.div`
 `;
 
 const BodyRow = styled.div`
- display: flex;
- margin: 15px 20px;
+  display: flex;
+  margin: 15px 20px;
 `;
 
 const ContentText = styled.p`
@@ -109,7 +112,7 @@ const ContentText = styled.p`
 
 const ExtraSpace = styled.div`
   height: 100px;
-  content: '';
-  zIndex: 0;
+  content: "";
+  zindex: 0;
 `;
-export default OnBoardOptionCard
+export default OnBoardOptionCard;
