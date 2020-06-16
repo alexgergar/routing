@@ -67,6 +67,7 @@ const Wrapper = styled.div`
   position: absolute;
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
+  zindex: 10;
 `;
 
 const CardContents = styled.div`

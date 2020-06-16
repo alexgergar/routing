@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Draggable from "./Draggable";
 import OnBoardOptionCard from "../components/OnBoardOptionCard";
 import DropTarget from "./DropTarget";
+import ArrowToNode from "./ArrowToNode";
 
 const Node = (props) => {
   return (
@@ -18,8 +19,6 @@ const Node = (props) => {
             >
               <Draggable
                 id={node.data.id}
-                position={props.position}
-                setPosition={props.setPosition}
                 handleCoordinateUpdateToRootNode={
                   props.handleCoordinateUpdateToRootNode
                 }
@@ -28,6 +27,13 @@ const Node = (props) => {
                 draggingCoords={props.draggingCoords}
                 setDraggingCoords={props.setDraggingCoords}
               >
+                <ArrowToNode
+                  x={node.x}
+                  y={node.y}
+                  numOfParentChildren={node.parent.children.length}
+                  parentX={node.parent.x}
+                  // xDiff={node.parent.x - node.x}
+                />
                 <OnBoardOptionCard
                   data={node}
                   setHoverArea={props.setHoverArea}

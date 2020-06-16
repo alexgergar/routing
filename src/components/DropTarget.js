@@ -50,7 +50,9 @@ const DropTarget = (props) => {
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  zindex: 10;
+`;
 
 DropTarget.defaultProps = {
   dropEffect: dropEffects.All,

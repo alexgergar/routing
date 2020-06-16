@@ -91,10 +91,9 @@ const TreeChart = (props) => {
     setDraggingParentID(0);
   };
 
-  // useEffect(() => {
-  //   console.log(items);
-  //   // console.log(tree);
-  // }, [items]);
+  useEffect(() => {
+    console.log(tree);
+  }, [tree]);
 
   return (
     <Wrapper>
@@ -133,10 +132,6 @@ const TreeChart = (props) => {
   );
 };
 
-const Wrapper = styled.div`
-  ${"" /* position: absolute; */}
-  ${"" /* top: ${(props) => props.top}px; */}
-  ${"" /* left: ${(props) => props.left}px; */}
-`;
+const Wrapper = styled.div``;
 
 export default TreeChart;
