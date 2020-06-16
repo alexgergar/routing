@@ -20,6 +20,7 @@ const TreeChart = (props) => {
     x: 0,
     y: 0,
   });
+  const [draggingParentID, setDraggingParentID] = useState(0);
 
   useEffect(() => {
     const root = hierarchy(items);
@@ -87,6 +88,7 @@ const TreeChart = (props) => {
       handleUpdateRootCoords({ x: draggingCoords.x, y: draggingCoords.y })
     );
     setDraggingCoords({ x: 0, y: 0 });
+    setDraggingParentID(0);
   };
 
   // useEffect(() => {
@@ -102,6 +104,9 @@ const TreeChart = (props) => {
             id={tree.data.id}
             setDraggingCoords={setDraggingCoords}
             handleCoordinateUpdateToRootNode={handleCoordinateUpdateToRootNode}
+            setDraggingParentID={setDraggingParentID}
+            draggingParentID={draggingParentID}
+            draggingCoords={draggingCoords}
           >
             <OnBoardOptionCard
               data={tree}
@@ -118,6 +123,10 @@ const TreeChart = (props) => {
           hoverArea={hoverArea}
           setHoverArea={setHoverArea}
           handleCoordinateUpdateToRootNode={handleCoordinateUpdateToRootNode}
+          setDraggingCoords={setDraggingCoords}
+          setDraggingParentID={setDraggingParentID}
+          draggingParentID={draggingParentID}
+          draggingCoords={draggingCoords}
         />
       )}
     </Wrapper>

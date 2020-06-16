@@ -23,6 +23,10 @@ const Node = (props) => {
                 handleCoordinateUpdateToRootNode={
                   props.handleCoordinateUpdateToRootNode
                 }
+                setDraggingParentID={props.setDraggingParentID}
+                draggingParentID={props.draggingParentID}
+                draggingCoords={props.draggingCoords}
+                setDraggingCoords={props.setDraggingCoords}
               >
                 <OnBoardOptionCard
                   data={node}
@@ -38,6 +42,10 @@ const Node = (props) => {
                 handleCoordinateUpdateToRootNode={
                   props.handleCoordinateUpdateToRootNode
                 }
+                setDraggingParentID={props.setDraggingParentID}
+                draggingParentID={props.draggingParentID}
+                draggingCoords={props.draggingCoords}
+                setDraggingCoords={props.setDraggingCoords}
               />
             )}
           </>

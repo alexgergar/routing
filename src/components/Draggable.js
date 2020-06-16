@@ -1,11 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import { handleUpdateRootCoords } from "../redux/actions/item-actions";
-import {
-  handleMouseMoving,
-  handleReset,
-} from "../redux/actions/draggedElement-actions";
 
 const Draggable = (props) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -13,6 +7,7 @@ const Draggable = (props) => {
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
+    props.setDraggingParentID(props.id);
     const pageX = e.pageX;
     const pageY = e.pageY;
     setPosition((position) => ({
@@ -61,6 +56,9 @@ const Draggable = (props) => {
       onMouseUp={handleMouseUp}
       position={position}
       isDragging={isDragging}
+      draggingParentID={props.draggingParentID}
+      id={props.id}
+      draggingCoords={props.draggingCoords}
     >
       {props.children}
     </Wrapper>
@@ -71,7 +69,9 @@ const Wrapper = styled.div`
   cursor: ${(props) =>
     props.isDragging ? "-webkit-grabbing" : "-webkit-grab"};
   transform: ${(props) =>
-    `translate(${props.position.x}px, ${props.position.y}px)`};
+    props.draggingParentID !== props.id
+      ? `translate(${props.draggingCoords.x}px, ${props.draggingCoords.y}px)`
+      : `translate(${props.position.x}px, ${props.position.y}px)`};
 `;
 
 export default Draggable;
