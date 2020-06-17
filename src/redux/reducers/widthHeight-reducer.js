@@ -1,8 +1,8 @@
 import { UPDATE_WIDTH_HEIGHT } from "../actions/widthHeight-actions";
 
 export const initialWidthHeightState = {
-  width: "100vw",
-  height: "100vh",
+  width: window.innerWidth,
+  height: window.innerHeight,
 };
 
 const widthHeightReducer = (

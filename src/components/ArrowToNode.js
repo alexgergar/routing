@@ -10,7 +10,6 @@ const ArrowToNode = (props) => {
 
   if (props.parentX - props.x >= 0) {
     xDiff = props.parentX - props.x + 10;
-    console.log(`in if xDiff: ${xDiff}`);
     leftMostPt = props.x - 10 + cardWidth / 2;
     arrowPoint = `M5 62 h10 L10 68 L5 62 Z`;
     stepLadder = `M${xDiff} 0 V30 L${10} 30 V61`;

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import SideBar from "./SideBar";
 import Board from "./Board";
+import DetailsSideBar from "./DetailsSideBar";
 import { useSelector, useDispatch } from "react-redux";
 import { handleAddRoot, handleUpdateNode } from "../redux/actions/item-actions";
 import { handleReset } from "../redux/actions/draggedElement-actions";
@@ -70,6 +71,7 @@ const MainContainer = (props) => {
     <Main>
       <SideBar />
       <Board />
+      <DetailsSideBar />
     </Main>
   );
 };

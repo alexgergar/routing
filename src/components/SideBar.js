@@ -8,7 +8,6 @@ import Nav from "react-bootstrap/Nav";
 import OptionCard from "./OptionCard";
 import DragData from "./DragData";
 import { database } from "../utils/database";
-import { useSelector } from "react-redux";
 
 const triggerList = database.filter((task) => task.optionType === "trigger");
 const actionList = database.filter((task) => task.optionType === "action");
@@ -16,10 +15,9 @@ const loggerList = database.filter((task) => task.optionType === "logger");
 
 const SideBar = (props) => {
   const [option, setOption] = useState("triggers");
-  const widthHeight = useSelector((state) => state.widthHeight);
 
   return (
-    <SideBarColumn height={widthHeight.height}>
+    <SideBarColumn>
       <PaddingForSideBar>
         <h3>Options:</h3>
         <SearchForm>
@@ -83,7 +81,9 @@ const SideBar = (props) => {
 
 const SideBarColumn = styled.div`
   width: 350px;
-  height: ${(props) => props.height - 50};
+  height: calc(
+    100vh - 50px
+  ); /* this seems to work better than using widthHeight.height - 50 (which cuts off it) */
   box-sizing: border-box;
   background-color: #fff;
   border-right: 1px solid #c7c7c7;

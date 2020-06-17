@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { MoreHorizontal } from "react-feather";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import IconSquare from "./IconSquare";
+import { handleToggleMenuOpen } from "../redux/actions/menu-actions";
 
 const OnBoardOptionCard = (props) => {
   const isOver = useSelector((state) => state.draggedElement.isOver);
@@ -10,6 +11,8 @@ const OnBoardOptionCard = (props) => {
     (state) => state.draggedElement.dragOverDropTargetID
   );
   const [area, setArea] = useState({});
+  const menu = useSelector((state) => state.menu);
+  const dispatch = useDispatch();
 
   const measuredRef = useCallback((node) => {
     if (node !== null) {
@@ -29,20 +32,22 @@ const OnBoardOptionCard = (props) => {
   }, [isOver, area]);
 
   const handleOnClick = () => {
-    console.log(`clicked: ${props.data.data.id}`);
+    dispatch(handleToggleMenuOpen(props.data.data));
   };
 
   return (
     <Wrapper
       ref={measuredRef}
-      isOver={isOver}
-      id={props.data.data.id}
-      hoveredOverId={hoveredOverId}
       left={props.data.x}
       top={props.data.y}
       onClick={handleOnClick}
     >
-      <CardContents>
+      <CardContents
+        isOver={isOver}
+        id={props.data.data.id}
+        hoveredOverId={hoveredOverId}
+        selectedID={menu.optionID}
+      >
         <TitleRow>
           <Row>
             <IconSquare
@@ -66,8 +71,6 @@ const OnBoardOptionCard = (props) => {
 
 const Wrapper = styled.div`
   width: 350px;
-  background-color: ${(props) =>
-    props.isOver && props.id === props.hoveredOverId ? "red" : "white"};
   position: absolute;
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
@@ -77,7 +80,12 @@ const CardContents = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-  box-shadow: 0px 4px 30px rgba(22, 33, 74, 0.08);
+  border: ${(props) =>
+    props.id === props.selectedID ? "3px solid #293D87" : "none"};
+  box-shadow: ${(props) =>
+    props.isOver && props.id === props.hoveredOverId
+      ? "0px 4px 30px rgba(22, 33, 74, 0.8)"
+      : "0px 4px 30px rgba(22, 33, 74, 0.08)"};
 `;
 
 const Row = styled.div`

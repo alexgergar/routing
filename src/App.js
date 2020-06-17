@@ -24,7 +24,7 @@ const App = (props) => {
 
   return (
     <Theme>
-      <Container width={widthHeight.width} height={widthHeight.height}>
+      <Container>
         <NavBar />
         <MainContainer />
       </Container>
@@ -33,12 +33,10 @@ const App = (props) => {
 };
 
 const Container = styled.div`
-  width: ${(props) => props.width};
-  min-height: ${(props) => props.height};
-  overflow: hidden;
   background-image: url(${dotgrid});
   background-repeat: repeat;
   background-size: 30px 30px;
+  overflow: auto;
 `;
 
 export default App;

@@ -13,11 +13,13 @@ import itemsReducer from "./redux/reducers/item-reducer";
 import widthHeightReducer, {
   initialWidthHeightState,
 } from "./redux/reducers/widthHeight-reducer";
+import menuReducer, { initialMenuState } from "./redux/reducers/menu-reducer";
 
 const allReducers = combineReducers({
   draggedElement: draggedElementReducer,
   items: itemsReducer,
   widthHeight: widthHeightReducer,
+  menu: menuReducer,
 });
 
 const store = createStore(
@@ -26,6 +28,7 @@ const store = createStore(
     draggedElement: initialDraggedElementState,
     items: null,
     widthHeight: initialWidthHeightState,
+    menu: initialMenuState,
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() // checks if dev tools exists and if it does calls it
 );

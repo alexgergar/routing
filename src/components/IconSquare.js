@@ -1,9 +1,19 @@
-import React from 'react'
+import React from "react";
 import styled from "styled-components";
-import {Eye, Zap, Clock, AlertOctagon, Database, Terminal} from "react-feather";
+import {
+  Eye,
+  Zap,
+  Clock,
+  AlertOctagon,
+  Database,
+  Terminal,
+  X,
+  User,
+  Settings,
+  Save,
+} from "react-feather";
 
-
-const IconSquare = props => {
+const IconSquare = (props) => {
   const iconColor = props.color ? props.color : "#7D7D7D";
   const IconBlock = () => {
     switch (props.icon) {
@@ -19,25 +29,38 @@ const IconSquare = props => {
         return <Database color={iconColor} size={props.size * (2 / 3)} />;
       case "Terminal":
         return <Terminal color={iconColor} size={props.size * (2 / 3)} />;
+      case "X":
+        return <X color={iconColor} size={props.size * (2 / 3)} />;
+      case "User":
+        return <User color={iconColor} size={props.size * (2 / 3)} />;
+      case "Settings":
+        return <Settings color={iconColor} size={props.size * (2 / 3)} />;
+      case "Save":
+        return <Save color={iconColor} size={props.size * (2 / 3)} />;
       default:
         break;
     }
-  }
+  };
 
   return (
     <>
       {props.showBackground ? (
-        <Wrapper backgroundColor={props.backgroundColor} size={props.size}>
+        <Wrapper
+          backgroundColor={props.backgroundColor}
+          size={props.size}
+          onClick={props.onClick}
+          style={props.style}
+        >
           <IconBlock />
         </Wrapper>
       ) : (
-        <JustIconWrapper>
+        <JustIconWrapper onClick={props.onClick} style={props.style}>
           <IconBlock />
         </JustIconWrapper>
       )}
     </>
   );
-}
+};
 const Wrapper = styled.div`
   border-radius: 5px;
   height: ${(props) => (props.size ? props.size + "px" : "36px")};
@@ -49,12 +72,10 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const JustIconWrapper = styled.div`
-
-`
+const JustIconWrapper = styled.div``;
 
 IconSquare.defaultProps = {
   showBackground: true,
-}
+};
 
-export default IconSquare
+export default IconSquare;
