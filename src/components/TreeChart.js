@@ -91,10 +91,6 @@ const TreeChart = (props) => {
     setDraggingParentID(0);
   };
 
-  useEffect(() => {
-    console.log(tree);
-  }, [tree]);
-
   return (
     <Wrapper>
       {tree !== undefined && (

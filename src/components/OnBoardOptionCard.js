@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { MoreHorizontal } from "react-feather";
 import { useSelector } from "react-redux";
 import IconSquare from "./IconSquare";
-import { handleUpdateRootCoords } from "../redux/actions/item-actions";
 
 const OnBoardOptionCard = (props) => {
   const isOver = useSelector((state) => state.draggedElement.isOver);
@@ -29,6 +28,10 @@ const OnBoardOptionCard = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOver, area]);
 
+  const handleOnClick = () => {
+    console.log(`clicked: ${props.data.data.id}`);
+  };
+
   return (
     <Wrapper
       ref={measuredRef}
@@ -37,6 +40,7 @@ const OnBoardOptionCard = (props) => {
       hoveredOverId={hoveredOverId}
       left={props.data.x}
       top={props.data.y}
+      onClick={handleOnClick}
     >
       <CardContents>
         <TitleRow>
@@ -67,7 +71,6 @@ const Wrapper = styled.div`
   position: absolute;
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
-  zindex: 10;
 `;
 
 const CardContents = styled.div`

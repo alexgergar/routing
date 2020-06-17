@@ -3,7 +3,6 @@ import styled from "styled-components";
 import * as dropEffects from "../utils/dropEffects";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  handleClicked,
   handleDragOver,
   handleDragEnter,
   handleDragLeave,
@@ -50,9 +49,7 @@ const DropTarget = (props) => {
   );
 };
 
-const Wrapper = styled.div`
-  zindex: 10;
-`;
+const Wrapper = styled.div``;
 
 DropTarget.defaultProps = {
   dropEffect: dropEffects.All,

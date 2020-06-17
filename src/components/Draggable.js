@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 
 const Draggable = (props) => {
@@ -66,7 +66,6 @@ const Draggable = (props) => {
 };
 
 const Wrapper = styled.div`
-  zindex: 10;
   cursor: ${(props) =>
     props.isDragging ? "-webkit-grabbing" : "-webkit-grab"};
   transform: ${(props) =>

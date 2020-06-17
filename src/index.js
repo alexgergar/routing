@@ -6,30 +6,26 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import * as serviceWorker from "./serviceWorker";
 import { combineReducers, createStore } from "redux";
 import { Provider } from "react-redux";
-import draggedElementReducer from "./redux/reducers/draggedElement-reducer";
+import draggedElementReducer, {
+  initialDraggedElementState,
+} from "./redux/reducers/draggedElement-reducer";
 import itemsReducer from "./redux/reducers/item-reducer";
-import { testData } from "./utils/testData";
+import widthHeightReducer, {
+  initialWidthHeightState,
+} from "./redux/reducers/widthHeight-reducer";
 
 const allReducers = combineReducers({
   draggedElement: draggedElementReducer,
   items: itemsReducer,
+  widthHeight: widthHeightReducer,
 });
-
-const initialDraggedElementState = {
-  areaOfClickedElement: null,
-  positionOfMouseDown: null,
-  coordsOfDroppedElement: null,
-  currentItem: null,
-  dragOverDropTargetID: null,
-  dragOverArea: null,
-  isOver: false,
-};
 
 const store = createStore(
   allReducers,
   {
     draggedElement: initialDraggedElementState,
     items: null,
+    widthHeight: initialWidthHeightState,
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() // checks if dev tools exists and if it does calls it
 );

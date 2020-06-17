@@ -2,12 +2,11 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 
 const cardWidth = 350;
-const cardHeight = 126;
 
 const ArrowToNode = (props) => {
   const topMostPt = props.y - 70;
 
-  let xDiff, leftMostPt, arrowPoint, stepLadder, viewBox;
+  let xDiff, leftMostPt, arrowPoint, stepLadder;
 
   if (props.parentX - props.x >= 0) {
     xDiff = props.parentX - props.x + 10;

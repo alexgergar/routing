@@ -27,13 +27,7 @@ const Node = (props) => {
                 draggingCoords={props.draggingCoords}
                 setDraggingCoords={props.setDraggingCoords}
               >
-                <ArrowToNode
-                  x={node.x}
-                  y={node.y}
-                  numOfParentChildren={node.parent.children.length}
-                  parentX={node.parent.x}
-                  // xDiff={node.parent.x - node.x}
-                />
+                <ArrowToNode x={node.x} y={node.y} parentX={node.parent.x} />
                 <OnBoardOptionCard
                   data={node}
                   setHoverArea={props.setHoverArea}

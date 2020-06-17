@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import DropTarget from "./DropTarget";
@@ -6,16 +6,23 @@ import TreeChart from "./TreeChart";
 
 const Board = (props) => {
   const items = useSelector((state) => state.items);
+  const widthHeight = useSelector((state) => state.widthHeight);
 
   return (
     <>
       {items !== null ? (
-        <ContainerForBoard>
+        <ContainerForBoard
+          width={widthHeight.width}
+          height={widthHeight.height}
+        >
           <TreeChart />
         </ContainerForBoard>
       ) : (
         <DropTarget dropEffect="copy">
-          <ContainerForBoard />
+          <ContainerForBoard
+            width={widthHeight.width}
+            height={widthHeight.height}
+          />
         </DropTarget>
       )}
     </>
@@ -23,8 +30,8 @@ const Board = (props) => {
 };
 
 const ContainerForBoard = styled.div`
-  min-width: calc(100vw - 350px);
-  min-height: calc(100vh - 50px);
+  min-width: ${(props) => props.width - 350};
+  min-height: ${(props) => props.height - 50};
   z-index: 0;
 `;
 
