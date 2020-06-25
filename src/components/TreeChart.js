@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState } from "react";
-import { hierarchy, tree, linkVertical, dispatch } from "d3";
+import React, { useEffect, useState } from "react";
+import { hierarchy } from "d3";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import Draggable from "../components/Draggable";

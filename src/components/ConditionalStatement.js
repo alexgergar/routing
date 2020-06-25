@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Form from "react-bootstrap/Form";
-import { database } from "../utils/database";
 import IconSquare from "./IconSquare";
 import {
   handleUpdateConditional,
@@ -130,18 +129,9 @@ const Row = styled.div`
   flex-direction: row;
 `;
 
-const Title = styled.h6`
-  align-self: center;
-`;
-
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const AndAllColumn = styled(Column)`
-  width: 25%;
-  margin-bottom: 0.5rem;
 `;
 
 const ConditionalColumn = styled(Column)`
