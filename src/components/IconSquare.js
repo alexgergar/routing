@@ -11,6 +11,11 @@ import {
   User,
   Settings,
   Save,
+  Calendar,
+  PhoneIncoming,
+  Share2,
+  PlusCircle,
+  MinusCircle,
 } from "react-feather";
 
 const IconSquare = (props) => {
@@ -37,6 +42,16 @@ const IconSquare = (props) => {
         return <Settings color={iconColor} size={props.size * (2 / 3)} />;
       case "Save":
         return <Save color={iconColor} size={props.size * (2 / 3)} />;
+      case "Calendar":
+        return <Calendar color={iconColor} size={props.size * (2 / 3)} />;
+      case "PhoneIncoming":
+        return <PhoneIncoming color={iconColor} size={props.size * (2 / 3)} />;
+      case "Share2":
+        return <Share2 color={iconColor} size={props.size * (2 / 3)} />;
+      case "PlusCircle":
+        return <PlusCircle color={iconColor} size={props.size * (2 / 3)} />;
+      case "MinusCircle":
+        return <MinusCircle color={iconColor} size={props.size * (2 / 3)} />;
       default:
         break;
     }

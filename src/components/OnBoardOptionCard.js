@@ -40,7 +40,7 @@ const OnBoardOptionCard = (props) => {
       ref={measuredRef}
       left={props.data.x}
       top={props.data.y}
-      onClick={handleOnClick}
+      onDoubleClick={handleOnClick}
     >
       <CardContents
         isOver={isOver}

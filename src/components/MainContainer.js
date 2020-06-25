@@ -29,6 +29,9 @@ const MainContainer = (props) => {
         title: draggedElement.currentItem.title, // title for the card
         shortDesc: draggedElement.currentItem.shortDesc, // description of the the card
         icon: draggedElement.currentItem.icon, // icon to help with visuals
+        noun: draggedElement.currentItem.noun, // noun to help details sidebar
+        conditionalOptions: draggedElement.currentItem.conditionalOptions, // options for detail sidebar for route
+        conditionsForRoute: null,
         x: xCoord, // where the x-posiiton should be om the card.
         y: yCoord, // where the y-position should be on the card
         children: [],

@@ -19,7 +19,7 @@ const SideBar = (props) => {
   return (
     <SideBarColumn>
       <PaddingForSideBar>
-        <h3>Options:</h3>
+        <h3>Workflow Options:</h3>
         <SearchForm>
           <Form.Control type="search" placeholder="Search for Option" />
         </SearchForm>
@@ -88,6 +88,7 @@ const SideBarColumn = styled.div`
   background-color: #fff;
   border-right: 1px solid #c7c7c7;
   z-index: 3;
+  overflow: scroll;
 `;
 
 const PaddingForSideBar = styled.div`

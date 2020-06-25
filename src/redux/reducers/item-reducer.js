@@ -2,6 +2,7 @@ import {
   ADD_ROOT,
   UPDATE_NODE,
   UPDATE_ROOT_COORDS,
+  DELETE_TREE,
 } from "../actions/item-actions";
 
 const itemsReducer = (state = {}, { type, payload }) => {
@@ -13,6 +14,8 @@ const itemsReducer = (state = {}, { type, payload }) => {
         ...state,
         ...payload,
       };
+    case DELETE_TREE:
+      return null;
     case UPDATE_ROOT_COORDS:
       return {
         ...state,
