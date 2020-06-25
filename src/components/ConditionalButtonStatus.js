@@ -10,6 +10,7 @@ import { database } from "../utils/database";
 import Form from "react-bootstrap/Form";
 import AddConditionalButton from "./AddConditionalButton";
 import ConditionalStatement from "./ConditionalStatement";
+import IconSquare from "./IconSquare";
 
 const ConditionalButtonStatus = (props) => {
   const conditionals = useSelector((state) => state.conditionals);
@@ -51,6 +52,7 @@ const ConditionalButtonStatus = (props) => {
         <AddConditionalButton
           onClick={props.handleDispatchOfConditional}
           label="Add Another Condtion"
+          icon="PlusCircle"
         />
         <Title>Then Route To:</Title>
         <Form.Control
@@ -64,9 +66,13 @@ const ConditionalButtonStatus = (props) => {
           ))}
         </Form.Control>
       </Form>
-      <ConditionalSubmitButton onClick={handleNewRouteWithConditionalAdd}>
-        Add this Route
-      </ConditionalSubmitButton>
+      <CenterRow>
+        <AddConditionalButton
+          icon="Plus"
+          label="Create this Route"
+          onClick={handleNewRouteWithConditionalAdd}
+        />
+      </CenterRow>
     </ConditionalColumn>
   );
 };
@@ -76,8 +82,13 @@ const Row = styled.div`
   flex-direction: row;
 `;
 
+const CenterRow = styled(Row)`
+  justify-content: center;
+  margin: 1rem 0;
+`;
+
 const ConditionalColumn = styled.div`
-  padding: 0 20px;
+  padding: 20px;
   flex-grow: 1;
 `;
 
@@ -89,13 +100,6 @@ const AndAllColumn = styled.div`
 
 const Title = styled.h6`
   align-self: center;
-`;
-
-const ConditionalSubmitButton = styled.button`
-  border-radius: 5px;
-  width: 80%;
-  background-color: teal;
-  font-size: 14px;
 `;
 
 export default ConditionalButtonStatus;

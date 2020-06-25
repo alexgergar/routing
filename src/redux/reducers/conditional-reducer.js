@@ -25,7 +25,7 @@ const conditionalReducer = (
         };
       });
     case REMOVE_CONDITIONAL:
-      return state.filter((conditional) => conditional !== payload);
+      return state.filter((conditional, index) => index !== payload.index);
     case RESET_CONDITIONAL:
       return [];
     default:

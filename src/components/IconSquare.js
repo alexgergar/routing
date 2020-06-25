@@ -14,6 +14,7 @@ import {
   Calendar,
   PhoneIncoming,
   Share2,
+  Plus,
   PlusCircle,
   MinusCircle,
 } from "react-feather";
@@ -50,6 +51,8 @@ const IconSquare = (props) => {
         return <Share2 color={iconColor} size={props.size * (2 / 3)} />;
       case "PlusCircle":
         return <PlusCircle color={iconColor} size={props.size * (2 / 3)} />;
+      case "Plus":
+        return <Plus color={iconColor} size={props.size * (2 / 3)} />;
       case "MinusCircle":
         return <MinusCircle color={iconColor} size={props.size * (2 / 3)} />;
       default:

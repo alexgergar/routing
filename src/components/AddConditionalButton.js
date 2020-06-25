@@ -4,6 +4,7 @@ import IconSquare from "./IconSquare";
 
 const AddConditionalButton = ({
   label = "Add Condition for Route",
+  icon = "PlusCircle",
   ...props
 }) => {
   const [plusButtonColor, setPlusButtonColor] = useState("black");
@@ -16,7 +17,7 @@ const AddConditionalButton = ({
       >
         <IconSquare
           showBackground={false}
-          icon="PlusCircle"
+          icon={icon}
           size={30}
           color={plusButtonColor}
           onMouseEnter={() => setPlusButtonColor("#7d7d7d")}
@@ -35,6 +36,8 @@ const Row = styled.div`
 const CenterRow = styled(Row)`
   justify-content: center;
   text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 `;
 
 const Wrapper = styled(Row)`

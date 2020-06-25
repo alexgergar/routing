@@ -24,8 +24,20 @@ const ConditionalStatement = (props) => {
     setQuesitonValue(conditionals[props.index].question);
     setQuestionIndex(indexOfQuestion);
     setConditionValue(conditionals[props.index].andAllValue);
+
     setAnswerValue(conditionals[props.index].answer);
-  }, [conditionals, props.data, props.index]);
+  }, [
+    conditionals,
+    props.data,
+    props.index,
+    questionValue,
+    conditionValue,
+    answerValue,
+  ]);
+
+  useEffect(() => {
+    console.log(questionValue);
+  }, [questionValue]);
 
   const handleQuestionSelect = (event) => {
     setQuesitonValue(event.target.value);
@@ -61,6 +73,7 @@ const ConditionalStatement = (props) => {
 
   const handleRemoveConditionalClick = () => {
     console.log(props.index);
+    dispatch(handleRemoveConditional(props.index));
   };
 
   return (
@@ -83,6 +96,7 @@ const ConditionalStatement = (props) => {
                 onChange={handleQuestionSelect}
                 size="sm"
                 defaultValue={questionValue}
+                value={questionValue}
               >
                 {props.data.map((option, index) => (
                   <option>{option.question}</option>
