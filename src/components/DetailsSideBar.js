@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { handleToggleMenuClosed } from "../redux/actions/menu-actions";
+import {
+  handleToggleMenuClosed,
+  handleAddConditional,
+} from "../redux/actions/menu-actions";
 import IconSquare from "./IconSquare";
 import {
   handleUpdateNode,
   handleDeleteTree,
 } from "../redux/actions/item-actions";
-import { handleAddConditional } from "../redux/actions/conditional-actions";
 import ConditionalButtonStatus from "./ConditionalButtonStatus";
 import AddConditionalButton from "./AddConditionalButton";
 
@@ -43,7 +45,7 @@ const DetailsSideBar = () => {
     dispatch(
       handleAddConditional(
         firstConditional.question,
-        "all",
+        "is",
         firstConditional.answer[0]
       )
     );
@@ -108,20 +110,16 @@ const DetailsSideBar = () => {
             size={40}
           />
         </HeaderRow>
-        {!showConditionalMenu && (
-          <AddConditionalButton onClick={handleAddBasicConditional} />
-        )}
         {menu.cardData &&
-          menu.cardData.conditionalOptions &&
           menu.cardData.conditionalOptions.length > 0 &&
-          showConditionalMenu && (
+          (showConditionalMenu ? (
             <ConditionalButtonStatus
-              noun={menu.cardData.noun}
-              data={menu.cardData.conditionalOptions}
               handleDispatchOfConditional={handleDispatchOfConditional}
               handleAddChildWithConditional={handleAddChildWithConditional}
             />
-          )}
+          ) : (
+            <AddConditionalButton onClick={handleAddBasicConditional} />
+          ))}
         <RemoveButton onClick={handleRemoveBlockClick}>
           Remove Route
         </RemoveButton>

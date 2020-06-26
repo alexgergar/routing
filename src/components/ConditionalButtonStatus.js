@@ -4,21 +4,21 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   handleAddConditional,
   handleRemoveConditional,
-  handleResetConditional,
-} from "../redux/actions/conditional-actions";
+  handleToggleMenuClosed,
+  handleUpdateAndAllValue,
+} from "../redux/actions/menu-actions";
 import { database } from "../utils/database";
 import Form from "react-bootstrap/Form";
 import AddConditionalButton from "./AddConditionalButton";
 import ConditionalStatement from "./ConditionalStatement";
 
 const ConditionalButtonStatus = (props) => {
-  const conditionals = useSelector((state) => state.conditionals);
+  const menu = useSelector((state) => state.menu);
   const dispatch = useDispatch();
   const [routeIndex, setRouteIndex] = useState(0); // this will be the index number of the database actions
-  const [andAllValue, setAndAllValue] = useState("all");
 
   const handleAndAllSelect = (event) => {
-    setAndAllValue(event.target.value);
+    dispatch(handleUpdateAndAllValue(event.target.value));
   };
 
   const handleNewRouteSelect = (event) => {
@@ -28,17 +28,20 @@ const ConditionalButtonStatus = (props) => {
   const handleNewRouteWithConditionalAdd = () => {
     let newRouteData = database[routeIndex];
     let conditionsForNewRoute = {
-      andAllValue: andAllValue,
-      conditionals: conditionals,
+      andAllValue: menu.andAllValue,
+      conditionals: menu.conditionals,
     };
     props.handleAddChildWithConditional(newRouteData, conditionsForNewRoute);
-    dispatch(handleResetConditional());
+    dispatch(handleToggleMenuClosed());
   };
+
+  console.log(menu.conditionals);
+
   return (
     <ConditionalColumn>
       <Form>
         <Row>
-          <Title>{props.noun} meets &nbsp;</Title>
+          <Title>{menu.noun} meets &nbsp;</Title>
           <AndAllColumn>
             <Form.Control onChange={handleAndAllSelect} as="select" size="sm">
               <option>all</option>
@@ -48,9 +51,12 @@ const ConditionalButtonStatus = (props) => {
 
           <Title>&nbsp; condition(s):</Title>
         </Row>
-        {conditionals &&
-          conditionals.map((conditional, index) => (
-            <ConditionalStatement data={props.data} index={index} />
+        {menu.conditionals &&
+          menu.conditionals.map((conditional, index) => (
+            <ConditionalStatement
+              data={menu.cardData.conditionalOptions}
+              index={index}
+            />
           ))}
         <AddConditionalButton
           onClick={props.handleDispatchOfConditional}

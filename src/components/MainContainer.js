@@ -31,7 +31,7 @@ const MainContainer = (props) => {
         icon: draggedElement.currentItem.icon, // icon to help with visuals
         noun: draggedElement.currentItem.noun, // noun to help details sidebar
         conditionalOptions: draggedElement.currentItem.conditionalOptions, // options for detail sidebar for route
-        conditionsForRoute: null,
+        conditionsForRoute: [],
         x: xCoord, // where the x-posiiton should be om the card.
         y: yCoord, // where the y-position should be on the card
         children: [],

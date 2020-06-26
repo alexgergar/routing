@@ -6,12 +6,14 @@ import {
   handleUpdateConditional,
   handleRemoveConditional,
   handleResetConditional,
-} from "../redux/actions/conditional-actions";
+} from "../redux/actions/menu-actions";
 import { useDispatch, useSelector } from "react-redux";
+import { database } from "../utils/database";
 
 const ConditionalStatement = (props) => {
   let dispatch = useDispatch();
-  const conditionals = useSelector((state) => state.conditionals);
+
+  const conditionals = useSelector((state) => state.menu.conditionals);
   const [questionValue, setQuesitonValue] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(null);
   const [conditionValue, setConditionValue] = useState(null);
@@ -21,40 +23,47 @@ const ConditionalStatement = (props) => {
     let indexOfQuestion = props.data.findIndex(
       (x) => x.question === conditionals[props.index].question
     );
+    console.log(conditionals);
     setQuesitonValue(conditionals[props.index].question);
+    console.log(`Question: ${conditionals[props.index].question}`);
     setQuestionIndex(indexOfQuestion);
-    setConditionValue(conditionals[props.index].andAllValue);
-
+    console.log(`Index of questionQuestion: ${indexOfQuestion}`);
+    setConditionValue(conditionals[props.index].condition);
+    console.log(`Condition: ${conditionals[props.index].condition}`);
     setAnswerValue(conditionals[props.index].answer);
+    console.log(`Answer: ${conditionals[props.index].answer}`);
   }, [conditionals, props.data, props.index]);
 
   const handleQuestionSelect = (event) => {
     setQuesitonValue(event.target.value);
-    conditionals[props.index] = {
-      question: event.target.value,
-      andAllValue: conditionValue,
-      answer: answerValue,
-    };
-    dispatch(handleUpdateConditional(conditionals, props.index));
+    dispatch(
+      handleUpdateConditional(props.index, {
+        question: event.target.value,
+        condition: conditionValue,
+        answer: answerValue,
+      })
+    );
   };
 
   const handleConditionSelect = (event) => {
     setConditionValue(event.target.value);
+
     dispatch(
       handleUpdateConditional(props.index, {
         question: questionValue,
-        andAllValue: event.target.value,
+        condition: event.target.value,
         answer: answerValue,
       })
     );
   };
 
   const handleAnswerSelect = (event) => {
+    console.log(event.target.value);
     setAnswerValue(event.target.value);
     dispatch(
       handleUpdateConditional(props.index, {
         question: questionValue,
-        andAllValue: conditionValue,
+        condition: conditionValue,
         answer: event.target.value,
       })
     );
@@ -97,6 +106,7 @@ const ConditionalStatement = (props) => {
                   as="select"
                   size="sm"
                   defaultValue={conditionValue}
+                  value={conditionValue}
                 >
                   <option>is</option>
                   <option>is not</option>
@@ -105,9 +115,15 @@ const ConditionalStatement = (props) => {
             </Row>
 
             <RowSpacer />
-            <Form.Control as="select" size="sm" defaultValue={answerValue}>
+            <Form.Control
+              as="select"
+              size="sm"
+              defaultValue={answerValue}
+              value={answerValue}
+              onChange={handleAnswerSelect}
+            >
               {props.data[questionIndex].answer.map((option) => (
-                <option onChange={handleAnswerSelect}>{option}</option>
+                <option>{option}</option>
               ))}
             </Form.Control>
           </Column>

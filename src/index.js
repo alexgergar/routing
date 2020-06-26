@@ -14,14 +14,12 @@ import widthHeightReducer, {
   initialWidthHeightState,
 } from "./redux/reducers/widthHeight-reducer";
 import menuReducer, { initialMenuState } from "./redux/reducers/menu-reducer";
-import conditionalReducer from "./redux/reducers/conditional-reducer";
 
 const allReducers = combineReducers({
   draggedElement: draggedElementReducer,
   items: itemsReducer,
   widthHeight: widthHeightReducer,
   menu: menuReducer,
-  conditionals: conditionalReducer,
 });
 
 const store = createStore(
@@ -31,7 +29,6 @@ const store = createStore(
     items: null,
     widthHeight: initialWidthHeightState,
     menu: initialMenuState,
-    conditional: [],
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() // checks if dev tools exists and if it does calls it
 );
