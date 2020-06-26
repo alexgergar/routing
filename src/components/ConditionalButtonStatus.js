@@ -10,7 +10,6 @@ import { database } from "../utils/database";
 import Form from "react-bootstrap/Form";
 import AddConditionalButton from "./AddConditionalButton";
 import ConditionalStatement from "./ConditionalStatement";
-import IconSquare from "./IconSquare";
 
 const ConditionalButtonStatus = (props) => {
   const conditionals = useSelector((state) => state.conditionals);
@@ -27,9 +26,13 @@ const ConditionalButtonStatus = (props) => {
   };
 
   const handleNewRouteWithConditionalAdd = () => {
-    console.log(conditionals);
-    console.log(routeIndex);
-    console.log(andAllValue);
+    let newRouteData = database[routeIndex];
+    let conditionsForNewRoute = {
+      andAllValue: andAllValue,
+      conditionals: conditionals,
+    };
+    props.handleAddChildWithConditional(newRouteData, conditionsForNewRoute);
+    dispatch(handleResetConditional());
   };
   return (
     <ConditionalColumn>

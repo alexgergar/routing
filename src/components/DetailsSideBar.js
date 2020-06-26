@@ -49,6 +49,45 @@ const DetailsSideBar = () => {
     );
   };
 
+  const createNewNodeData = (data, conditionsForRoute) => {
+    const date = new Date();
+    const nodeID = date.valueOf();
+    return {
+      id: nodeID, // to find in the array
+      parentId: menu.optionID,
+      optionType: data.optionType, // for the card option type
+      title: data.title, // title for the card
+      shortDesc: data.shortDesc, // description of the the card
+      icon: data.icon, // icon to help with visuals
+      noun: data.noun, // noun to help details sidebar
+      conditionalOptions: data.conditionalOptions, // options for detail sidebar for route
+      conditionsForRoute: conditionsForRoute,
+      x: null, // where the x-posiiton should be om the card.
+      y: null, // where the y-position should be on the card
+      children: [],
+    };
+  };
+
+  const handleAddChildWithConditional = (newRouteData, conditionals) => {
+    let newNodeData = createNewNodeData(newRouteData, conditionals);
+    let foundValue;
+    const findID = (object, id) => {
+      if (typeof object !== "object" || object === undefined || object === null)
+        return;
+      if (object.id === id) {
+        foundValue = object;
+        return;
+      } else {
+        for (const i in object) {
+          findID(object[i], id);
+        }
+      }
+    };
+    findID(items, menu.optionID);
+    foundValue.children.push(newNodeData);
+    dispatch(handleUpdateNode(items));
+  };
+
   const handleRemoveBlockClick = () => {
     const newItem = filterItems(items, menu.cardData.id);
     newItem === null
@@ -80,6 +119,7 @@ const DetailsSideBar = () => {
               noun={menu.cardData.noun}
               data={menu.cardData.conditionalOptions}
               handleDispatchOfConditional={handleDispatchOfConditional}
+              handleAddChildWithConditional={handleAddChildWithConditional}
             />
           )}
         <RemoveButton onClick={handleRemoveBlockClick}>

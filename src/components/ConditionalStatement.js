@@ -26,18 +26,7 @@ const ConditionalStatement = (props) => {
     setConditionValue(conditionals[props.index].andAllValue);
 
     setAnswerValue(conditionals[props.index].answer);
-  }, [
-    conditionals,
-    props.data,
-    props.index,
-    questionValue,
-    conditionValue,
-    answerValue,
-  ]);
-
-  useEffect(() => {
-    console.log(questionValue);
-  }, [questionValue]);
+  }, [conditionals, props.data, props.index]);
 
   const handleQuestionSelect = (event) => {
     setQuesitonValue(event.target.value);
@@ -72,7 +61,6 @@ const ConditionalStatement = (props) => {
   };
 
   const handleRemoveConditionalClick = () => {
-    console.log(props.index);
     dispatch(handleRemoveConditional(props.index));
   };
 
