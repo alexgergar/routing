@@ -1,9 +1,13 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { MoreHorizontal } from "react-feather";
 import { useSelector, useDispatch } from "react-redux";
 import IconSquare from "./IconSquare";
 import { handleToggleMenuOpen } from "../redux/actions/menu-actions";
+import {
+  handleUpdateTreeDepthHeight,
+  handleAppendNewTreeDepth,
+} from "../redux/actions/treeDepth-actions";
 import ConditionIcon from "./ConditionIcon";
 
 const OnBoardOptionCard = (props) => {
@@ -11,22 +15,51 @@ const OnBoardOptionCard = (props) => {
   const hoveredOverId = useSelector(
     (state) => state.draggedElement.dragOverDropTargetID
   );
-  const [area, setArea] = useState({});
+  const [area, setArea] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    bottom: 0,
+  });
   const menu = useSelector((state) => state.menu);
+  const treeDepth = useSelector((state) => state.treeDepth);
   const [hasConditionals, setHasConditionals] = useState(false);
   const dispatch = useDispatch();
 
-  const measuredRef = useCallback((node) => {
-    if (node !== null) {
+  const boardRef = useRef();
+
+  useEffect(() => {
+    if (
+      boardRef.current &&
+      boardRef.current.getBoundingClientRect().height !== area.height
+    ) {
       setArea({
-        x: node.getBoundingClientRect().x,
-        y: node.getBoundingClientRect().y,
-        width: node.getBoundingClientRect().width,
-        height: node.getBoundingClientRect().height,
-        bottom: node.getBoundingClientRect().bottom,
+        x: boardRef.current.getBoundingClientRect().x,
+        y: boardRef.current.getBoundingClientRect().y,
+        width: boardRef.current.getBoundingClientRect().width,
+        height: boardRef.current.getBoundingClientRect().height,
+        bottom: boardRef.current.getBoundingClientRect().bottom,
       });
+      if (treeDepth[props.data.depth] === undefined) {
+        dispatch(
+          handleAppendNewTreeDepth(
+            boardRef.current.getBoundingClientRect().height
+          )
+        );
+      } else if (
+        boardRef.current.getBoundingClientRect().height >
+        treeDepth[props.data.depth]
+      ) {
+        dispatch(
+          handleUpdateTreeDepthHeight(
+            props.data.depth,
+            boardRef.current.getBoundingClientRect().height
+          )
+        );
+      }
     }
-  }, []);
+  }, [area.height, hasConditionals, props.data.depth, treeDepth]);
 
   useEffect(() => {
     isOver ? props.setHoverArea(area) : props.setHoverArea(null);
@@ -44,7 +77,7 @@ const OnBoardOptionCard = (props) => {
 
   return (
     <Wrapper
-      ref={measuredRef}
+      ref={boardRef}
       left={props.data.x}
       top={props.data.y}
       onDoubleClick={handleOnClick}
@@ -110,7 +143,6 @@ const CardContents = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-
   box-shadow: ${(props) =>
     props.isOver && props.id === props.hoveredOverId
       ? "0px 4px 30px rgba(22, 33, 74, 0.8)"

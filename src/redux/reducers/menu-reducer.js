@@ -6,7 +6,6 @@ import {
   REMOVE_CONDITIONAL,
   UPDATE_AND_ALL_CONDITIONAL_VALUE,
 } from "../actions/menu-actions";
-import { keyframes } from "styled-components";
 
 export const initialMenuState = {
   isMenuOpen: false,
@@ -50,7 +49,6 @@ const menuReducer = (state = initialMenuState, { type, payload }) => {
         conditionals: [...state.conditionals, payload],
       };
     case UPDATE_CONDITIONAL:
-      console.log(payload);
       let newConditionalsState = state.conditionals.map((item, index) => {
         if (index !== payload.index) {
           return item;

@@ -6,6 +6,7 @@ import Draggable from "../components/Draggable";
 import OnBoardOptionCard from "../components/OnBoardOptionCard";
 import DropTarget from "./DropTarget";
 import Node from "./Node";
+import { handleAppendNewTreeDepth } from "../redux/actions/treeDepth-actions";
 import { handleUpdateRootCoords } from "../redux/actions/item-actions";
 
 const cardWidth = 350;
@@ -14,6 +15,7 @@ const cardHeight = 126;
 const TreeChart = (props) => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.items);
+  const treeDepth = useSelector((state) => state.treeDepth);
   const [tree, setTree] = useState();
   const [hoverArea, setHoverArea] = useState(null);
   const [draggingCoords, setDraggingCoords] = useState({

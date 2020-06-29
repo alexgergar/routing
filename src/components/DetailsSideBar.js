@@ -95,6 +95,7 @@ const DetailsSideBar = () => {
     newItem === null
       ? dispatch(handleDeleteTree())
       : dispatch(handleUpdateNode(newItem));
+    handleCloseMenu();
   };
 
   const menuTitle = menu.cardData !== null ? menu.cardData.title : "";
