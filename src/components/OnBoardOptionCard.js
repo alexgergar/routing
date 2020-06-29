@@ -4,6 +4,7 @@ import { MoreHorizontal } from "react-feather";
 import { useSelector, useDispatch } from "react-redux";
 import IconSquare from "./IconSquare";
 import { handleToggleMenuOpen } from "../redux/actions/menu-actions";
+import ConditionIcon from "./ConditionIcon";
 
 const OnBoardOptionCard = (props) => {
   const isOver = useSelector((state) => state.draggedElement.isOver);
@@ -12,6 +13,7 @@ const OnBoardOptionCard = (props) => {
   );
   const [area, setArea] = useState({});
   const menu = useSelector((state) => state.menu);
+  const [hasConditionals, setHasConditionals] = useState(false);
   const dispatch = useDispatch();
 
   const measuredRef = useCallback((node) => {
@@ -31,6 +33,11 @@ const OnBoardOptionCard = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOver, area]);
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setHasConditionals(props.data.data.conditionsForRoute.conditionals);
+  }, [props.data.data.conditionsForRoute.conditionals]);
+
   const handleOnClick = () => {
     dispatch(handleToggleMenuOpen(props.data.data));
   };
@@ -41,12 +48,32 @@ const OnBoardOptionCard = (props) => {
       left={props.data.x}
       top={props.data.y}
       onDoubleClick={handleOnClick}
+      id={props.data.data.id}
+      selectedID={menu.optionID}
     >
+      {hasConditionals && (
+        <ConditionalWrapper
+          isOver={isOver}
+          id={props.data.data.id}
+          hoveredOverId={hoveredOverId}
+          selectedID={menu.optionID}
+        >
+          <ConditionalsIconWrapper>
+            <ConditionIcon />
+          </ConditionalsIconWrapper>
+          <ConditionalsColumn>
+            {props.data.data.conditionsForRoute.conditionals.map((item) => (
+              <ConditionalStatementText>
+                {item.question} {item.condition} {item.answer}
+              </ConditionalStatementText>
+            ))}
+          </ConditionalsColumn>
+        </ConditionalWrapper>
+      )}
       <CardContents
         isOver={isOver}
         id={props.data.data.id}
         hoveredOverId={hoveredOverId}
-        selectedID={menu.optionID}
       >
         <TitleRow>
           <Row>
@@ -74,14 +101,16 @@ const Wrapper = styled.div`
   position: absolute;
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
+  border: ${(props) =>
+    props.id === props.selectedID ? "3px solid #293D87" : "none"};
+  border-radius: 5px;
 `;
 
 const CardContents = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-  border: ${(props) =>
-    props.id === props.selectedID ? "3px solid #293D87" : "none"};
+
   box-shadow: ${(props) =>
     props.isOver && props.id === props.hoveredOverId
       ? "0px 4px 30px rgba(22, 33, 74, 0.8)"
@@ -120,6 +149,36 @@ const BodyRow = styled.div`
 
 const ContentText = styled.p`
   display: inline-block;
+`;
+
+const ConditionalWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border-radius: 5px;
+  justify-content: flex-start;
+  align-items: center;
+  color: red;
+  margin-bottom: 10px;
+  box-shadow: ${(props) =>
+    props.isOver && props.id === props.hoveredOverId
+      ? "0px 4px 30px rgba(22, 33, 74, 0.8)"
+      : "0px 4px 30px rgba(22, 33, 74, 0.08)"};
+`;
+
+const ConditionalsIconWrapper = styled.div`
+  padding: 10px;
+`;
+
+const ConditionalsColumn = styled.div`
+  padding: 10px;
+`;
+
+const ConditionalStatementText = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
 const ExtraSpace = styled.div`

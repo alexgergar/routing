@@ -17,6 +17,7 @@ import {
   Plus,
   PlusCircle,
   MinusCircle,
+  AlertTriangle,
 } from "react-feather";
 
 const IconSquare = (props) => {
@@ -55,6 +56,8 @@ const IconSquare = (props) => {
         return <Plus color={iconColor} size={props.size * (2 / 3)} />;
       case "MinusCircle":
         return <MinusCircle color={iconColor} size={props.size * (2 / 3)} />;
+      case "AlertTriangle":
+        return <AlertTriangle color={iconColor} size={props.size * (2 / 3)} />;
       default:
         break;
     }

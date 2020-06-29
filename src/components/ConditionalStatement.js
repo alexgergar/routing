@@ -5,10 +5,8 @@ import IconSquare from "./IconSquare";
 import {
   handleUpdateConditional,
   handleRemoveConditional,
-  handleResetConditional,
 } from "../redux/actions/menu-actions";
 import { useDispatch, useSelector } from "react-redux";
-import { database } from "../utils/database";
 
 const ConditionalStatement = (props) => {
   let dispatch = useDispatch();
@@ -23,15 +21,10 @@ const ConditionalStatement = (props) => {
     let indexOfQuestion = props.data.findIndex(
       (x) => x.question === conditionals[props.index].question
     );
-    console.log(conditionals);
     setQuesitonValue(conditionals[props.index].question);
-    console.log(`Question: ${conditionals[props.index].question}`);
     setQuestionIndex(indexOfQuestion);
-    console.log(`Index of questionQuestion: ${indexOfQuestion}`);
     setConditionValue(conditionals[props.index].condition);
-    console.log(`Condition: ${conditionals[props.index].condition}`);
     setAnswerValue(conditionals[props.index].answer);
-    console.log(`Answer: ${conditionals[props.index].answer}`);
   }, [conditionals, props.data, props.index]);
 
   const handleQuestionSelect = (event) => {
@@ -47,7 +40,6 @@ const ConditionalStatement = (props) => {
 
   const handleConditionSelect = (event) => {
     setConditionValue(event.target.value);
-
     dispatch(
       handleUpdateConditional(props.index, {
         question: questionValue,
@@ -58,7 +50,6 @@ const ConditionalStatement = (props) => {
   };
 
   const handleAnswerSelect = (event) => {
-    console.log(event.target.value);
     setAnswerValue(event.target.value);
     dispatch(
       handleUpdateConditional(props.index, {

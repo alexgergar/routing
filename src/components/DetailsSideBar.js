@@ -111,7 +111,7 @@ const DetailsSideBar = () => {
           />
         </HeaderRow>
         {menu.cardData &&
-          menu.cardData.conditionalOptions.length > 0 &&
+          menu.cardData.conditionalOptions &&
           (showConditionalMenu ? (
             <ConditionalButtonStatus
               handleDispatchOfConditional={handleDispatchOfConditional}

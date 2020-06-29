@@ -55,7 +55,6 @@ const menuReducer = (state = initialMenuState, { type, payload }) => {
         if (index !== payload.index) {
           return item;
         }
-
         return payload.updatedConditional;
       });
       return {

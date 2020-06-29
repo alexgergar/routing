@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  handleAddConditional,
-  handleRemoveConditional,
   handleToggleMenuClosed,
   handleUpdateAndAllValue,
 } from "../redux/actions/menu-actions";
@@ -35,13 +33,11 @@ const ConditionalButtonStatus = (props) => {
     dispatch(handleToggleMenuClosed());
   };
 
-  console.log(menu.conditionals);
-
   return (
     <ConditionalColumn>
       <Form>
         <Row>
-          <Title>{menu.noun} meets &nbsp;</Title>
+          <Title>{menu.cardData.noun} meets &nbsp;</Title>
           <AndAllColumn>
             <Form.Control onChange={handleAndAllSelect} as="select" size="sm">
               <option>all</option>
