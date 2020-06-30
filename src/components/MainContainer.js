@@ -62,11 +62,11 @@ const MainContainer = (props) => {
       }
       dispatch(handleReset());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     draggedElement.currentItem,
     draggedElement.coordsOfDroppedElement,
     draggedElement.dragOverDropTargetID,
-    draggedElement.dragOverArea,
     items,
   ]);
 

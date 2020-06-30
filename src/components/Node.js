@@ -1,9 +1,8 @@
 import React from "react";
-import styled from "styled-components";
 import Draggable from "./Draggable";
 import OnBoardOptionCard from "../components/OnBoardOptionCard";
 import DropTarget from "./DropTarget";
-import ArrowToNode from "./ArrowToNode";
+import Arrows from "./Arrows";
 
 const Node = (props) => {
   return (
@@ -27,7 +26,7 @@ const Node = (props) => {
                 draggingCoords={props.draggingCoords}
                 setDraggingCoords={props.setDraggingCoords}
               >
-                <ArrowToNode x={node.x} y={node.y} parentX={node.parent.x} />
+                {node.children !== undefined && <Arrows data={node.children} />}
                 <OnBoardOptionCard
                   data={node}
                   setHoverArea={props.setHoverArea}

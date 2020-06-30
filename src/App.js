@@ -4,11 +4,10 @@ import NavBar from "./components/NavBar";
 import MainContainer from "./components/MainContainer";
 import dotgrid from "./images/dotgrid.png";
 import Theme from "./Theme";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { handleUpdateWidthHeight } from "./redux/actions/widthHeight-actions";
 
 const App = (props) => {
-  const widthHeight = useSelector((state) => state.widthHeight);
   const dispatch = useDispatch();
 
   useEffect(() => {

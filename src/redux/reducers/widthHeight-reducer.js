@@ -13,6 +13,7 @@ const widthHeightReducer = (
   switch (type) {
     case UPDATE_WIDTH_HEIGHT:
       return {
+        ...state,
         width: payload.width,
         height: payload.height,
       };

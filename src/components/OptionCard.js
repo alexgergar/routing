@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { MoreVertical } from "react-feather";
 import IconSquare from "./IconSquare";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { handleClicked } from "../redux/actions/draggedElement-actions";
 
 const OptionCard = (props) => {

@@ -6,11 +6,10 @@ import Draggable from "../components/Draggable";
 import OnBoardOptionCard from "../components/OnBoardOptionCard";
 import DropTarget from "./DropTarget";
 import Node from "./Node";
-import { handleAppendNewTreeDepth } from "../redux/actions/treeDepth-actions";
 import { handleUpdateRootCoords } from "../redux/actions/item-actions";
+import Arrows from "./Arrows";
 
 const cardWidth = 350;
-const cardHeight = 126;
 
 const TreeChart = (props) => {
   const dispatch = useDispatch();
@@ -46,8 +45,10 @@ const TreeChart = (props) => {
 
     updatedRoot.each((node) => {
       if (node.depth === 0) {
-        node.x = items.x;
-        node.y = items.y;
+        if (node.x !== items.x || node.y !== items.y) {
+          node.x = items.x;
+          node.y = items.y;
+        }
       } else {
         let sumOfSiblingsToPt = 0;
         let arrayForSiblingsValues = [];
@@ -76,14 +77,15 @@ const TreeChart = (props) => {
 
         const thisCardXPt =
           furtherestLeftForBranch + (branchWidth - cardWidth) / 2;
-
         node.x = thisCardXPt;
-        node.y = node.parent.y + cardHeight + 70;
+        node.y =
+          treeDepth[node.depth] !== 0
+            ? node.parent.y + treeDepth[node.depth - 1] + 70
+            : node.parent.y + 126 + 70;
       }
     });
-
     setTree(updatedRoot);
-  }, [items]);
+  }, [items, treeDepth]);
 
   const handleCoordinateUpdateToRootNode = () => {
     dispatch(
@@ -105,8 +107,10 @@ const TreeChart = (props) => {
             draggingParentID={draggingParentID}
             draggingCoords={draggingCoords}
           >
+            {tree.children !== undefined && <Arrows data={tree.children} />}
             <OnBoardOptionCard
               data={tree}
+              children={tree.children}
               setHoverArea={setHoverArea}
               left={tree.x}
               top={tree.y}

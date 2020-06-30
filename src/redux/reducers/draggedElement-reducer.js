@@ -5,7 +5,6 @@ import {
   DRAG_LEAVE,
   DROP,
   MOUSE_UP,
-  MOUSE_MOVE,
   RESET,
 } from "../actions/draggedElement-actions";
 

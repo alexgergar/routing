@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { MoreHorizontal } from "react-feather";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,7 +26,6 @@ const OnBoardOptionCard = (props) => {
   const treeDepth = useSelector((state) => state.treeDepth);
   const [hasConditionals, setHasConditionals] = useState(false);
   const dispatch = useDispatch();
-
   const boardRef = useRef();
 
   useEffect(() => {
@@ -34,6 +33,7 @@ const OnBoardOptionCard = (props) => {
       boardRef.current &&
       boardRef.current.getBoundingClientRect().height !== area.height
     ) {
+      console.log("in use effect of onboard option card");
       setArea({
         x: boardRef.current.getBoundingClientRect().x,
         y: boardRef.current.getBoundingClientRect().y,
@@ -59,12 +59,8 @@ const OnBoardOptionCard = (props) => {
         );
       }
     }
-  }, [area.height, hasConditionals, props.data.depth, treeDepth]);
-
-  useEffect(() => {
-    isOver ? props.setHoverArea(area) : props.setHoverArea(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOver, area]);
+  }, [area.height, props.data.depth, treeDepth]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,56 +72,58 @@ const OnBoardOptionCard = (props) => {
   };
 
   return (
-    <Wrapper
-      ref={boardRef}
-      left={props.data.x}
-      top={props.data.y}
-      onDoubleClick={handleOnClick}
-      id={props.data.data.id}
-      selectedID={menu.optionID}
-    >
-      {hasConditionals && (
-        <ConditionalWrapper
+    <>
+      <Wrapper
+        ref={boardRef}
+        left={props.data.x}
+        top={props.data.y}
+        onDoubleClick={handleOnClick}
+        id={props.data.data.id}
+        selectedID={menu.optionID}
+      >
+        {hasConditionals && (
+          <ConditionalWrapper
+            isOver={isOver}
+            id={props.data.data.id}
+            hoveredOverId={hoveredOverId}
+            selectedID={menu.optionID}
+          >
+            <ConditionalsIconWrapper>
+              <ConditionIcon />
+            </ConditionalsIconWrapper>
+            <ConditionalsColumn>
+              {props.data.data.conditionsForRoute.conditionals.map((item) => (
+                <ConditionalStatementText>
+                  {item.question} {item.condition} {item.answer}
+                </ConditionalStatementText>
+              ))}
+            </ConditionalsColumn>
+          </ConditionalWrapper>
+        )}
+        <CardContents
           isOver={isOver}
           id={props.data.data.id}
           hoveredOverId={hoveredOverId}
-          selectedID={menu.optionID}
         >
-          <ConditionalsIconWrapper>
-            <ConditionIcon />
-          </ConditionalsIconWrapper>
-          <ConditionalsColumn>
-            {props.data.data.conditionsForRoute.conditionals.map((item) => (
-              <ConditionalStatementText>
-                {item.question} {item.condition} {item.answer}
-              </ConditionalStatementText>
-            ))}
-          </ConditionalsColumn>
-        </ConditionalWrapper>
-      )}
-      <CardContents
-        isOver={isOver}
-        id={props.data.data.id}
-        hoveredOverId={hoveredOverId}
-      >
-        <TitleRow>
-          <Row>
-            <IconSquare
-              showBackground={false}
-              icon={props.data.data.icon}
-              size={36}
-            />
-            <Title>{props.data.data.title}</Title>
-          </Row>
-          <MoreHorizontal color="#c2c2c2" />
-        </TitleRow>
-        <HorizontalLine />
-        <BodyRow>
-          <ContentText>I am the body text </ContentText>
-        </BodyRow>
-      </CardContents>
-      {/* <ExtraSpace /> */}
-    </Wrapper>
+          <TitleRow>
+            <Row>
+              <IconSquare
+                showBackground={false}
+                icon={props.data.data.icon}
+                size={36}
+              />
+              <Title>{props.data.data.title}</Title>
+            </Row>
+            <MoreHorizontal color="#c2c2c2" />
+          </TitleRow>
+          <HorizontalLine />
+          <BodyRow>
+            <ContentText>{props.data.data.shortDesc}</ContentText>
+          </BodyRow>
+        </CardContents>
+        {/* <ExtraSpace /> */}
+      </Wrapper>
+    </>
   );
 };
 
@@ -137,6 +135,7 @@ const Wrapper = styled.div`
   border: ${(props) =>
     props.id === props.selectedID ? "3px solid #293D87" : "none"};
   border-radius: 5px;
+  background-color: white;
 `;
 
 const CardContents = styled.div`
@@ -213,6 +212,7 @@ const ConditionalStatementText = styled.div`
   align-items: center;
 `;
 
+// eslint-disable-next-line no-unused-vars
 const ExtraSpace = styled.div`
   height: 100px;
   content: "";

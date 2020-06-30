@@ -36,7 +36,7 @@ const ConditionalButtonStatus = (props) => {
   return (
     <ConditionalColumn>
       <Form>
-        <Row>
+        <ConditionalStatusTitleRow>
           <Title>{menu.cardData.noun} meets &nbsp;</Title>
           <AndAllColumn>
             <Form.Control onChange={handleAndAllSelect} as="select" size="sm">
@@ -46,7 +46,7 @@ const ConditionalButtonStatus = (props) => {
           </AndAllColumn>
 
           <Title>&nbsp; condition(s):</Title>
-        </Row>
+        </ConditionalStatusTitleRow>
         {menu.conditionals &&
           menu.conditionals.map((conditional, index) => (
             <ConditionalStatement
@@ -85,6 +85,10 @@ const ConditionalButtonStatus = (props) => {
 const Row = styled.div`
   display: flex;
   flex-direction: row;
+`;
+
+const ConditionalStatusTitleRow = styled(Row)`
+  flex-wrap: wrap;
 `;
 
 const CenterRow = styled(Row)`

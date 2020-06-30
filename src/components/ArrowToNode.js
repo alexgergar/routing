@@ -1,24 +1,29 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
 
 const cardWidth = 350;
 
 const ArrowToNode = (props) => {
-  const topMostPt = props.y - 70;
+  const topMostPt = props.parentY;
+
+  let yAmt = props.y - props.parentY;
 
   let xDiff, leftMostPt, arrowPoint, stepLadder;
 
   if (props.parentX - props.x >= 0) {
     xDiff = props.parentX - props.x + 10;
     leftMostPt = props.x - 10 + cardWidth / 2;
-    arrowPoint = `M5 62 h10 L10 68 L5 62 Z`;
-    stepLadder = `M${xDiff} 0 V30 L${10} 30 V61`;
+    arrowPoint = `M5 ${yAmt - 8} h10 L10 ${yAmt - 2} L5 ${yAmt - 8} Z`;
+    stepLadder = `M${xDiff} 0 V${yAmt - 40} L${10} ${yAmt - 40}  V${yAmt - 9}`;
   } else {
     xDiff = props.x - props.parentX + 10;
     leftMostPt = props.parentX + cardWidth / 2;
-    arrowPoint = `M${xDiff - 5} 62 h10 L${xDiff} 68 L${xDiff - 5} 62 Z`;
-    stepLadder = `M0 0 L0 30 L${xDiff} 30 L${xDiff} 61`;
+    arrowPoint = `M${xDiff - 5} ${yAmt - 8} h10 L${xDiff} ${yAmt - 2} L${
+      xDiff - 5
+    } ${yAmt - 8} Z`;
+    stepLadder = `M0 0 L0 ${yAmt - 40} L${xDiff} ${yAmt - 40} L${xDiff} ${
+      yAmt - 9
+    }`;
   }
 
   return (
@@ -37,10 +42,13 @@ const SVGWrapper = styled.div`
   top: ${(props) => props.top}px;
   overflow: visible;
   pointer-events: none;
+  z-index: 0;
 `;
 
 const SVG = styled.svg`
   overflow: visible;
+  position: absolute;
+  z-index: 0;
 `;
 
 export default ArrowToNode;
