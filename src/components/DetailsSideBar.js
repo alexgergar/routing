@@ -101,31 +101,32 @@ const DetailsSideBar = () => {
   const menuTitle = menu.cardData !== null ? menu.cardData.title : "";
   return (
     <Wrapper height={height} isMenuOpen={menu.isMenuOpen}>
-      <ContentWrapper height={height} isMenuOpen={menu.isMenuOpen}>
-        <HeaderRow>
-          <h4>{menuTitle}</h4>
-          <IconSquare
-            onClick={handleCloseMenu}
-            showBackground={false}
-            icon="X"
-            size={40}
-          />
-        </HeaderRow>
-        {menu.cardData &&
-          menu.cardData.conditionalOptions &&
-          menu.cardData.conditionalOptions.length !== 0 &&
-          (showConditionalMenu ? (
+      <HeaderRow>
+        <h4>{menuTitle}</h4>
+        <IconSquare
+          onClick={handleCloseMenu}
+          showBackground={false}
+          icon="X"
+          size={40}
+        />
+      </HeaderRow>
+      {menu.cardData &&
+        menu.cardData.conditionalOptions &&
+        (menu.cardData.conditionalOptions.length !== 0 ? (
+          showConditionalMenu ? (
             <ConditionalButtonStatus
               handleDispatchOfConditional={handleDispatchOfConditional}
               handleAddChildWithConditional={handleAddChildWithConditional}
             />
           ) : (
             <AddConditionalButton onClick={handleAddBasicConditional} />
-          ))}
-        <RemoveButton onClick={handleRemoveBlockClick}>
-          Remove Route
-        </RemoveButton>
-      </ContentWrapper>
+          )
+        ) : (
+          <NoCondtionalsText>
+            There are no conditionals to add for this trigger.
+          </NoCondtionalsText>
+        ))}
+      <RemoveButton onClick={handleRemoveBlockClick}>Remove Route</RemoveButton>
     </Wrapper>
   );
 };
@@ -133,21 +134,14 @@ const DetailsSideBar = () => {
 const Wrapper = styled.div`
   width: ${(props) => (props.isMenuOpen ? "300px" : "0px")};
   position: fixed;
-  top: 0;
+  top: 50;
   right: 0;
   min-height: ${(props) => props.height - 50}px;
   zindex: 100;
   transition: 0.25s;
   background-color: white;
   margin-right: ${(props) => (props.isMenuOpen ? "0" : "-300px")};
-`;
-
-const ContentWrapper = styled.div`
-  ${"" /* display: ${(props) => (props.isMenuOpen ? "block" : "none !important")}; */}
-  ${"" /* opacity: ${(props) => (props.isMenuOpen ? 1 : 0)}; */}
-  transition: 0.25s;
   overflow: auto;
-  min-height: ${(props) => props.height - 50}px;
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -174,6 +168,10 @@ const RemoveButton = styled.button`
   padding: 5px;
   margin-bottom: 15px;
   align-self: center;
+`;
+
+const NoCondtionalsText = styled.h6`
+  padding: 20px;
 `;
 
 export default DetailsSideBar;

@@ -9,7 +9,6 @@ import {
   handleAppendNewTreeDepth,
 } from "../redux/actions/treeDepth-actions";
 import ConditionIcon from "./ConditionIcon";
-import Popover from "react-bootstrap/Popover";
 
 const OnBoardOptionCard = (props) => {
   const isOver = useSelector((state) => state.draggedElement.isOver);
@@ -68,16 +67,14 @@ const OnBoardOptionCard = (props) => {
   }, [props.data.data.conditionsForRoute.conditionals]);
 
   const handleOnClick = () => {
-    if (props.data.data.conditionalOptions.length > 0) {
-      dispatch(handleToggleMenuOpen(props.data.data));
-    }
+    dispatch(handleToggleMenuOpen(props.data.data));
   };
 
   return (
     <>
       <Wrapper
         ref={boardRef}
-        left={props.left}
+        left={props.data.x}
         top={props.data.y}
         onDoubleClick={handleOnClick}
         id={props.data.data.id}

@@ -49,9 +49,7 @@ const DropTarget = (props) => {
   );
 };
 
-const Wrapper = styled.div`
-  background-color: red;
-`;
+const Wrapper = styled.div``;
 
 DropTarget.defaultProps = {
   dropEffect: dropEffects.All,
