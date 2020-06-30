@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import dotgrid from "../images/dotgrid.png";
 import styled from "styled-components";
 import SideBar from "./SideBar";
 import Board from "./Board";
@@ -9,8 +10,13 @@ import { handleReset } from "../redux/actions/draggedElement-actions";
 
 const MainContainer = (props) => {
   const draggedElement = useSelector((state) => state.draggedElement);
+  const [sideBarOpen, setSideBarOpen] = useState(true);
   const items = useSelector((state) => state.items);
   const dispatch = useDispatch();
+
+  const handleToggleSideBar = () => {
+    setSideBarOpen(!sideBarOpen);
+  };
 
   useEffect(() => {
     if (
@@ -72,9 +78,12 @@ const MainContainer = (props) => {
 
   return (
     <Main>
-      <SideBar />
-      <Board />
-      <DetailsSideBar />
+      <SideBar
+        handleToggleSideBar={handleToggleSideBar}
+        sideBarOpen={sideBarOpen}
+      />
+      <Board sideBarOpen={sideBarOpen} />
+      <DetailsSideBar sideBarOpen={sideBarOpen} />
     </Main>
   );
 };
@@ -82,8 +91,10 @@ const MainContainer = (props) => {
 const Main = styled.div`
   display: flex;
   flex-direction: row;
-  position: absolute;
-  top: 50px;
+  margin-top: 50px;
+  background-image: url(${dotgrid});
+  background-repeat: repeat;
+  background-size: 30px 30px;
 `;
 
 export default MainContainer;

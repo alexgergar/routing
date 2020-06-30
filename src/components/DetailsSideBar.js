@@ -132,18 +132,19 @@ const DetailsSideBar = () => {
 
 const Wrapper = styled.div`
   width: ${(props) => (props.isMenuOpen ? "300px" : "0px")};
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   min-height: ${(props) => props.height - 50}px;
   zindex: 100;
   transition: 0.25s;
   background-color: white;
+  margin-right: ${(props) => (props.isMenuOpen ? "0" : "-300px")};
 `;
 
 const ContentWrapper = styled.div`
-  display: ${(props) => (props.isMenuOpen ? "block" : "none !important")};
-  opacity: ${(props) => (props.isMenuOpen ? 1 : 0)};
+  ${"" /* display: ${(props) => (props.isMenuOpen ? "block" : "none !important")}; */}
+  ${"" /* opacity: ${(props) => (props.isMenuOpen ? 1 : 0)}; */}
   transition: 0.25s;
   overflow: auto;
   min-height: ${(props) => props.height - 50}px;

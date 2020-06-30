@@ -95,8 +95,10 @@ const TreeChart = (props) => {
     setDraggingParentID(0);
   };
 
+  const leftAmt = props.sideBarOpen ? 0 : 700;
+
   return (
-    <Wrapper>
+    <Wrapper marginLeft={leftAmt}>
       {tree !== undefined && (
         <DropTarget dropEffect="copy" hoverArea={hoverArea} id={tree.data.id}>
           <Draggable
@@ -114,6 +116,7 @@ const TreeChart = (props) => {
               setHoverArea={setHoverArea}
               left={tree.x}
               top={tree.y}
+              sideBarOpen={props.sideBarOpen}
             />
           </Draggable>
         </DropTarget>
@@ -128,12 +131,16 @@ const TreeChart = (props) => {
           setDraggingParentID={setDraggingParentID}
           draggingParentID={draggingParentID}
           draggingCoords={draggingCoords}
+          sideBarOpen={props.sideBarOpen}
         />
       )}
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  margin-left: ${(props) => props.marginLeft}px;
+  transition: 0.5s;
+`;
 
 export default TreeChart;

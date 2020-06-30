@@ -9,6 +9,7 @@ import {
   handleAppendNewTreeDepth,
 } from "../redux/actions/treeDepth-actions";
 import ConditionIcon from "./ConditionIcon";
+import Popover from "react-bootstrap/Popover";
 
 const OnBoardOptionCard = (props) => {
   const isOver = useSelector((state) => state.draggedElement.isOver);
@@ -33,7 +34,6 @@ const OnBoardOptionCard = (props) => {
       boardRef.current &&
       boardRef.current.getBoundingClientRect().height !== area.height
     ) {
-      console.log("in use effect of onboard option card");
       setArea({
         x: boardRef.current.getBoundingClientRect().x,
         y: boardRef.current.getBoundingClientRect().y,
@@ -68,14 +68,16 @@ const OnBoardOptionCard = (props) => {
   }, [props.data.data.conditionsForRoute.conditionals]);
 
   const handleOnClick = () => {
-    dispatch(handleToggleMenuOpen(props.data.data));
+    if (props.data.data.conditionalOptions.length > 0) {
+      dispatch(handleToggleMenuOpen(props.data.data));
+    }
   };
 
   return (
     <>
       <Wrapper
         ref={boardRef}
-        left={props.data.x}
+        left={props.left}
         top={props.data.y}
         onDoubleClick={handleOnClick}
         id={props.data.data.id}

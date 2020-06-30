@@ -18,6 +18,8 @@ import {
   PlusCircle,
   MinusCircle,
   AlertTriangle,
+  ChevronsLeft,
+  ChevronsRight,
 } from "react-feather";
 
 const IconSquare = (props) => {
@@ -58,6 +60,10 @@ const IconSquare = (props) => {
         return <MinusCircle color={iconColor} size={props.size * (2 / 3)} />;
       case "AlertTriangle":
         return <AlertTriangle color={iconColor} size={props.size * (2 / 3)} />;
+      case "ChevronsLeft":
+        return <ChevronsLeft color={iconColor} size={props.size * (2 / 3)} />;
+      case "ChevronsRight":
+        return <ChevronsRight color={iconColor} size={props.size * (2 / 3)} />;
       default:
         break;
     }
