@@ -30,6 +30,7 @@ const Node = (props) => {
                 <OnBoardOptionCard
                   data={node}
                   setHoverArea={props.setHoverArea}
+                  showToolTip={props.showToolTip}
                 />
               </Draggable>
             </DropTarget>
@@ -45,6 +46,7 @@ const Node = (props) => {
                 draggingParentID={props.draggingParentID}
                 draggingCoords={props.draggingCoords}
                 setDraggingCoords={props.setDraggingCoords}
+                showToolTip={props.showToolTip}
               />
             )}
           </>

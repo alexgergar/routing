@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { MoreHorizontal } from "react-feather";
+import { MoreHorizontal, Tool } from "react-feather";
 import { useSelector, useDispatch } from "react-redux";
 import IconSquare from "./IconSquare";
 import { handleToggleMenuOpen } from "../redux/actions/menu-actions";
@@ -11,6 +11,7 @@ import {
 import ConditionIcon from "./ConditionIcon";
 
 const OnBoardOptionCard = (props) => {
+  const dispatch = useDispatch();
   const isOver = useSelector((state) => state.draggedElement.isOver);
   const hoveredOverId = useSelector(
     (state) => state.draggedElement.dragOverDropTargetID
@@ -25,7 +26,6 @@ const OnBoardOptionCard = (props) => {
   const menu = useSelector((state) => state.menu);
   const treeDepth = useSelector((state) => state.treeDepth);
   const [hasConditionals, setHasConditionals] = useState(false);
-  const dispatch = useDispatch();
   const boardRef = useRef();
 
   useEffect(() => {
@@ -71,58 +71,56 @@ const OnBoardOptionCard = (props) => {
   };
 
   return (
-    <>
-      <Wrapper
-        ref={boardRef}
-        left={props.data.x}
-        top={props.data.y}
-        onDoubleClick={handleOnClick}
-        id={props.data.data.id}
-        selectedID={menu.optionID}
-      >
-        {hasConditionals && (
-          <ConditionalWrapper
-            isOver={isOver}
-            id={props.data.data.id}
-            hoveredOverId={hoveredOverId}
-            selectedID={menu.optionID}
-          >
-            <ConditionalsIconWrapper>
-              <ConditionIcon />
-            </ConditionalsIconWrapper>
-            <ConditionalsColumn>
-              {props.data.data.conditionsForRoute.conditionals.map((item) => (
-                <ConditionalStatementText>
-                  {item.question} {item.condition} {item.answer}
-                </ConditionalStatementText>
-              ))}
-            </ConditionalsColumn>
-          </ConditionalWrapper>
-        )}
-        <CardContents
+    <Wrapper
+      ref={boardRef}
+      left={props.data.x}
+      top={props.data.y}
+      onClick={handleOnClick}
+      onDoubleClick={handleOnClick}
+      id={props.data.data.id}
+      selectedID={menu.optionID}
+    >
+      {hasConditionals && (
+        <ConditionalWrapper
           isOver={isOver}
           id={props.data.data.id}
           hoveredOverId={hoveredOverId}
+          selectedID={menu.optionID}
         >
-          <TitleRow>
-            <Row>
-              <IconSquare
-                showBackground={false}
-                icon={props.data.data.icon}
-                size={36}
-              />
-              <Title>{props.data.data.title}</Title>
-            </Row>
-            <MoreHorizontal color="#c2c2c2" />
-          </TitleRow>
-          <HorizontalLine />
-          <BodyRow>
-            <ContentText>{props.data.data.shortDesc}</ContentText>
-          </BodyRow>
-        </CardContents>
-        {/* <ExtraSpace /> */}
-      </Wrapper>
-    </>
+          <ConditionalsIconWrapper>
+            <ConditionIcon />
+          </ConditionalsIconWrapper>
+          <ConditionalsColumn>
+            {props.data.data.conditionsForRoute.conditionals.map((item) => (
+              <ConditionalStatementText>
+                {item.question} {item.condition} {item.answer}
+              </ConditionalStatementText>
+            ))}
+          </ConditionalsColumn>
+        </ConditionalWrapper>
+      )}
+      <CardContents
+        isOver={isOver}
+        id={props.data.data.id}
+        hoveredOverId={hoveredOverId}
+      >
+        <TitleRow>
+          <Row>
+            <IconSquare
+              showBackground={false}
+              icon={props.data.data.icon}
+              size={36}
+            />
+            <Title>{props.data.data.title}</Title>
+          </Row>
+          <MoreHorizontal color="#c2c2c2" />
+        </TitleRow>
+        <HorizontalLine />
+        <BodyRow>
+          <ContentText>{props.data.data.shortDesc}</ContentText>
+        </BodyRow>
+      </CardContents>
+    </Wrapper>
   );
 };
 
@@ -211,10 +209,4 @@ const ConditionalStatementText = styled.div`
   align-items: center;
 `;
 
-// eslint-disable-next-line no-unused-vars
-const ExtraSpace = styled.div`
-  height: 100px;
-  content: "";
-  zindex: 0;
-`;
 export default OnBoardOptionCard;

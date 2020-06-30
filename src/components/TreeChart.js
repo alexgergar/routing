@@ -8,6 +8,7 @@ import DropTarget from "./DropTarget";
 import Node from "./Node";
 import { handleUpdateRootCoords } from "../redux/actions/item-actions";
 import Arrows from "./Arrows";
+import ToolTip from "./ToolTip";
 
 const cardWidth = 350;
 
@@ -22,6 +23,7 @@ const TreeChart = (props) => {
     y: 0,
   });
   const [draggingParentID, setDraggingParentID] = useState(0);
+  const [showToolTip, setShowToolTip] = useState(true);
 
   useEffect(() => {
     const root = hierarchy(items);
@@ -95,6 +97,19 @@ const TreeChart = (props) => {
     setDraggingParentID(0);
   };
 
+  useEffect(() => {
+    if (showToolTip === true) {
+      const handleSeShowToolTip = () => {
+        setShowToolTip(false);
+      };
+      window.addEventListener("mousedown", handleSeShowToolTip);
+
+      return () => {
+        window.removeEventListener("mousedown", handleSeShowToolTip);
+      };
+    }
+  }, [showToolTip]);
+
   const leftAmt = props.sideBarOpen ? 0 : 700;
 
   return (
@@ -116,7 +131,7 @@ const TreeChart = (props) => {
               setHoverArea={setHoverArea}
               left={tree.x}
               top={tree.y}
-              sideBarOpen={props.sideBarOpen}
+              showToolTip={showToolTip}
             />
           </Draggable>
         </DropTarget>
@@ -131,8 +146,16 @@ const TreeChart = (props) => {
           setDraggingParentID={setDraggingParentID}
           draggingParentID={draggingParentID}
           draggingCoords={draggingCoords}
-          sideBarOpen={props.sideBarOpen}
+          showToolTip={showToolTip}
         />
+      )}
+      {tree !== undefined && tree.children === undefined && showToolTip && (
+        <ToolTip left={items.x + 701} top={items.y + 60}>
+          Click or Double Click to Add Possible Conditional to Child Blocks or
+          Routes. <br />
+          <br />
+          This Flowchart is draggable - Click & Hold to see more!
+        </ToolTip>
       )}
     </Wrapper>
   );
