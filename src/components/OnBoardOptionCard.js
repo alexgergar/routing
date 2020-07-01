@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { MoreHorizontal, Tool } from "react-feather";
+import { MoreHorizontal } from "react-feather";
 import { useSelector, useDispatch } from "react-redux";
 import IconSquare from "./IconSquare";
 import { handleToggleMenuOpen } from "../redux/actions/menu-actions";

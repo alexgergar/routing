@@ -27,8 +27,7 @@ const Wrapper = styled.div`
 
 const CheckboxInput = styled.input`
   transform: scale(2);
-  ${"" /* height: 20px; */}
-  margin: 0 20px 0  !important;
+  margin: 0 20px 0 !important;
   cursor: pointer;
 `;
 const CheckboxLabel = styled.label`

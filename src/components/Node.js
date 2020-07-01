@@ -1,6 +1,6 @@
 import React from "react";
 import Draggable from "./Draggable";
-import OnBoardOptionCard from "../components/OnBoardOptionCard";
+import OnBoardOptionCard from "./OnBoardOptionCard";
 import DropTarget from "./DropTarget";
 import Arrows from "./Arrows";
 
